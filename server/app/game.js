@@ -1,0 +1,117 @@
+const Player = require('./player').Player;
+
+class Game {
+  constructor(io, code, onEmpty) {
+    this.io = io;
+    this.code = code;
+    this.onEmpty = onEmpty;
+    this.players = new Map();
+    this.host;
+    this.inProgress = false;
+    this.currentId = 0;
+  }
+
+  getPlayer(id) {
+    if (this.players.has(id)) {
+      return this.players.get(id);
+    }
+    return false; // not found
+  }
+
+  initPlayer(player) {
+    player.socket.join(this.code);
+    if (!this.host) {
+      this.setHost(player);
+    }
+    // player disconnects
+    player.socket.on('disconnect', () => {
+      player.isConnected = false;
+      if (!this.inProgress) {
+        this.removePlayer(player.id);
+      }
+      this.onPlayerDisconnected(player);
+      this.sendUpdatedPlayersList();
+    });
+  }
+
+  addPlayer(name, socket) {
+    let newPlayer = new Player(socket, this.code, name, this.currentId++);
+    this.initPlayer(newPlayer);
+    this.players.set(newPlayer.id, newPlayer);
+    this.sendUpdatedPlayersList();
+    return newPlayer;
+  }
+
+  removePlayer(id) {
+    if (!this.players.has(id)) {
+      return false;
+    }
+    const player = this.players.get(id);
+    this.players.delete(id);
+    this.deleteGameIfEmpty();
+  }
+
+  deleteGame(game) {
+    this.onEmpty();
+  }
+
+  getJSON() {
+    let playersJSON = Array.from(this.players.values()).map(player =>
+      player.getJSON()
+    );
+    return {
+      code: this.code,
+      players: playersJSON,
+      inProgress: this.inProgress
+    };
+  }
+
+  onPlayerDisconnected(player) {
+    console.log('onPlayerDisconnected');
+    if (this.deleteGameIfEmpty()) {
+      return;
+    }
+    if (!this.host || (this.host && this.host === player)) {
+      // find new host
+      for (const player of this.players.values()) {
+        console.dir(player);
+        if (player.isConnected) {
+          this.setHost(player);
+          break;
+        }
+      }
+    }
+  }
+
+  deleteGameIfEmpty() {
+    console.log('deleteGameIfEmpty');
+    if (this.players.size === 0) {
+      this.deleteGame();
+      return true;
+    }
+    return false;
+  }
+
+  sendUpdatedPlayersList() {
+    console.log('sendUpdatedPlayersList');
+    this.sendToAllPlayers('updatePlayerList', {
+      players: Array.from(this.players.values()).map(player => player.getJSON())
+    });
+  }
+
+  sendToAllPlayers(eventName, data) {
+    this.io.to(this.code).emit(eventName, data);
+  }
+
+  setHost(player) {
+    this.host = player;
+    player.makeHost();
+    this.sendToAllPlayers('updateNewHost', { socketId: player.socket.id });
+  }
+
+  startRound() {
+    // TODO
+  }
+}
+
+module.exports.Game = Game;

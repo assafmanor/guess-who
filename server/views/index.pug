@@ -1,0 +1,51 @@
+extends layout
+
+block js
+  script(src=`${js}`, defer)
+
+block main-title
+  h1 נחש מי
+block content
+  //- .content.header.centered-text
+  //-   h1 נחש מי
+  .content#rules
+    p הוראות הוראות הוראות הוראות הוראות הוראות הוראות הוראות
+  section.container.section#join-host-area
+    .content.centered-text
+      button.btn#host-btn ארח משחק
+      button.btn#join-btn הצטרף
+    .content#host-area
+      form(action='create-room', method='post')
+        label(for='host-name') איך קוראים לך?
+        input#host-name(
+          type='text'
+          name='name'
+          maxlength='20'
+          placeholder="מתיתיהו בן אליעזר"
+          pattern="[a-zA-Zא-ת0-9 ]{1,20}")
+        button.btn(type='submit') צור
+    #join-area
+      .content#join-code-area
+        form#join-code-form(action='', method='')
+          label(for='code') הכנס קוד
+          input#code(
+            type='text'
+            name='code'
+            maxlength='4'
+            placeholder="קוד בעל 4 אותיות "
+            pattern="[a-zA-Z]{4}"
+            autocomplete='off')
+          button.btn(type='submit') שלח
+        .warning.centered-text#wrong-code-warning
+      .content#join-name-area
+        form#join-name-form(action='join-room', method='post')
+          label(for='name') איך קוראים לך?
+          input#join-name(type='text'
+          name='name'
+          maxlength='20'
+          placeholder="מתיתיהו בן אליעזר"
+          pattern="[a-zA-Zא-ת0-9 ]{1,20}")
+          input#join-code(type='hidden', name='code')
+          button.btn#join-back(type='button') חזור
+          button.btn(type='submit') הצטרף
+          .warning.centered-text#wrong-name-warning

@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.05em;
+}
+
+@media only screen and (max-device-width: 1440px) {
+  * {
+    font-size: 1.3em;
+  }
+}
+
+body {
+  font-family: 'Varela Round', sans-serif;
+  direction: rtl;
+  background: #f3f3f3;
+}
+
+.container {
+  max-width: 900px;
+  margin: 25px auto;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 5px;
+}
+
+.main-container {
+  background: #fff;
+}
+
+.section {
+  margin: 25px;
+  background: rgb(253, 243, 234);
+}
+
+.content {
+  margin: auto;
+  padding: 30px;
+}
+
+.header {
+  font-size: 1.2em;
+}
+
+.primary {
+  background-color: rgb(243, 208, 168);
+  border-color: rgb(221, 169, 111);
+}
+
+.warning {
+  color: rgb(233, 68, 39);
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.centered {
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+.btn {
+  background-color: rgb(243, 208, 168);
+  border: 1px solid rgb(221, 169, 111);
+  color: #000;
+  text-align: center;
+  padding: 15px 32px;
+  text-decoration: none;
+  margin: auto 10px;
+  padding: 10px;
+  transition-duration: 0.4s;
+  outline: none;
+}
+
+.btn:hover {
+  background-color: rgb(253, 226, 194);
+  cursor: pointer;
+}
+
+.btn.selected {
+  background-color: rgb(253, 226, 194);
+}
+
+form label {
+  width: 40%;
+  font-size: 1em;
+}
+
+form input {
+  width: 40%;
+  padding: 1rem 20px;
+  margin: 8px;
+  display: block;
+}
+
+form .btn {
+  margin: 8px 8px;
+  /* display: block; */
+}
+
+#players-list {
+  list-style-type: none;
+}

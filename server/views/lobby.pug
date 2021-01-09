@@ -1,0 +1,21 @@
+extends layout
+
+block js
+  script(src='/socket.io/socket.io.js' defer)
+  script const name = '#{name}'
+  script const code = '#{code}'
+  script(src=`${js}`, defer)
+
+block main-title
+  h1 קוד חדר: #{code}
+block content
+  .content#code
+    h2 שלום #{name}, זה הלובי.
+    p עוד לא עשיתי פה כלום, סתם רציתי לבדוק שהטמפלייטים עובדים כמו שצריך.
+  section.container.section#players
+    .content.centered-text
+      h2 והרי רשימת השחקנים: 
+      ul#players-list
+        li #{name}
+  .content#host-area(hidden)
+    button.btn.centered התחל משחק
