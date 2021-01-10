@@ -1,6 +1,8 @@
 const Player = require('./player').Player;
 
 class Game {
+  MAX_PLAYERS = 3;
+
   constructor(io, code, onEmpty) {
     this.io = io;
     this.code = code;
@@ -73,8 +75,8 @@ class Game {
     }
     if (!this.host || (this.host && this.host === player)) {
       // find new host
+      this.host = null;
       for (const player of this.players.values()) {
-        console.dir(player);
         if (player.isConnected) {
           this.setHost(player);
           break;

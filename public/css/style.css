@@ -61,6 +61,22 @@ body {
   margin: 0 auto !important;
 }
 
+.text-lg {
+  font-size: 1.5em;
+}
+
+.text-huge {
+  font-size: 2em;
+}
+
+.font-important {
+  color: rgb(255, 102, 0);
+  font-weight: bolder;
+}
+
+.text-sml {
+  font-size: 0.8em;
+}
 .btn {
   background-color: rgb(243, 208, 168);
   border: 1px solid rgb(221, 169, 111);
@@ -80,7 +96,8 @@ body {
 }
 
 .btn.selected {
-  background-color: rgb(253, 226, 194);
+  background-color: rgb(253, 234, 209);
+  border-color: #000;
 }
 
 form label {
@@ -98,6 +115,12 @@ form input {
 form .btn {
   margin: 8px 8px;
   /* display: block; */
+}
+
+.btn:disabled {
+  background-color: #f3f3f3;
+  color: #777;
+  border-color: #aaa;
 }
 
 #players-list {

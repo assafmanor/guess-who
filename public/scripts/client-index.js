@@ -1,3 +1,5 @@
+import { showErrorMessage } from './utils.js';
+
 const hostButton = document.getElementById('host-btn');
 const joinButton = document.getElementById('join-btn');
 
@@ -8,7 +10,7 @@ const joinCodeArea = document.getElementById('join-code-area');
 const joinNameArea = document.getElementById('join-name-area');
 
 const joinCodeForm = document.getElementById('join-code-form');
-const joinNameForm = document.getElementById('join-name-form');
+const joinNameForm = document.getElementById('join-name-form'); //
 
 const joinBackButton = document.getElementById('join-back');
 
@@ -52,44 +54,46 @@ joinCodeForm.addEventListener('submit', event => {
   event.preventDefault();
   const codeEntered = document.getElementById('code').value;
   fetch(`/is-code-valid/${codeEntered}`)
+    .then(res => res.json())
     .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      if (res) {
-        code = codeEntered;
-        joinCodeArea.style.display = 'none';
-        joinNameArea.style.display = 'block';
-        document.getElementById('join-code').value = code;
-        document.getElementById('join-name').select();
+      if (!res) {
+        const errorMessage = 'קוד שגוי';
+        showErrorMessage('join-error-message', errorMessage, 2000);
       } else {
-        document.getElementById('wrong-code-warning').textContent = 'קוד שגוי';
-        setTimeout(() => {
-          document.getElementById('wrong-code-warning').textContent = ''
-        }, 2000);
+        return fetch(`/can-join-game/${codeEntered}`)
+          .then(res => res.json())
+          .then(res => {
+            if (!res) {
+              const errorMessage = 'מצטערים, החדר מלא.';
+              showErrorMessage('join-error-message', errorMessage, 4000);
+            } else {
+              code = codeEntered;
+              joinCodeArea.style.display = 'none';
+              joinNameArea.style.display = 'block';
+              document.getElementById('join-code').value = code;
+              document.getElementById('join-name').select();
+            }
+          });
       }
     });
 });
 
-joinNameForm.addEventListener('submit', event => {
-  event.preventDefault();
-  const name = document.getElementById('join-name').value;
-  fetch(`/is-name-valid/${code}/${name}`)
-    .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      if (res) {
-        event.target.submit();
-      } else {
-        document.getElementById('wrong-name-warning').textContent =
-          'השם כבר תפוס';
-        setTimeout(() => {
-          document.getElementById('wrong-name-warning').textContent = ''
-        }, 2000);
-      }
-    });
-});
+// joinNameForm.addEventListener('submit', event => {
+//   event.preventDefault();
+//   const name = document.getElementById('join-name').value;
+//   fetch(`/is-name-valid/${code}/${name}`)
+//     .then(res => {
+//       return res.json();
+//     })
+//     .then(res => {
+//       if (res) {
+//         event.target.submit();
+//       } else {
+//         const errorMessage = 'השם כבר תפוס.';
+//         showErrorMessage('join-error-message', errorMessage, 2000);
+//       }
+//     });
+// });
 
 joinBackButton.addEventListener('click', () => {
   joinNameArea.style.display = 'none';

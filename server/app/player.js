@@ -18,11 +18,6 @@ class Player {
     };
   }
 
-  emit(eventName, data) {
-    console.log('emit', eventName, data);
-    this.socket.emit(eventName, data);
-  }
-
   send(eventName, data) {
     this.socket.to(this.roomCode).emit(eventName, data);
   }

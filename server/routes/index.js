@@ -5,6 +5,8 @@ const PORT = process.env.PORT || 3000;
 
 const INDEX = 'index';
 const LOBBY = 'lobby';
+const JOIN_LOBBY = 'join-lobby';
+
 const CSS = 'css/style.css';
 
 const path = require('path');
@@ -32,9 +34,15 @@ app.set('view engine', 'pug');
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  const js = 'scripts/client-index.js';
+  // const js = 'scripts/client-index.js';
   const title = 'דף הבית';
-  res.render(INDEX, { title: title, css: CSS, js: js });
+  const scripts = [
+    { path: 'scripts/utils.js', isModule: true },
+    { path: 'scripts/client-player-join.js', isModule: true },
+    { path: 'scripts/client-index.js', isModule: true }
+  ];
+
+  res.render(INDEX, { title: title, css: CSS, scripts: scripts });
 });
 
 app.post('/create-room', (req, res) => {
@@ -55,22 +63,63 @@ app.post('/:code/lobby', (req, res) => {
     res.sendStatus(404);
     return;
   }
-  const js = '../scripts/client-lobby.js';
+  const scripts = [
+    { path: '/socket.io/socket.io.js', isModule: false },
+    { path: '../scripts/client-lobby.js', isModule: false }
+  ];
   res.render(LOBBY, {
     title: title,
     css: '../' + CSS,
     name: name,
     code: code,
-    js: js
+    scripts: scripts
   });
 });
+
+app.post('/join-room', (req, res) => {
+  code = req.body.code;
+  if (code === undefined) {
+    code_cookie = req.cookies.code;
+    if (code_cookie === undefined) {
+      res.sendStatus(404);
+      return;
+    }
+    code = code_cookie;
+  }
+
+  res.redirect(307, `/${code}/lobby`);
+});
+
+app.get('/:code/join', (req, res) => {
+  const code = req.params.code;
+  if (guessWho.findGame(code) === false) {
+    res.sendStatus(404);
+    return;
+  }
+  const scripts = [
+    { path: '../scripts/utils.js', isModule: true },
+    { path: '../scripts/join-lobby.js', isModule: true },
+    { path: '../scripts/client-player-join.js', isModule: true }
+  ];
+  const title = 'הצטרף לחדר';
+  res.render(JOIN_LOBBY, {
+    title: title,
+    css: '../' + CSS,
+    code: code,
+    scripts: scripts
+  });
+});
+
+// Client API
 
 app.get('/is-code-valid/:code', (req, res) => {
   const code = req.params.code;
   if (guessWho.findGame(code) !== false) {
     res.send('true');
+    console.log('true');
   } else {
     res.send('false');
+    console.log('false');
   }
 });
 
@@ -85,25 +134,24 @@ app.get('/is-name-valid/:code/:name', (req, res) => {
   }
   let isNameValid = 'true';
   for (const player of game.players.values()) {
-    console.log(player.name, name);
     if (player.name === name) {
       isNameValid = 'false';
       break;
     }
   }
-  console.log('isNameValid', isNameValid);
   res.send(isNameValid);
 });
 
-app.post('/join-room', (req, res) => {
-  code = req.body.code;
-  if (code === undefined) {
-    code_cookie = req.cookies.code;
-    if (code_cookie === undefined) {
-      res.sendStatus(404);
-      return;
-    }
-    code = code_cookie;
+app.get('/can-join-game/:code', (req, res) => {
+  const code = req.params.code;
+  const game = guessWho.findGame(code);
+  if (game === false) {
+    res.sendStatus(404);
+    return;
   }
-  res.redirect(307, `/${code}/lobby`);
+  if (game.players.size >= game.MAX_PLAYERS) {
+    res.send('false');
+    return;
+  }
+  res.send('true');
 });
