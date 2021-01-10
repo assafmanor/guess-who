@@ -5,10 +5,17 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content='Multiplayer guessing game')
+    //- css
     link(rel='preconnect', href='https://fonts.gstatic.com')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Varela+Round&display=swap')
     link(rel='stylesheet', href=`${css}`)
+    //- scripts
+    each script in scripts
+      - var scriptType = script.isModule ? 'module' : 'application/javascript'
+      - var path = script.path
+      script(type=`${scriptType}`, src=`${path}`, defer)
     block js
+
   body
     .container.main-content
       .content.header.centered-text
@@ -17,4 +24,3 @@ html
         .content.header.centered-text
           block main-title            
 
-      

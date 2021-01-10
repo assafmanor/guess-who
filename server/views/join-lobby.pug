@@ -1,0 +1,19 @@
+extends layout
+
+block main-title
+  h1 הצטרפות לחדר: #{code}
+
+block content
+  section.container.section#players
+    .content#join-name-area
+      form#join-name-form(action='../join-room', method='post')
+        label(for='name') איך קוראים לך?
+        input#join-name(type='text'
+        name='name'
+        maxlength='20'
+        placeholder="מתיתיהו בן אליעזר"
+        pattern="[a-zA-Zא-ת0-9 ]{1,20}")
+        input#join-code(type='hidden', name='code' value=`${code}`)
+        button.btn(type='submit') הצטרף
+      .content#join-warning(hidden)
+        p.warning.centered-text#join-error-message
