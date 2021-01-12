@@ -50,44 +50,50 @@ app.post('/create-room', (req, res) => {
   const gameJSON = game.getJSON();
   const lobby = new Lobby(game);
   lobbies.set(gameJSON.code, lobby);
-  res.redirect(307, `${gameJSON.code}/lobby`);
+  res.redirect(307, `${gameJSON.code}`);
 });
 
-app.all('/:code([a-z]{4})/?(lobby)', (req, res) => {
+app.all('/:code([a-z]{4})', (req, res) => {
   const title = 'לובי המתנה';
   const code = req.params.code;
   let name = req.body.name;
+
   if (name === undefined) {
     const guessWhoRoom = req.cookies.guessWhoRoom;
     if (guessWhoRoom) {
       name = JSON.parse(guessWhoRoom).name;
     } else {
-      res.redirect(`${req.baseUrl}/${code}/join`);
+      renderJoinLobby(req, res);
       return;
     }
   }
+
   const game = guessWho.findGame(code);
   if (game === false) {
     res.sendStatus(404);
     return;
   }
-  // find out if player has already joined
-  game.players.forEach(player => {
+
+  for (player of game.players.values()) {
     if (player.name === name) {
-      res.redirect(`${req.baseUrl}/${code}/join`);
+      renderJoinLobby(req, res);
+      // res.redirect(`${req.baseUrl}/${code}/join`);
       return;
     }
-  });
+  }
+
   const cookie = { code: code, name: name };
   res.cookie('guessWhoRoom', JSON.stringify(cookie), {
     maxAge: 600000 /* 10 minutes */,
     httpOnly: false
   });
+
   const scripts = [
     { path: '/socket.io/socket.io.js', isModule: false },
     { path: '../scripts/utils.js', isModule: true },
     { path: '../scripts/client-lobby.js', isModule: true }
   ];
+
   res.render(LOBBY, {
     title: title,
     css: '../' + CSS,
@@ -109,14 +115,15 @@ app.post('/join-room', (req, res) => {
       return;
     }
   }
-  res.redirect(307, `/${code}/lobby`);
+  res.redirect(307, `/${code}`);
 });
 
-app.get('/:code/join', (req, res) => {
+function renderJoinLobby(req, res) {
   const code = req.params.code;
   const guessWhoRoom = req.cookies.guessWhoRoom;
   if (guessWhoRoom && guessWhoRoom.code === code) {
-    res.redirect(`${req.baseUrl}/${code}/lobby`);
+    res.redirect(`${req.baseUrl}/${code}`);
+    return;
   }
   if (guessWho.findGame(code) === false) {
     res.sendStatus(404);
@@ -134,7 +141,7 @@ app.get('/:code/join', (req, res) => {
     code: code,
     scripts: scripts
   });
-});
+}
 
 // Client API
 

@@ -55,9 +55,14 @@ socket.on('numQuestionsChanged', data => {
   const numQuestions = data.value;
   numQuestionsEl.value = numQuestions;
 });
+
 socket.on('questionPackChanged', data => {
   const questionPack = data.value;
   questionPackEl.value = questionPack;
+});
+
+socket.on('startRound', () => {
+  console.log('startRound');
 });
 
 function enableHostOptions() {
@@ -113,3 +118,8 @@ async function checkMinimumNumberOfPlayers() {
       return res;
     });
 }
+
+document.getElementById('options-form').addEventListener('submit', event => {
+  event.preventDefault();
+  socket.emit('startRound', { code: code });
+});

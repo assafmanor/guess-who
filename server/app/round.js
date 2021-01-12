@@ -1,3 +1,5 @@
-class Round {}
+class Round {
+  
+}
 
-module.exports.Player = Player;
+module.exports.Round = Round;

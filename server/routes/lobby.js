@@ -3,6 +3,7 @@ class Lobby {
     this.game = game;
     this.io = game.io;
     this.newConnectionsHandler();
+    this.startRoundHandler();
     this.optionChangedHandler('numQuestionsChanged', 'numQuestions');
     this.optionChangedHandler('questionPackChanged', 'questionPack');
   }
@@ -16,6 +17,17 @@ class Lobby {
         const newPlayer = this.game.addPlayer(name, socket);
         this.io.to(socket.id).emit('getPlayerInfo', newPlayer.getJSON());
         this.io.to(socket.id).emit('getGameOptions', this.game.options);
+      });
+    });
+  }
+
+  startRoundHandler() {
+    this.io.on('connection', socket => {
+      socket.on('startRound', data => {
+        console.log('startRound');
+        if (data.code !== this.game.code) return;
+
+        this.game.startRound();
       });
     });
   }

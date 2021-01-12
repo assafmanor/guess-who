@@ -1,5 +1,5 @@
 const Player = require('./player').Player;
-const Rounding = require('./round').Round
+const Rounding = require('./round').Round;
 
 class Game {
   MIN_PLAYERS = 3;
@@ -123,7 +123,7 @@ class Game {
 
   startRound() {
     this.inProgress = true;
-    // TODO
+    this.sendToAllPlayers('startRound');
   }
 }
 
