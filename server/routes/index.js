@@ -34,15 +34,7 @@ app.set('view engine', 'pug');
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  // const js = 'scripts/client-index.js';
-  const title = 'דף הבית';
-  const scripts = [
-    { path: 'scripts/utils.js', isModule: true },
-    { path: 'scripts/client-player-join.js', isModule: true },
-    { path: 'scripts/client-index.js', isModule: true }
-  ];
-
-  res.render(INDEX, { title: title, css: CSS, scripts: scripts });
+  renderIndex(req, res);
 });
 
 app.post('/create-room', (req, res) => {
@@ -54,9 +46,14 @@ app.post('/create-room', (req, res) => {
 });
 
 app.all('/:code([a-z]{4})', (req, res) => {
-  const title = 'לובי המתנה';
   const code = req.params.code;
   let name = req.body.name;
+
+  const game = guessWho.findGame(code);
+  if (game === false) {
+    res.sendStatus(404);
+    return;
+  }
 
   if (name === undefined) {
     const guessWhoRoom = req.cookies.guessWhoRoom;
@@ -68,20 +65,45 @@ app.all('/:code([a-z]{4})', (req, res) => {
     }
   }
 
-  const game = guessWho.findGame(code);
-  if (game === false) {
-    res.sendStatus(404);
-    return;
-  }
-
   for (player of game.players.values()) {
     if (player.name === name) {
       renderJoinLobby(req, res);
-      // res.redirect(`${req.baseUrl}/${code}/join`);
       return;
     }
   }
 
+  renderLobby(req, res);
+});
+
+app.post('/join-room', (req, res) => {
+  const code = req.body.code;
+  if (code === undefined) {
+    const guessWhoRoom = req.cookies.guessWhoRoom;
+    if (guessWhoRoom && guessWhoRoom.code) {
+      code = guessWhoRoom.code;
+    } else {
+      res.sendStatus(404);
+      return;
+    }
+  }
+  res.redirect(307, `/${code}`);
+});
+
+function renderIndex(req, res) {
+  const title = 'דף הבית';
+  const scripts = [
+    { path: 'scripts/utils.js', isModule: true },
+    { path: 'scripts/client-player-join.js', isModule: true },
+    { path: 'scripts/client-index.js', isModule: true }
+  ];
+
+  res.render(INDEX, { title: title, css: CSS, scripts: scripts });
+}
+
+function renderLobby(req, res) {
+  const title = 'לובי המתנה';
+  const code = req.params.code;
+  let name = req.body.name;
   const cookie = { code: code, name: name };
   res.cookie('guessWhoRoom', JSON.stringify(cookie), {
     maxAge: 600000 /* 10 minutes */,
@@ -101,22 +123,7 @@ app.all('/:code([a-z]{4})', (req, res) => {
     code: code,
     scripts: scripts
   });
-});
-
-app.post('/join-room', (req, res) => {
-  const code = req.body.code;
-  const name = req.body.name;
-  if (code === undefined) {
-    const guessWhoRoom = req.cookies.guessWhoRoom;
-    if (guessWhoRoom && guessWhoRoom.code) {
-      code = guessWhoRoom.code;
-    } else {
-      res.sendStatus(404);
-      return;
-    }
-  }
-  res.redirect(307, `/${code}`);
-});
+}
 
 function renderJoinLobby(req, res) {
   const code = req.params.code;
