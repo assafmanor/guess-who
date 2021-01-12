@@ -7,10 +7,8 @@ fetch(`/can-join-game/${code}`)
   .then(res => {
     // code is valid
     if (res !== false) {
-      console.log('hi');
       return;
     }
-    console.log('hello');
     const errorMessage = 'מצטערים, החדר מלא.';
     showErrorMessage('join-error-message', errorMessage);
     // disable form

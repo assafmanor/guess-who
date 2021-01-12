@@ -46,26 +46,47 @@ app.get('/', (req, res) => {
 });
 
 app.post('/create-room', (req, res) => {
-  const name = req.body.name;
   const game = guessWho.createGame();
   const gameJSON = game.getJSON();
-  res.cookie('code', gameJSON.code);
   const lobby = new Lobby(game);
   lobbies.set(gameJSON.code, lobby);
-  res.redirect(307, 'join-room');
+  res.redirect(307, `${gameJSON.code}/lobby`);
 });
 
-app.post('/:code/lobby', (req, res) => {
+app.all('/:code([a-z]{4})/?(lobby)', (req, res) => {
   const title = 'לובי המתנה';
   const code = req.params.code;
-  const name = req.body.name;
-  if (guessWho.findGame(code) === false) {
+  let name = req.body.name;
+  if (name === undefined) {
+    const guessWhoRoom = req.cookies.guessWhoRoom;
+    if (guessWhoRoom) {
+      name = JSON.parse(guessWhoRoom).name;
+    } else {
+      res.redirect(`${req.baseUrl}/${code}/join`);
+      return;
+    }
+  }
+  const game = guessWho.findGame(code);
+  if (game === false) {
     res.sendStatus(404);
     return;
   }
+  // find out if player has already joined
+  game.players.forEach(player => {
+    if (player.name === name) {
+      res.redirect(`${req.baseUrl}/${code}/join`);
+      return;
+    }
+  });
+  const cookie = { code: code, name: name };
+  res.cookie('guessWhoRoom', JSON.stringify(cookie), {
+    maxAge: 600000 /* 10 minutes */,
+    httpOnly: false
+  });
   const scripts = [
     { path: '/socket.io/socket.io.js', isModule: false },
-    { path: '../scripts/client-lobby.js', isModule: false }
+    { path: '../scripts/utils.js', isModule: true },
+    { path: '../scripts/client-lobby.js', isModule: true }
   ];
   res.render(LOBBY, {
     title: title,
@@ -77,21 +98,26 @@ app.post('/:code/lobby', (req, res) => {
 });
 
 app.post('/join-room', (req, res) => {
-  code = req.body.code;
+  const code = req.body.code;
+  const name = req.body.name;
   if (code === undefined) {
-    code_cookie = req.cookies.code;
-    if (code_cookie === undefined) {
+    const guessWhoRoom = req.cookies.guessWhoRoom;
+    if (guessWhoRoom && guessWhoRoom.code) {
+      code = guessWhoRoom.code;
+    } else {
       res.sendStatus(404);
       return;
     }
-    code = code_cookie;
   }
-
   res.redirect(307, `/${code}/lobby`);
 });
 
 app.get('/:code/join', (req, res) => {
   const code = req.params.code;
+  const guessWhoRoom = req.cookies.guessWhoRoom;
+  if (guessWhoRoom && guessWhoRoom.code === code) {
+    res.redirect(`${req.baseUrl}/${code}/lobby`);
+  }
   if (guessWho.findGame(code) === false) {
     res.sendStatus(404);
     return;
@@ -150,6 +176,20 @@ app.get('/can-join-game/:code', (req, res) => {
     return;
   }
   if (game.players.size >= game.MAX_PLAYERS) {
+    res.send('false');
+    return;
+  }
+  res.send('true');
+});
+
+app.get('/is-enough-players/:code', (req, res) => {
+  const code = req.params.code;
+  const game = guessWho.findGame(code);
+  if (game === false) {
+    res.sendStatus(404);
+    return;
+  }
+  if (game.players.size < game.MIN_PLAYERS) {
     res.send('false');
     return;
   }

@@ -1,18 +1,31 @@
 extends layout
 
-block js
-  script const name = '#{name}'
-  script const code = '#{code}'
-
 block main-title
   h1.text-lg.font-important קוד חדר: #{code}
 
 block content
-  section.container.section#players
+  section.container#players
     .content.centered-text
-      h2 ממתינים כרגע: 
+      h2 ממתינים כרגע:
       ul#players-list
-  section.container.section#host-area(hidden)
-    .content.centered-text#options
-      h2 אפשרויות:
-      button.btn.centered התחל משחק
+    .content
+      p.text-sml#players-wait יש להמתין עד שתהיו לפחות 3 שחקנים
+  section.container#options
+    .content.centered-text
+      h2 הגדרות המשחק:
+    section
+      form#options-form(action='')
+        fieldset(disabled='true')
+          .form-group
+            label(for='question-pack') חבילת שאלות
+            select#question-pack(name='question-pack', required)
+              option(selected, disabled, hidden, value='')
+              option(value='base') בסיסי
+          .form-group
+            label(for='num-questions') מספר שאלות
+            select#num-questions(name='num-questions', value='20', required)
+              option(selected, disabled, hidden, value='')
+              - for(let num = 5; num <= 50; num += 5)
+                option(value=`${num}`) #{num}
+          .centered
+            button.btn#start-game-btn(disabled, style='display: none; !important') התחל משחק

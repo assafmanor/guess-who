@@ -7,7 +7,7 @@
 
 @media only screen and (max-device-width: 1440px) {
   * {
-    font-size: 1.3em;
+    font-size: 1.1em;
   }
 }
 
@@ -27,11 +27,12 @@ body {
 
 .main-container {
   background: #fff;
+  padding: 30px;
 }
 
-.section {
-  margin: 25px;
-  background: rgb(253, 243, 234);
+section {
+  margin: 0 25px 25px 25px;
+  background: rgb(253, 243, 234) !important;
 }
 
 .content {
@@ -57,8 +58,8 @@ body {
 }
 
 .centered {
-  display: block !important;
-  margin: 0 auto !important;
+  display: flex;
+  justify-content: center;
 }
 
 .text-lg {
@@ -121,6 +122,18 @@ form .btn {
   background-color: #f3f3f3;
   color: #777;
   border-color: #aaa;
+}
+
+form fieldset {
+  border: none;
+}
+
+form fieldset label {
+  margin-left: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
 }
 
 #players-list {

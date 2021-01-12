@@ -1,10 +1,10 @@
 extends layout
 
 block main-title
-  h1 הצטרפות לחדר: #{code}
+  h1.text-lg.font-important קוד חדר: #{code}
 
 block content
-  section.container.section#players
+  section.container#players
     .content#join-name-area
       form#join-name-form(action='../join-room', method='post')
         label(for='name') איך קוראים לך?

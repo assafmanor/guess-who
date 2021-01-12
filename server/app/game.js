@@ -1,7 +1,9 @@
 const Player = require('./player').Player;
+const Rounding = require('./round').Round
 
 class Game {
-  MAX_PLAYERS = 3;
+  MIN_PLAYERS = 3;
+  MAX_PLAYERS = 8;
 
   constructor(io, code, onEmpty) {
     this.io = io;
@@ -11,6 +13,8 @@ class Game {
     this.host;
     this.inProgress = false;
     this.currentId = 0;
+    this.options = { questionPack: null, numQuestions: null };
+    this.round;
   }
 
   getPlayer(id) {
@@ -22,6 +26,7 @@ class Game {
 
   initPlayer(player) {
     player.socket.join(this.code);
+    console.log('initPlayer');
     if (!this.host) {
       this.setHost(player);
     }
@@ -71,11 +76,11 @@ class Game {
   onPlayerDisconnected(player) {
     console.log('onPlayerDisconnected');
     if (this.deleteGameIfEmpty()) {
-      return;
     }
     if (!this.host || (this.host && this.host === player)) {
       // find new host
       this.host = null;
+
       for (const player of this.players.values()) {
         if (player.isConnected) {
           this.setHost(player);
@@ -88,7 +93,12 @@ class Game {
   deleteGameIfEmpty() {
     console.log('deleteGameIfEmpty');
     if (this.players.size === 0) {
-      this.deleteGame();
+      // delete game after 5 seconds of being empty
+      setTimeout(() => {
+        if (this.players.size === 0) {
+          this.deleteGame();
+        }
+      }, 5000);
       return true;
     }
     return false;
@@ -112,6 +122,7 @@ class Game {
   }
 
   startRound() {
+    this.inProgress = true;
     // TODO
   }
 }
