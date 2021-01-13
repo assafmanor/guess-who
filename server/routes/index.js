@@ -168,10 +168,8 @@ app.get('/is-code-valid/:code', (req, res) => {
   const code = req.params.code;
   if (guessWho.findGame(code) !== false) {
     res.json({ result: true });
-    console.log('true');
   } else {
-    res.send('false');
-    console.log('false');
+    res.json({ result: false });
   }
 });
 
