@@ -2,34 +2,27 @@ var path = require('path');
 const fs = require('fs');
 
 class Questions {
-  PACKS_PATH = path.join(__dirname, '../questions');
+  static PACKS_PATH = path.join(__dirname, '../questions');
+  static allPacks = new Map();
+  constructor() {}
 
-  constructor() {
-    this.packs = new Map();
-    this.loadAllPacks();
-  }
-
-  loadAllPacks() {
+  static loadAllPacks() {
     console.log('loadAllPacks');
     fs.readdir(this.PACKS_PATH, (err, filenames) => {
       filenames.forEach(filename => {
         fs.readFile(this.PACKS_PATH + '/' + filename, (err, content) => {
           const pack = JSON.parse(content);
-          this.packs.set(pack.name, pack.questions);
+          this.allPacks.set(pack.name, pack.questions);
         });
       });
     });
   }
 
-  getPackNames() {
-    return Array.from(this.packs.keys());
-  }
-
-  getRandomQuestion(packNames) {
+  static getRandomQuestion(packNames) {
     let packs = [];
     let numberOfQuestions = 0;
     packNames.forEach(packName => {
-      const pack = this.packs.get(packName);
+      const pack = this.allPacks.get(packName);
       packs.push(pack);
       numberOfQuestions += pack.length;
     });
@@ -41,6 +34,10 @@ class Questions {
       }
       curSum += pack.length;
     }
+  }
+
+  static getPackNames() {
+    return Array.from(this.allPacks.keys());
   }
 }
 

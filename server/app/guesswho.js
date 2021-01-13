@@ -1,5 +1,5 @@
-Game = require('./game').Game;
-Questions = require('./questions').Questions;
+const Game = require('./game').Game;
+const Questions = require('./questions').Questions;
 
 class GuessWho {
   CODE_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
@@ -8,7 +8,7 @@ class GuessWho {
   constructor(io) {
     this.io = io;
     this.games = new Map();
-    this.questions = new Questions();
+    Questions.loadAllPacks();
   }
 
   createGame(forcedCode = null) {
@@ -51,6 +51,10 @@ class GuessWho {
       // so that there are no two games with the same code
     } while (this.findGame(code));
     return code;
+  }
+
+  getQuestionPackNames() {
+    return Questions.getPackNames();
   }
 }
 

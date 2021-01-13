@@ -1,6 +1,5 @@
 const Player = require('./player').Player;
 const Round = require('./round').Round;
-const Questions = require('./questions').Questions;
 
 class Game {
   MIN_PLAYERS = 3;
@@ -16,7 +15,6 @@ class Game {
     this.currentId = 0;
     this.options = { questionPacks: null, numQuestions: null };
     this.round;
-    this.questions = new Questions();
   }
 
   getPlayer(id) {
@@ -134,8 +132,7 @@ class Game {
   startRound() {
     this.inProgress = true;
     console.log('startRound');
-    console.dir(this.options);
-    this.round = new Round(this.options, this.questions);
+    this.round = new Round(this.options);
     this.sendToAllPlayers('startRound');
   }
 }

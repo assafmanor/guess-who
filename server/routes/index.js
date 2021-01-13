@@ -152,7 +152,7 @@ function renderLobby(req, res) {
     { path: '../scripts/client-lobby.js', isModule: true }
   ];
 
-  const questionPacks = lobbies.get(code).game.questions.getPackNames();
+  const questionPacks = guessWho.getQuestionPackNames();
 
   res.render(LOBBY, {
     title: title,

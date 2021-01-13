@@ -49,7 +49,6 @@ socket.on('getPlayerInfo', playerJSON => {
 });
 
 socket.on('getGameOptions', data => {
-  console.dir(data);
   const questionPacks = data.questionPacks;
   const numQuestions = data.numQuestions;
   console.log('getGameOptions');
@@ -178,7 +177,6 @@ async function enableStartButtonIfOKTo() {
 }
 
 function checkAllFieldsAreFilled() {
-  console.dir(selectedQuestionPackNames);
   if (selectedQuestionPackNames.length === 0) {
     return false;
   }
@@ -235,7 +233,6 @@ function createRemoveItemButtonEl() {
     questionPackEl.appendChild(option);
 
     console.log('selectedQuestionPackNames before: ');
-    console.dir(selectedQuestionPackNames);
 
     const index = selectedQuestionPackNames.indexOf(questionPackName);
     if (index > -1) {
@@ -243,7 +240,6 @@ function createRemoveItemButtonEl() {
     }
 
     console.log('selectedQuestionPackNames after: ');
-    console.dir(selectedQuestionPackNames);
     enableStartButtonIfOKTo();
     socket.emit('questionPacksChanged', {
       player: thisPlayer,
