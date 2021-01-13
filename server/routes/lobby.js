@@ -1,14 +1,16 @@
+const InGame = require('./ingame').InGame;
+
 class Lobby {
   constructor(game) {
     this.game = game;
     this.io = game.io;
-    this.newConnectionsHandler();
+    this.newConnectionHandler();
     this.startRoundHandler();
     this.optionChangedHandler('numQuestionsChanged', 'numQuestions');
-    this.optionChangedHandler('questionPackChanged', 'questionPack');
+    this.optionChangedHandler('questionPacksChanged', 'questionPacks');
   }
 
-  newConnectionsHandler() {
+  newConnectionHandler() {
     this.io.on('connection', socket => {
       socket.on('updateNewPlayer', data => {
         console.log('updateNewPlayer');
@@ -24,10 +26,9 @@ class Lobby {
   startRoundHandler() {
     this.io.on('connection', socket => {
       socket.on('startRound', data => {
-        console.log('startRound');
         if (data.code !== this.game.code) return;
-
         this.game.startRound();
+        new InGame(this.game);
       });
     });
   }
@@ -37,7 +38,6 @@ class Lobby {
       socket.on(eventName, data => {
         if (data.player.roomCode !== this.game.code) return;
         this.game.options[optionName] = data.value;
-        this.game.sendToAllPlayers(eventName, data);
         const player = this.game.getPlayer(data.player.id);
         if (player) {
           player.send(eventName, data);

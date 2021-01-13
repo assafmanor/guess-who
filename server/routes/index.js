@@ -55,6 +55,11 @@ app.all('/:code([a-z]{4})', (req, res) => {
     return;
   }
 
+  if (game.inProgress) {
+    renderJoinLobby(req, res);
+    return;
+  }
+
   if (name === undefined) {
     const guessWhoRoom = req.cookies.guessWhoRoom;
     if (guessWhoRoom) {
@@ -116,11 +121,14 @@ function renderLobby(req, res) {
     { path: '../scripts/client-lobby.js', isModule: true }
   ];
 
+  const questionPacks = lobbies.get(code).game.questions.getPackNames();
+
   res.render(LOBBY, {
     title: title,
     css: '../' + CSS,
     name: name,
     code: code,
+    questionPacks: questionPacks,
     scripts: scripts
   });
 }
@@ -150,12 +158,16 @@ function renderJoinLobby(req, res) {
   });
 }
 
+function renderInGame(req, res) {
+  const code = req.params.code;
+}
+
 // Client API
 
 app.get('/is-code-valid/:code', (req, res) => {
   const code = req.params.code;
   if (guessWho.findGame(code) !== false) {
-    res.send('true');
+    res.json({ result: true });
     console.log('true');
   } else {
     res.send('false');
@@ -172,14 +184,15 @@ app.get('/is-name-valid/:code/:name', (req, res) => {
     res.sendStatus(400);
     return;
   }
-  let isNameValid = 'true';
+  let isNameValid = true;
   for (const player of game.players.values()) {
     if (player.name === name) {
-      isNameValid = 'false';
+      isNameValid = false;
       break;
     }
   }
-  res.send(isNameValid);
+
+  res.json({ result: isNameValid });
 });
 
 app.get('/can-join-game/:code', (req, res) => {
@@ -190,10 +203,14 @@ app.get('/can-join-game/:code', (req, res) => {
     return;
   }
   if (game.players.size >= game.MAX_PLAYERS) {
-    res.send('false');
+    res.json({ result: false, errorMessage: 'החדר מלא' });
     return;
   }
-  res.send('true');
+  if (game.inProgress) {
+    res.json({ result: false, errorMessage: 'המשחק כבר התחיל' });
+    return;
+  }
+  res.json({ result: true });
 });
 
 app.get('/is-enough-players/:code', (req, res) => {
@@ -204,8 +221,8 @@ app.get('/is-enough-players/:code', (req, res) => {
     return;
   }
   if (game.players.size < game.MIN_PLAYERS) {
-    res.send('false');
+    res.json({ result: false });
     return;
   }
-  res.send('true');
+  res.send({ result: true });
 });

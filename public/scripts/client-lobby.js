@@ -4,9 +4,13 @@ const socket = io();
 
 const playerListEl = document.getElementById('players-list');
 const questionPackEl = document.getElementById('question-pack');
+const questionPackListEl = document.getElementById('question-pack-list');
 const numQuestionsEl = document.getElementById('num-questions');
+const addPackBtn = document.getElementById('add-pack-btn');
 
 let thisPlayer;
+let isHost = false;
+let selectedQuestionPackNames = [];
 
 const guessWhoRoom = JSON.parse(getCookie('guessWhoRoom'));
 const code = guessWhoRoom.code;
@@ -25,6 +29,13 @@ socket.on('updatePlayerList', playersData => {
     }
     playerListEl.append(li);
   }
+  checkMinimumNumberOfPlayers().then(res => {
+    if (res.result) {
+      document.getElementById('players-wait').style.display = 'none';
+    } else {
+      document.getElementById('players-wait').style.display = 'block';
+    }
+  });
   enableStartButtonIfOKTo();
 });
 
@@ -34,18 +45,21 @@ socket.on('getPlayerInfo', playerJSON => {
 });
 
 socket.on('getGameOptions', data => {
-  const questionPack = data.questionPack;
+  console.dir(data);
+  const questionPacks = data.questionPacks;
   const numQuestions = data.numQuestions;
   console.log('getGameOptions');
-  console.dir(data);
-  questionPackEl.value = questionPack;
-  numQuestionsEl.value = numQuestions;
+  if (questionPacks) {
+    updateQuestionPacksList(questionPacks);
+  }
+  if (numQuestions) {
+    numQuestionsEl.value = numQuestions;
+  }
 });
 
 socket.on('updateNewHost', hostData => {
   console.log('updateNewHost');
   const hostSocketId = hostData.socketId;
-  const nonHostArea = document.getElementById('non-host-area');
   if (socket.id === hostSocketId) {
     enableHostOptions();
   }
@@ -56,19 +70,16 @@ socket.on('numQuestionsChanged', data => {
   numQuestionsEl.value = numQuestions;
 });
 
-socket.on('questionPackChanged', data => {
-  const questionPack = data.value;
-  questionPackEl.value = questionPack;
+socket.on('questionPacksChanged', data => {
+  console.log('questionPacksChanged');
+  const questionPackNames = data.value;
+  updateQuestionPacksList(questionPackNames);
+  selectedQuestionPackNames = questionPackNames;
 });
 
 socket.on('startRound', () => {
   console.log('startRound');
 });
-
-function enableHostOptions() {
-  document.querySelector('form fieldset').removeAttribute('disabled');
-  document.getElementById('start-game-btn').style.display = 'block';
-}
 
 numQuestionsEl.addEventListener('change', () => {
   socket.emit('numQuestionsChanged', {
@@ -79,18 +90,69 @@ numQuestionsEl.addEventListener('change', () => {
 });
 
 questionPackEl.addEventListener('change', () => {
-  socket.emit('questionPackChanged', {
+  if (questionPackEl.selectedIndex.value !== '') {
+    addPackBtn.disabled = false;
+  } else {
+    addPackBtn.disabled = true;
+  }
+});
+
+document.getElementById('options-form').addEventListener('submit', event => {
+  event.preventDefault();
+  socket.emit('startRound', {
+    code: code
+  });
+});
+
+addPackBtn.addEventListener('click', () => {
+  const selectedPackName = questionPackEl.value;
+  if (selectedPackName === '') return;
+  addQuestionPackToList(selectedPackName);
+  questionPackEl.remove(questionPackEl.selectedIndex);
+  if (questionPackEl.options.length == 1) {
+    // only 'בחר'
+    toggleQuestionPackSelection('none');
+  }
+  socket.emit('questionPacksChanged', {
     player: thisPlayer,
-    value: questionPackEl.value
+    value: selectedQuestionPackNames
   });
   enableStartButtonIfOKTo();
 });
+
+function enableHostOptions() {
+  isHost = true;
+  document.querySelector('form fieldset').removeAttribute('disabled');
+  document.getElementById('start-game-btn').style.display = 'block';
+  // update question pack selection menu
+  while (questionPackEl.childNodes.length > 1) {
+    questionPackEl.removeChild(questionPackEl.lastChild);
+  }
+  const filter = questionPackNames.filter(
+    name => !selectedQuestionPackNames.includes(name)
+  );
+  if (filter.length === 0) {
+    toggleQuestionPackSelection('none');
+  } else {
+    filter.forEach(name => {
+      const option = document.createElement('option');
+      option.value = name;
+      option.textContent = name;
+      questionPackEl.append(option);
+    });
+    toggleQuestionPackSelection('block');
+  }
+  // add 'remove item' buttons to the selected packs list
+  questionPackListEl.childNodes.forEach(li => {
+    li.appendChild(createRemoveItemButtonEl());
+  });
+}
 
 async function enableStartButtonIfOKTo() {
   const startGameButton = document.getElementById('start-game-btn');
   if (checkAllFieldsAreFilled()) {
     checkMinimumNumberOfPlayers().then(res => {
-      if (res) {
+      if (res.result) {
         startGameButton.removeAttribute('disabled');
       } else {
         startGameButton.setAttribute('disabled', '');
@@ -102,11 +164,12 @@ async function enableStartButtonIfOKTo() {
 }
 
 function checkAllFieldsAreFilled() {
-  const formFields = document.querySelectorAll('.form-group select');
-  for (let i = 0; i < formFields.length; i++) {
-    if (formFields[i].value === '') {
-      return false;
-    }
+  console.dir(selectedQuestionPackNames);
+  if (selectedQuestionPackNames.length === 0) {
+    return false;
+  }
+  if (numQuestionsEl.value === '') {
+    return false;
   }
   return true;
 }
@@ -119,7 +182,59 @@ async function checkMinimumNumberOfPlayers() {
     });
 }
 
-document.getElementById('options-form').addEventListener('submit', event => {
-  event.preventDefault();
-  socket.emit('startRound', { code: code });
-});
+function updateQuestionPacksList(questionPackNames) {
+  questionPackListEl.innerHTML = '';
+  for (const questionPackName of questionPackNames) {
+    addQuestionPackToList(questionPackName);
+  }
+}
+
+function addQuestionPackToList(name) {
+  selectedQuestionPackNames.push(name);
+  const li = document.createElement('li');
+  li.textContent = name;
+  li.classList.add('text-sml');
+  if (isHost) {
+    li.append(createRemoveItemButtonEl());
+  }
+  questionPackListEl.append(li);
+}
+
+function toggleQuestionPackSelection(display) {
+  questionPackEl.style.display = display;
+  addPackBtn.style.display = display;
+}
+
+function createRemoveItemButtonEl() {
+  const removeListItemEl = document.createElement('i');
+  removeListItemEl.classList.add('fas', 'fa-times', 'remove-button');
+  removeListItemEl.addEventListener('click', event => {
+    const li = event.target.parentNode;
+    li.parentNode.removeChild(li);
+    if (questionPackEl.childNodes.length === 1) {
+      toggleQuestionPackSelection('block');
+    }
+    const option = document.createElement('option');
+    const questionPackName = li.textContent;
+    option.value = questionPackName;
+    option.textContent = questionPackName;
+    questionPackEl.appendChild(option);
+
+    console.log('selectedQuestionPackNames before: ');
+    console.dir(selectedQuestionPackNames);
+
+    const index = selectedQuestionPackNames.indexOf(questionPackName);
+    if (index > -1) {
+      selectedQuestionPackNames.splice(index, 1);
+    }
+
+    console.log('selectedQuestionPackNames after: ');
+    console.dir(selectedQuestionPackNames);
+    enableStartButtonIfOKTo();
+    socket.emit('questionPacksChanged', {
+      player: thisPlayer,
+      value: selectedQuestionPackNames
+    });
+  });
+  return removeListItemEl;
+}

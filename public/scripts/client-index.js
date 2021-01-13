@@ -63,8 +63,8 @@ joinCodeForm.addEventListener('submit', event => {
         return fetch(`/can-join-game/${codeEntered}`)
           .then(res => res.json())
           .then(res => {
-            if (!res) {
-              const errorMessage = 'מצטערים, החדר מלא.';
+            if (!res.result) {
+              const errorMessage = `מצטערים, ${res.errorMessage}.`;
               showErrorMessage('join-error-message', errorMessage, 4000);
             } else {
               code = codeEntered;
@@ -77,23 +77,6 @@ joinCodeForm.addEventListener('submit', event => {
       }
     });
 });
-
-// joinNameForm.addEventListener('submit', event => {
-//   event.preventDefault();
-//   const name = document.getElementById('join-name').value;
-//   fetch(`/is-name-valid/${code}/${name}`)
-//     .then(res => {
-//       return res.json();
-//     })
-//     .then(res => {
-//       if (res) {
-//         event.target.submit();
-//       } else {
-//         const errorMessage = 'השם כבר תפוס.';
-//         showErrorMessage('join-error-message', errorMessage, 2000);
-//       }
-//     });
-// });
 
 joinBackButton.addEventListener('click', () => {
   joinNameArea.style.display = 'none';

@@ -6,12 +6,12 @@ fetch(`/can-join-game/${code}`)
   .then(res => res.json())
   .then(res => {
     // code is valid
-    if (res !== false) {
+    if (res.result) {
       return;
     }
-    const errorMessage = 'מצטערים, החדר מלא.';
+    const errorMessage = `מצטערים, ${res.errorMessage}.`;
     showErrorMessage('join-error-message', errorMessage);
     // disable form
-    document.querySelector('form button').disabled = true;
+    document.querySelector('form .btn').disabled = true;
     document.getElementById('join-name').disabled = true;
   });

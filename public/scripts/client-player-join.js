@@ -13,7 +13,7 @@ joinNameForm.addEventListener('submit', event => {
       return res.json();
     })
     .then(res => {
-      if (res) {
+      if (res.result) {
         event.target.submit();
       } else {
         const errorMessage = 'השם כבר תפוס.';
