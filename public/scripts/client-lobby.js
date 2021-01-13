@@ -14,8 +14,9 @@ let selectedQuestionPackNames = [];
 
 const guessWhoRoom = JSON.parse(getCookie('guessWhoRoom'));
 const code = guessWhoRoom.code;
-const name = guessWhoRoom.name;
-
+if (name === '') {
+  name = guessWhoRoom.name;
+}
 socket.emit('updateNewPlayer', { code: code, name: name });
 
 socket.on('updatePlayerList', playersData => {
@@ -42,6 +43,9 @@ socket.on('updatePlayerList', playersData => {
 socket.on('getPlayerInfo', playerJSON => {
   console.log('getPlayerInfo');
   thisPlayer = playerJSON;
+  // write id to cookie
+  const cookieObj = { code: code, id: thisPlayer.id };
+  document.cookie = 'guessWhoRoomId=' + JSON.stringify(cookieObj);
 });
 
 socket.on('getGameOptions', data => {
@@ -100,8 +104,18 @@ questionPackEl.addEventListener('change', () => {
 document.getElementById('options-form').addEventListener('submit', event => {
   event.preventDefault();
   socket.emit('startRound', {
+    player: thisPlayer,
     code: code
   });
+  document.getElementById('selected-question-packs').value = JSON.stringify(
+    selectedQuestionPackNames
+  );
+  event.target.submit();
+});
+
+socket.on('startRound', data => {
+  document.getElementById('selected-question-packs').value = data.questionPacks;
+  document.getElementById('options-form').submit();
 });
 
 addPackBtn.addEventListener('click', () => {

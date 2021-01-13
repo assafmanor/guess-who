@@ -29,6 +29,7 @@ class Lobby {
         if (data.code !== this.game.code) return;
         this.game.startRound();
         new InGame(this.game);
+        this.game.getPlayer(data.player.id).send('startRound', this.game.options);
       });
     });
   }

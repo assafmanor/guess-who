@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 const INDEX = 'index';
 const LOBBY = 'lobby';
 const JOIN_LOBBY = 'join-lobby';
+const INGAME = 'ingame';
 
 const CSS = 'css/style.css';
 
@@ -45,7 +46,7 @@ app.post('/create-room', (req, res) => {
   res.redirect(307, `${gameJSON.code}`);
 });
 
-app.all('/:code([a-z]{4})', (req, res) => {
+app.all('/:code([a-z]{4})', async (req, res) => {
   const code = req.params.code;
   let name = req.body.name;
 
@@ -62,7 +63,7 @@ app.all('/:code([a-z]{4})', (req, res) => {
 
   if (name === undefined) {
     const guessWhoRoom = req.cookies.guessWhoRoom;
-    if (guessWhoRoom) {
+    if (guessWhoRoom && guessWhoRoom.code == code) {
       name = JSON.parse(guessWhoRoom).name;
     } else {
       renderJoinLobby(req, res);
@@ -70,28 +71,53 @@ app.all('/:code([a-z]{4})', (req, res) => {
     }
   }
 
-  for (player of game.players.values()) {
-    if (player.name === name) {
-      renderJoinLobby(req, res);
-      return;
-    }
+  if (_getPlayerList(game).includes(name)) {
+    renderJoinLobby(req, res);
+    return;
   }
 
   renderLobby(req, res);
 });
 
-app.post('/join-room', (req, res) => {
-  const code = req.body.code;
-  if (code === undefined) {
-    const guessWhoRoom = req.cookies.guessWhoRoom;
-    if (guessWhoRoom && guessWhoRoom.code) {
-      code = guessWhoRoom.code;
-    } else {
-      res.sendStatus(404);
-      return;
-    }
+function _getPlayerList(game) {
+  return Array.from(game.players.values()).map(player => player.name);
+}
+
+app.all('/join-room', (req, res) => {
+  let name = req.body.name;
+  let code = req.body.code;
+  if (name && code) {
+    res.redirect(307, `/${code}`);
+    return;
   }
+  const guessWhoRoomStr = req.cookies.guessWhoRoom;
+  if (!guessWhoRoomStr) {
+    res.sendStatus(404);
+    return;
+  }
+  guessWhoRoom = JSON.parse(guessWhoRoomStr);
+  code = guessWhoRoom.code;
+  name = guessWhoRoom.name;
+  console.log(code, name);
   res.redirect(307, `/${code}`);
+});
+
+app.post('/:code([a-z]{4})/ingame', (req, res) => {
+  const code = req.params.code;
+  let name = req.body.name;
+
+  const game = guessWho.findGame(code);
+  if (game === false) {
+    res.sendStatus(404);
+    return;
+  }
+
+  if (!game.inProgress) {
+    renderJoinLobby(req, res);
+    return;
+  }
+
+  renderInGame(req, res);
 });
 
 function renderIndex(req, res) {
@@ -108,10 +134,15 @@ function renderIndex(req, res) {
 function renderLobby(req, res) {
   const title = 'לובי המתנה';
   const code = req.params.code;
+  const guessWhoRoom = req.cookies.guessWhoRoom;
   let name = req.body.name;
-  const cookie = { code: code, name: name };
-  res.cookie('guessWhoRoom', JSON.stringify(cookie), {
-    maxAge: 600000 /* 10 minutes */,
+  let cookie;
+  if (name) {
+    cookie = JSON.stringify({ code: code, name: name });
+  } else {
+    cookie = guessWhoRoom;
+  }
+  res.cookie('guessWhoRoom', cookie, {
     httpOnly: false
   });
 
@@ -135,15 +166,22 @@ function renderLobby(req, res) {
 
 function renderJoinLobby(req, res) {
   const code = req.params.code;
-  const guessWhoRoom = req.cookies.guessWhoRoom;
-  if (guessWhoRoom && guessWhoRoom.code === code) {
-    res.redirect(`${req.baseUrl}/${code}`);
-    return;
+  const guessWhoRoomStr = req.cookies.guessWhoRoom;
+  if (guessWhoRoomStr) {
+    const guessWhoRoom = JSON.parse(guessWhoRoomStr);
+    const cookieCode = guessWhoRoom.code;
+    const name = guessWhoRoom.name;
+    const game = guessWho.findGame(code);
+    if (game === false) {
+      res.sendStatus(404);
+      return;
+    }
+    if (cookieCode === code && !_getPlayerList(game).includes(name)) {
+      res.redirect(`${req.baseUrl}/${code}`);
+      return;
+    }
   }
-  if (guessWho.findGame(code) === false) {
-    res.sendStatus(404);
-    return;
-  }
+
   const scripts = [
     { path: '../scripts/utils.js', isModule: true },
     { path: '../scripts/join-lobby.js', isModule: true },
@@ -160,6 +198,18 @@ function renderJoinLobby(req, res) {
 
 function renderInGame(req, res) {
   const code = req.params.code;
+  const scripts = [
+    { path: '/socket.io/socket.io.js', isModule: false },
+    { path: '../scripts/utils.js', isModule: true },
+    { path: '../scripts/client-ingame.js', isModule: true }
+  ];
+  const title = 'סבב שאלות';
+  res.render(INGAME, {
+    title: title,
+    css: '../' + CSS,
+    code: code,
+    scripts: scripts
+  });
 }
 
 // Client API
@@ -189,7 +239,6 @@ app.get('/is-name-valid/:code/:name', (req, res) => {
       break;
     }
   }
-
   res.json({ result: isNameValid });
 });
 

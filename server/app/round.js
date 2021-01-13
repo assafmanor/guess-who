@@ -1,5 +1,4 @@
 class Round {
-<<<<<<< HEAD
   constructor(options, questions) {
     this.questionPacks = options.questionPacks;
     this.numQuestions = options.numQuestions;
@@ -8,11 +7,6 @@ class Round {
       console.log(`#${i}`);
       console.dir(this.questions.getRandomQuestion(this.questionPacks));
     }
-=======
-  constructor(options) {
-    this.questionPacks = options.questionPacks;
-    this.numQuestions = options.numQuestions;
->>>>>>> 782ae1507e02de878a439019dabf4df2aa177de0
   }
 }
 

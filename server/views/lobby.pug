@@ -2,7 +2,8 @@ extends layout
 
 block js
   script.
-    const questionPackNames = `#{questionPacks}`.split(',')
+    let name = `#{name}`;
+    const questionPackNames = `#{questionPacks}`.split(',');
 
 block main-title
   h1.text-lg.font-important קוד חדר: #{code}
@@ -17,7 +18,7 @@ block content
   section.container#options
     .content.centered-text
       h2 הגדרות המשחק:
-    form#options-form(action='')
+    form#options-form(action=`${code}/ingame`, method='post')
       fieldset(disabled='true')
         .row.text-sml
           .col-25

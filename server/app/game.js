@@ -60,6 +60,14 @@ class Game {
     this.deleteGameIfEmpty();
   }
 
+  reconnectPlayer(id, socket) {
+    const player = this.getPlayer(id);
+    if (!player) {
+      throw new Error(`Player id ${id} not found`);
+    }
+    player.socket = socket;
+  }
+
   deleteGame(game) {
     this.onEmpty();
   }
