@@ -1,4 +1,5 @@
 Game = require('./game').Game;
+Questions = require('./questions').Questions;
 
 class GuessWho {
   CODE_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
@@ -7,6 +8,7 @@ class GuessWho {
   constructor(io) {
     this.io = io;
     this.games = new Map();
+    this.questions = new Questions();
   }
 
   createGame(forcedCode = null) {

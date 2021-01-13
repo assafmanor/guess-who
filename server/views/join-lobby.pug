@@ -7,13 +7,17 @@ block content
   section.container#players
     .content#join-name-area
       form#join-name-form(action='../join-room', method='post')
-        label(for='name') איך קוראים לך?
-        input#join-name(type='text'
-        name='name'
-        maxlength='20'
-        placeholder="מתיתיהו בן אליעזר"
-        pattern="[a-zA-Zא-ת0-9 ]{1,20}")
-        input#join-code(type='hidden', name='code' value=`${code}`)
-        button.btn(type='submit') הצטרף
+        .row
+          .col-25
+            label(for='name') שם
+          .col-75
+            input#join-name(type='text'
+            name='name'
+            maxlength='20'
+            placeholder="מתיתיהו בן אליעזר"
+            pattern="[a-zA-Zא-ת0-9 ]{1,20}")
+            input#join-code(type='hidden', name='code' value=`${code}`)
+        .row.submit
+          input.btn(type='submit', value='הצטרף')
       .content#join-warning(hidden)
         p.warning.centered-text#join-error-message

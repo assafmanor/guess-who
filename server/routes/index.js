@@ -116,11 +116,14 @@ function renderLobby(req, res) {
     { path: '../scripts/client-lobby.js', isModule: true }
   ];
 
+  const questionPacks = guessWho.questions.getPackNames().sort();
+
   res.render(LOBBY, {
     title: title,
     css: '../' + CSS,
     name: name,
     code: code,
+    questionPacks: questionPacks,
     scripts: scripts
   });
 }

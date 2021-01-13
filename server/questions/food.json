@@ -1,0 +1,37 @@
+{
+  "name": "אוכל",
+  "questions": [
+    {
+      "question": "ברוקולי",
+      "type": "multipleChoice"
+    },
+    {
+        "question": "חריף",
+        "type": "multipleChoice"
+      },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מתוק", "מלוח"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פיצה", "המבורגר"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פיצה", "פסטה"]
+    },
+    {
+      "question": "ההמבורגר המושלם בעיניך",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["רוטב עגבניות", "רוטב שמנת"]
+    }
+  ]
+}

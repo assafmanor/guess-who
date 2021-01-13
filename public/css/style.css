@@ -7,11 +7,12 @@
 
 @media only screen and (max-device-width: 1440px) {
   * {
-    font-size: 1.1em;
+    font-size: 1em;
   }
 }
 
 body {
+  padding: 25px;
   font-family: 'Varela Round', sans-serif;
   direction: rtl;
   background: #f3f3f3;
@@ -28,16 +29,19 @@ body {
 .main-container {
   background: #fff;
   padding: 30px;
+  box-shadow: 0 0 25px #ccc;
 }
 
 section {
+  padding: 25px;
   margin: 0 25px 25px 25px;
   background: rgb(253, 243, 234) !important;
 }
 
 .content {
   margin: auto;
-  padding: 30px;
+  padding: 10px;
+  /* padding: 25px; */
 }
 
 .header {
@@ -78,6 +82,10 @@ section {
 .text-sml {
   font-size: 0.8em;
 }
+
+.text-tiny {
+  font-size: 0.65em;
+}
 .btn {
   background-color: rgb(243, 208, 168);
   border: 1px solid rgb(221, 169, 111);
@@ -85,7 +93,7 @@ section {
   text-align: center;
   padding: 15px 32px;
   text-decoration: none;
-  margin: auto 10px;
+  margin-right: 20px;
   padding: 10px;
   transition-duration: 0.4s;
   outline: none;
@@ -101,27 +109,11 @@ section {
   border-color: #000;
 }
 
-form label {
-  width: 40%;
-  font-size: 1em;
-}
-
-form input {
-  width: 40%;
-  padding: 1rem 20px;
-  margin: 8px;
-  display: block;
-}
-
-form .btn {
-  margin: 8px 8px;
-  /* display: block; */
-}
-
 .btn:disabled {
   background-color: #f3f3f3;
   color: #777;
   border-color: #aaa;
+  cursor: auto;
 }
 
 form fieldset {
@@ -136,6 +128,104 @@ form fieldset label {
   margin-bottom: 10px;
 }
 
-#players-list {
+#players-list,
+#question-pack-list {
   list-style-type: none;
+}
+
+#question-pack-list {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#question-pack-list li {
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 5px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type='text'],
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+input[type='submit'] {
+  float: left;
+}
+
+input[type='button'] {
+  float: left;
+}
+
+label {
+  display: inline-block;
+  padding: 12px 0;
+}
+
+.col-10 {
+  float: right;
+  width: 10%;
+  margin-top: 6px;
+}
+
+.col-25 {
+  float: right;
+  width: 25%;
+  margin-top: 6px;
+}
+
+.col-50 {
+  float: right;
+  width: 50%;
+  margin-top: 6px;
+}
+
+.col-65 {
+  float: right;
+  width: 65%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: right;
+  width: 75%;
+  margin-top: 6px;
+}
+
+.row:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.row.submit {
+  margin-top: 1em;
+}
+
+.row .back {
+  margin-right: 0;
+}
+
+.add-button {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+}
+
+.remove-button {
+  margin-right: 5px;
+}
+
+.remove-button:hover {
+  color: red;
+  cursor: pointer;
 }

@@ -1,0 +1,66 @@
+{
+  "name": "כללי",
+  "questions": [
+    {
+      "question": "הארי פוטר",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["הביטלס", "רולינג סטונס"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ים", "בריכה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ספר", "סרט", "סדרה"]
+    },
+    {
+      "question": "מחשב",
+      "type": "multipleChoice",
+      "choices": ["נייח", "נייד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קיץ", "סתיו", "חורף", "אביב"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["כלב", "חתול"]
+    },
+    {
+      "question": "להיות או לא להיות?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "זקן (beard)",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["תה", "קפה"]
+    },
+    {
+      "question": "היעד הבא שלך בחו\"ל",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["משחקי קופסה", "משחקי מחשב"]
+    }, 
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["למצוא אהבת אמת", "לזכות במיליון דולר"]
+    }
+  ]
+}

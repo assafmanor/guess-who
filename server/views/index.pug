@@ -11,36 +11,48 @@ block content
       button.btn#join-btn הצטרף
     .content#host-area
       form(action='create-room', method='post')
-        label(for='host-name') איך קוראים לך?
-        input#host-name(
-          type='text'
-          name='name'
-          maxlength='20'
-          placeholder="מתיתיהו בן אליעזר"
-          pattern="[a-zA-Zא-ת0-9 ]{1,20}")
-        button.btn(type='submit') צור
+        .row
+          .col-25
+            label(for='host-name') שם
+          .col-75
+            input#host-name(
+              type='text'
+              name='name'
+              maxlength='20'
+              placeholder="מתיתיהו בן אליעזר"
+              pattern="[a-zA-Zא-ת0-9 ]{1,20}")
+        .row.submit
+          input.btn(type='submit', value='צור')
     #join-area
       .content#join-code-area
         form#join-code-form(action='', method='')
-          label(for='code') הכנס קוד
-          input#code(
-            type='text'
-            name='code'
-            maxlength='4'
-            placeholder="קוד בעל 4 אותיות "
-            pattern="[a-zA-Z]{4}"
-            autocomplete='off')
-          button.btn(type='submit') שלח
+          .row
+            .col-25
+              label(for='code') הכנס קוד
+            .col-75
+              input#code(
+                type='text'
+                name='code'
+                maxlength='4'
+                placeholder="קוד בעל 4 אותיות "
+                pattern="[a-zA-Z]{4}"
+                autocomplete='off')
+          .row.submit
+            input.btn(type='submit', value='שלח')
       .content#join-name-area
         form#join-name-form(action='join-room', method='post')
-          label(for='name') איך קוראים לך?
-          input#join-name(type='text'
-          name='name'
-          maxlength='20'
-          placeholder="מתיתיהו בן אליעזר"
-          pattern="[a-zA-Zא-ת0-9 ]{1,20}")
-          input#join-code(type='hidden', name='code')
-          button.btn#join-back(type='button') חזור
-          button.btn(type='submit') הצטרף
+          .row
+            .col-25
+              label(for='name') שם
+            .col-75
+              input#join-name(type='text'
+              name='name'
+              maxlength='20'
+              placeholder="מתיתיהו בן אליעזר"
+              pattern="[a-zA-Zא-ת0-9 ]{1,20}")
+              input#join-code(type='hidden', name='code')
+          .row.submit.back
+            input.btn(type='submit', value='הצטרף')
+            input.btn.back#join-back(type='button', value='חזור')
       .content#join-warning(hidden)
         p.warning.centered-text#join-error-message
