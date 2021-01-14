@@ -5,12 +5,6 @@
   font-size: 1.05em;
 }
 
-@media only screen and (max-device-width: 1440px) {
-  * {
-    font-size: 1em;
-  }
-}
-
 body {
   padding: 25px;
   font-family: 'Varela Round', sans-serif;
@@ -36,6 +30,10 @@ section {
   padding: 25px;
   margin: 0 25px 25px 25px;
   background: rgb(253, 243, 234) !important;
+}
+
+.bg-lightblue {
+  background: rgb(234, 244, 253) !important;
 }
 
 .content {
@@ -116,6 +114,15 @@ section {
   cursor: auto;
 }
 
+.btn-blue {
+  background-color: rgb(168, 203, 243);
+  border: 1px solid rgb(111, 155, 221);
+}
+
+.btn-blue:hover {
+  background-color: rgb(194, 222, 253);
+}
+
 form fieldset {
   border: none;
 }
@@ -149,12 +156,15 @@ form fieldset label {
 }
 
 input[type='text'],
-select {
+select,
+textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+  outline: none;
+  font-family: inherit;
 }
 
 input[type='submit'] {
@@ -165,7 +175,7 @@ input[type='button'] {
   float: left;
 }
 
-label {
+.row label {
   display: inline-block;
   padding: 12px 0;
 }
@@ -228,4 +238,99 @@ label {
 .remove-button:hover {
   color: red;
   cursor: pointer;
+}
+
+/* Ingame */
+
+.choice-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.choice-item {
+  width: 34%;
+  cursor: pointer;
+  padding: 1em 0;
+}
+
+.choice-item label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  padding-right: 2rem;
+}
+
+.choice-item input[type='radio'] {
+  width: 0;
+  height: 0;
+}
+
+.radio {
+  position: absolute;
+  top: 0.35rem;
+  right: 0;
+  height: 1.1rem;
+  width: 1.1rem;
+  background-color: #ccc;
+  border-radius: 50%;
+}
+
+.choice-item:hover input ~ .radio {
+  background-color: #aaa;
+}
+
+.choice-item input:checked ~ .radio {
+  background-color: rgb(123, 166, 216);
+}
+
+.radio:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.choice-item input:checked ~ .radio:after {
+  display: block;
+}
+
+.choice-item .radio:after {
+  top: 5px;
+  left: 4.5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: white;
+}
+
+.answer-input {
+  height: 10vh;
+  padding: 10px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Mobile Area */
+
+@media only screen and (max-device-width: 700px) {
+  * {
+    font-size: 1em;
+  }
+
+  .choice-item {
+    width: 100%;
+  }
+
+  .radio {
+    top: 12%;
+  }
+
+  .choice-item .radio:after {
+    top: 4.5px;
+    left: 5px;
+  }
 }

@@ -1,1 +1,18 @@
 extends layout
+
+block main-title
+  h1.text-lg#q-number שאלה 
+    span#q-num
+
+block content
+  section.container.bg-lightblue
+    .content.centered-text
+      h2#question
+    .content
+      form#answers-form
+        .choice-container#multiple-choice-area(style='display: none; !important')
+        #short-answer-area(style='display: none; !important')
+          .row
+            input.answer-input#short-answer(type='text', name='answer', autocomplete="off")
+        .row.submit
+          input.btn.btn-blue#submit-answer-btn(type='submit', value='בחר')

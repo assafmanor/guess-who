@@ -9,6 +9,11 @@
     "socket.io": "^3.0.5"
   },
   "scripts": {
+    "dev": "nodemon -r dotenv/config server/routes/index.js",
     "start": "node server/routes/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "dotenv": "^8.2.0"
   }
 }

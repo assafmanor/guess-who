@@ -1,14 +1,31 @@
 const Questions = require('./questions').Questions;
 
 class Round {
-  constructor(options, questions) {
+  constructor(options) {
     this.questionPacks = options.questionPacks;
     this.numQuestions = options.numQuestions;
-    this.questions = questions;
-    for (let i = 0; i < options.numQuestions; i++) {
-      console.log(`#${i}`);
-      console.dir(Questions.getRandomQuestion(this.questionPacks));
+  }
+
+  getQuestions() {
+    if (
+      this.numQuestions > Questions.getNumberOfQuestions(this.questionPacks)
+    ) {
+      throw new Error('Cannot get enough questions');
     }
+    let questions = [];
+    const addedQuestionIds = new Set();
+    let numOfAddedQuestions = 0;
+    let currentQuestion;
+    while (numOfAddedQuestions < this.numQuestions) {
+      currentQuestion = Questions.getRandomQuestion(this.questionPacks);
+      if (addedQuestionIds.has(currentQuestion.id)) {
+        continue;
+      }
+      questions.push(currentQuestion);
+      addedQuestionIds.add(currentQuestion.id);
+      numOfAddedQuestions++;
+    }
+    return questions;
   }
 }
 

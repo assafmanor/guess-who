@@ -1,8 +1,10 @@
 const Player = require('./player').Player;
 const Round = require('./round').Round;
 
+node_env = process.env.NODE_ENV;
+
 class Game {
-  MIN_PLAYERS = 3;
+  MIN_PLAYERS = node_env === 'development' ? 1 : 3;
   MAX_PLAYERS = 8;
 
   constructor(io, code, onEmpty) {

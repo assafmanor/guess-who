@@ -6,13 +6,39 @@
       "type": "multipleChoice"
     },
     {
-        "question": "חריף",
-        "type": "multipleChoice"
-      },
+      "question": "חריף",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מיונז",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "קטשופ",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "ופל לימון",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "במבה אדומה",
+      "type": "multipleChoice"
+    },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["מתוק", "מלוח"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["נוטלה", "השחר"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אוכל בשרי", "אוכל חלבי"]
     },
     {
       "question": "מה עדיף?",
@@ -22,16 +48,60 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["שניצל", "סטייק"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["פיצה", "פסטה"]
     },
     {
-      "question": "ההמבורגר המושלם בעיניך",
-      "type": "shortAnswer"
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["תה", "קפה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קפה", "שוקו"]
+    },
+    {
+      "question": "מה סוג הקפה המועדף עליך?",
+      "type": "multipleChoice",
+      "choices": ["הפוך", "נס", "שחור", "אחר", "אף אחד"]
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["רוטב עגבניות", "רוטב שמנת"]
+    },
+    {
+      "question": "מה התוספת הכי טובה לצד שניצל?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "סטייק: מה מידת העשיה המועדפת עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה העוגה האהובה עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "כמה סוכר לשים לך בקפה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "באיזה חג יש את האוכל הכי טעים?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "קסטה: מאיזה צד מתחילים?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "ההמבורגר המושלם בעיניך",
+      "type": "shortAnswer"
     }
   ]
 }

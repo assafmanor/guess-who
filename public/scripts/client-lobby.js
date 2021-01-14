@@ -43,9 +43,6 @@ socket.on('updatePlayerList', playersData => {
 socket.on('getPlayerInfo', playerJSON => {
   console.log('getPlayerInfo');
   thisPlayer = playerJSON;
-  // write id to cookie
-  const cookieObj = { code: code, id: thisPlayer.id };
-  document.cookie = 'guessWhoRoomId=' + JSON.stringify(cookieObj);
 });
 
 socket.on('getGameOptions', data => {
@@ -113,7 +110,11 @@ document.getElementById('options-form').addEventListener('submit', event => {
 });
 
 socket.on('startRound', data => {
+  // write id to cookie
+  const cookieObj = { code: code, id: thisPlayer.id };
+  document.cookie = 'guessWhoRoomId=' + JSON.stringify(cookieObj);
   document.getElementById('selected-question-packs').value = data.questionPacks;
+  
   document.getElementById('options-form').submit();
 });
 
@@ -232,14 +233,11 @@ function createRemoveItemButtonEl() {
     option.textContent = questionPackName;
     questionPackEl.appendChild(option);
 
-    console.log('selectedQuestionPackNames before: ');
-
     const index = selectedQuestionPackNames.indexOf(questionPackName);
     if (index > -1) {
       selectedQuestionPackNames.splice(index, 1);
     }
 
-    console.log('selectedQuestionPackNames after: ');
     enableStartButtonIfOKTo();
     socket.emit('questionPacksChanged', {
       player: thisPlayer,

@@ -8,10 +8,15 @@ class Questions {
 
   static loadAllPacks() {
     console.log('loadAllPacks');
+    let uniqueId = 0;
     fs.readdir(this.PACKS_PATH, (err, filenames) => {
       filenames.forEach(filename => {
         fs.readFile(this.PACKS_PATH + '/' + filename, (err, content) => {
           const pack = JSON.parse(content);
+          pack.questions.forEach(question => {
+            question.pack = pack.name;
+            question.id = uniqueId++;
+          });
           this.allPacks.set(pack.name, pack.questions);
         });
       });
@@ -34,6 +39,12 @@ class Questions {
       }
       curSum += pack.length;
     }
+  }
+
+  static getNumberOfQuestions(packNames) {
+    return packNames
+      .map(packName => this.allPacks.get(packName))
+      .reduce((sum, pack) => sum + pack.length, 0);
   }
 
   static getPackNames() {

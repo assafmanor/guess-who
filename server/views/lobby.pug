@@ -24,7 +24,7 @@ block content
           .col-25
             label(for='question-pack') שאלות בנושא
           .col-65
-            select#question-pack(name='question-pack', style='display: none; !important')
+            select#question-pack(style='display: none; !important')
               option(selected, disabled, hidden, value='') בחר
               each questionPack in questionPacks
                 option(value=`${questionPack}`) #{questionPack}

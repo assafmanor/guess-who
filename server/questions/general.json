@@ -13,6 +13,16 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["פינק פלויד", "ביונסה"]
+    },
+    {
+      "question": "מוזיקה...",
+      "type": "multipleChoice",
+      "choices": ["לועית", "ישראלית"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["ים", "בריכה"]
     },
     {
@@ -31,36 +41,136 @@
       "choices": ["קיץ", "סתיו", "חורף", "אביב"]
     },
     {
+      "question": "לאיזה בית את/ה שייך/ת?",
+      "type": "multipleChoice",
+      "choices": ["גריפינדור", "סלית'רין", "רייבנקלו", "האפלפאף"]
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["כלב", "חתול"]
     },
     {
-      "question": "להיות או לא להיות?",
-      "type": "shortAnswer"
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פוקימון", "דיג'ימון"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["חופשת סקי", "בטן גב"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["תל אביב", "ירושלים"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["עיר", "כפר"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["האח הגדול", "משחקי הכס"]
+    },
+    {
+      "question": "צבא: מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קל\"ב", "רחוק מהבית"]
+    },
+    {
+      "question": "צבא: מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קרבי", "ג'ובניק"]
+    },
+    {
+      "question": "טיול אחרי צבא (או כל זמן אחר):",
+      "type": "multipleChoice",
+      "choices": ["המזרח", "דרום אמריקה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["שלג", "שמש"]
+    },
+    {
+      "question": "יום העצמאות...",
+      "type": "multipleChoice",
+      "choices": ["זיקוקים", "מנגל"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["וואטסאפ", "שיחת טלפון"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פייסבוק", "אינסטגרם", "טיקטוק", "אחר", "אף אחד"]
     },
     {
       "question": "זקן (beard)",
       "type": "multipleChoice"
     },
     {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["תה", "קפה"]
+      "question": "רק ביבי",
+      "type": "multipleChoice"
     },
     {
-      "question": "היעד הבא שלך בחו\"ל",
-      "type": "shortAnswer"
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ביבי", "בילבי"]
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["משחקי קופסה", "משחקי מחשב"]
-    }, 
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אנדרואיד", "אייפון"]
+    },
+    {
+      "question": "את/ה טיפוס של...",
+      "type": "multipleChoice",
+      "choices": ["בוקר", "ערב"]
+    },
+    {
+      "question": "מקלחת...",
+      "type": "multipleChoice",
+      "choices": ["בבוקר", "בערב", "גם וגם"]
+    },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["למצוא אהבת אמת", "לזכות במיליון דולר"]
+    },
+    {
+      "question": "להיות או לא להיות?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "נתקעת באי בודד. מה תיקח/י איתך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה הסרט דיסני האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה החג האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזה דמות מחברים את/ה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "היעד הבא שלך בחו\"ל",
+      "type": "shortAnswer"
     }
   ]
 }
