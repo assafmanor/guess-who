@@ -12,6 +12,7 @@ const ERROR = 'error';
 const CSS = 'css/style.css';
 
 const devMode = process.env.NODE_ENV === 'development';
+debug('dev mode: ' + devMode);
 let io;
 let guessWho;
 
@@ -99,44 +100,6 @@ function router(app) {
     renderInGame(req, res);
   });
 
-  // error handling
-
-  function sendError(next, message) {
-    var err = new Error(message);
-    err.status = 404;
-    next(err);
-  }
-
-  app.use((req, res, next) => {
-    if (res.headersSent) {
-      return next(err);
-    }
-    sendError(next, 'העמוד לא נמצא');
-  });
-
-  if (devMode) {
-    app.use((err, req, res, next) => {
-      res.status(err.status || 500);
-      res.render(ERROR, {
-        title: err.message,
-        css: '../' + CSS,
-        error: err,
-        stack: err.stack
-      });
-      next();
-    });
-  }
-
-  app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.render(ERROR, {
-      title: err.message,
-      css: '../' + CSS,
-      error: err
-    });
-    next();
-  });
-
   // dev mode routes
   if (devMode) {
     app.get('/dev', (req, res) => {
@@ -215,6 +178,44 @@ function router(app) {
       return;
     }
     res.send({ result: true });
+  });
+
+  // error handling
+
+  function sendError(next, message) {
+    var err = new Error(message);
+    err.status = 404;
+    next(err);
+  }
+
+  app.use((req, res, next) => {
+    if (res.headersSent) {
+      return next(err);
+    }
+    sendError(next, 'העמוד לא נמצא');
+  });
+
+  if (devMode) {
+    app.use((err, req, res, next) => {
+      res.status(err.status || 500);
+      res.render(ERROR, {
+        title: err.message,
+        css: '../' + CSS,
+        error: err,
+        stack: err.stack
+      });
+      next();
+    });
+  }
+
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render(ERROR, {
+      title: err.message,
+      css: '../' + CSS,
+      error: err
+    });
+    next();
   });
 }
 
