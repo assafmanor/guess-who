@@ -1,4 +1,4 @@
-import { getCookie } from './utils.js';
+import { getCookie, showErrorMessage } from './utils.js';
 
 const socket = io();
 
@@ -8,6 +8,9 @@ const shortAnswerAreaEl = document.getElementById('short-answer-area');
 const shortAnswerTextEl = document.getElementById('short-answer');
 const questionTextEl = document.getElementById('question');
 const questionNumEl = document.getElementById('q-num');
+const backButtonEl = document.getElementById('back-btn');
+const nextButtonEl = document.getElementById('next-btn');
+const submitQuestionsForm = document.getElementById('submit-questions-form');
 
 const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
 const code = guessWhoRoomId.code;
@@ -30,7 +33,6 @@ window.addEventListener('popstate', event => {
   }
   event.preventDefault();
   if (state.id < questionNumber) {
-    questionNumber;
     showQuestion(--questionNumber);
   } else {
     showQuestion(++questionNumber);
@@ -51,32 +53,68 @@ socket.on('getQuestions', data => {
   history.pushState({ id: questionNumber }, '');
 });
 
+socket.on('updateRoundOver', () => {
+  console.log('updateRoundOver');
+});
+
 answersFormEl.addEventListener('submit', event => {
   event.preventDefault();
   const answer = getAnswerFromForm();
   if (answer === '') {
+    showErrorMessage('warning', 'אנא השב על השאלה', 2000);
+    if (answers.size === questions.length) {
+      // hide submit button
+      submitQuestionsForm.querySelector('input').setAttribute('type', 'hidden');
+    }
+    return;
+  }
+
+  const question = questions[questionNumber];
+  answers.set(question, answer);
+  if (answers.size === questions.length) {
+    // show submit button
+    submitQuestionsForm.querySelector('input').setAttribute('type', 'submit');
     return;
   }
   if (questions.length <= questionNumber + 1) {
-    // TODO: emit finished answering and wait for other players
-    // to finish, or redirect to the guessing part if you're the
-    // last one to finish
-    alert('דיי. נגמר.');
     return;
   }
-  const question = questions[questionNumber];
-  answers.set(question, answer);
-  console.dir(answers);
-  questionNumber++;
-  showQuestion(questionNumber);
+  showQuestion(++questionNumber);
   history.pushState({ id: questionNumber }, '');
+});
+
+submitQuestionsForm.addEventListener('submit', event => {
+  event.preventDefault();
+  socket.emit('updateDoneAnswering', {
+    code: code,
+    answers: answers,
+    player: thisPlayer
+  });
 });
 
 function getAnswerFromForm() {
   if (currentQuestionType === 'multipleChoice') {
-    return answersFormEl.querySelector('input[name="answer"]:checked').value;
+    const checkedButton = answersFormEl.querySelector(
+      'input[name="answer"]:checked'
+    );
+    if (checkedButton) {
+      return checkedButton.value;
+    }
+    return '';
   } else if (currentQuestionType === 'shortAnswer') {
     return document.getElementById('short-answer').value;
+  }
+}
+
+function setAnswer(question, answer) {
+  if (question.type === 'multipleChoice') {
+    for (const input of answersFormEl.querySelectorAll('input')) {
+      if (input.value === answer) {
+        input.checked = true;
+      }
+    }
+  } else if (currentQuestionType === 'shortAnswer') {
+    document.getElementById('short-answer').value = answer;
   }
 }
 
@@ -84,6 +122,18 @@ function showQuestion(i) {
   const question = questions[i];
   clearLastQuestion();
   addQuestion(question, i + 1);
+  if (answers.has(question)) {
+    setAnswer(question, answers.get(question));
+  }
+  if (i === 0) {
+    backButtonEl.style.display = 'none';
+  } else if (i == 1) {
+    backButtonEl.style.display = 'inline-block';
+  } else if (i + 1 === questions.length - 1) {
+    nextButtonEl.style.display = 'inline-block';
+  } else if (i + 1 == questions.length) {
+    nextButtonEl.style.display = 'none';
+  }
 }
 
 function clearLastQuestion() {
@@ -130,7 +180,7 @@ function addChoiceElement(choice) {
 }
 
 function createChoiceElement(choice) {
-  const choiceID = `a${uniqueId++}`;
+  const choiceID = 'a' + uniqueId++;
   const newChoiceEl = document.createElement('div');
   newChoiceEl.classList.add('choice-item');
   newChoiceEl.innerHTML = `
@@ -139,8 +189,17 @@ function createChoiceElement(choice) {
     <span class="radio">
   </label>
   `;
-  newChoiceEl.querySelector('input').addEventListener('change', () => {
+  newChoiceEl.querySelector('input').addEventListener('click', () => {
     answersFormEl.dispatchEvent(new Event('submit'));
   });
   return newChoiceEl;
 }
+
+backButtonEl.addEventListener('click', () => {
+  history.back();
+});
+
+nextButtonEl.addEventListener('click', () => {
+  showQuestion(++questionNumber);
+  history.pushState({ id: questionNumber }, '');
+});

@@ -1,6 +1,8 @@
 extends layout
 
 block main-title
+  i.fas.fa-arrow-circle-right.fa-2x.float-right.back-forward-btn#back-btn(style='display: none; !important')
+  i.fas.fa-arrow-circle-left.fa-2x.float-left.back-forward-btn#next-btn
   h1.text-lg#q-number שאלה 
     span#q-num
 
@@ -14,5 +16,10 @@ block content
         #short-answer-area(style='display: none; !important')
           .row
             input.answer-input#short-answer(type='text', name='answer', autocomplete="off")
-        .row.submit
-          input.btn.btn-blue#submit-answer-btn(type='submit', value='בחר')
+          .row.submit
+            input.btn.btn-blue#submit-answer-btn(type='submit', value='שלח')
+    .content#warning(hidden)
+      p.warning.centered-text
+  .content#submit-questions.centered-text
+    form#submit-questions-form
+      input.btn.btn-lg(type='hidden', value='סיימתי לענות')

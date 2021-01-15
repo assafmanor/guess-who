@@ -6,9 +6,27 @@
       "type": "multipleChoice"
     },
     {
+      "question": "מטאל",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "אנימה",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["הביטלס", "רולינג סטונס"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["כדורגל", "כדורסל"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["טניס", "פינג פונג"]
     },
     {
       "question": "מה עדיף?",
@@ -18,12 +36,17 @@
     {
       "question": "מוזיקה...",
       "type": "multipleChoice",
-      "choices": ["לועית", "ישראלית"]
+      "choices": ["לועזית", "ישראלית"]
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["ים", "בריכה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["בית פרטי", "דירה"]
     },
     {
       "question": "מה עדיף?",
@@ -39,6 +62,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קיץ", "סתיו", "חורף", "אביב"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קיץ", "חורף"]
     },
     {
       "question": "לאיזה בית את/ה שייך/ת?",
@@ -96,6 +124,11 @@
       "choices": ["שלג", "שמש"]
     },
     {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["עצמאי", "שכיר"]
+    },
+    {
       "question": "יום העצמאות...",
       "type": "multipleChoice",
       "choices": ["זיקוקים", "מנגל"]
@@ -109,6 +142,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["פייסבוק", "אינסטגרם", "טיקטוק", "אחר", "אף אחד"]
+    },
+    {
+      "question": "איזה דמות מחברים את/ה?",
+      "type": "multipleChoice",
+      "choices": ["רייצ'ל", "רוס", "ג'ואי", "מוניקה", "צ'נדלר", "פיבי"]
     },
     {
       "question": "זקן (beard)",
@@ -162,10 +200,6 @@
     },
     {
       "question": "מה החג האהוב עליך?",
-      "type": "shortAnswer"
-    },
-    {
-      "question": "איזה דמות מחברים את/ה?",
       "type": "shortAnswer"
     },
     {

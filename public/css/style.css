@@ -97,6 +97,10 @@ section {
   outline: none;
 }
 
+.btn-lg {
+  font-size: 1.4em;
+}
+
 .btn:hover {
   background-color: rgb(253, 226, 194);
   cursor: pointer;
@@ -167,11 +171,7 @@ textarea {
   font-family: inherit;
 }
 
-input[type='submit'] {
-  float: left;
-}
-
-input[type='button'] {
+input[type='submit']:not(.btn-lg) {
   float: left;
 }
 
@@ -222,6 +222,14 @@ input[type='button'] {
 
 .row .back {
   margin-right: 0;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
 }
 
 .add-button {
@@ -314,7 +322,17 @@ textarea {
   resize: vertical;
 }
 
-/* Mobile Area */
+.back-forward-btn {
+  display: none;
+  color: rgb(80, 142, 234);
+}
+
+.back-forward-btn:hover {
+  cursor: pointer;
+  color: rgb(48, 105, 190);
+}
+
+/* Mobile */
 
 @media only screen and (max-device-width: 700px) {
   * {

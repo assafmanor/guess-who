@@ -1,13 +1,10 @@
 const Player = require('./player').Player;
 const Round = require('./round').Round;
 
-node_env = process.env.NODE_ENV;
+const debug = require('debug')('guesswho:game');
 
 class Game {
-  MIN_PLAYERS = node_env === 'development' ? 1 : 3;
-  MAX_PLAYERS = 8;
-
-  constructor(io, code, onEmpty) {
+  constructor(io, code, onEmpty, devMode) {
     this.io = io;
     this.code = code;
     this.onEmpty = onEmpty;
@@ -17,6 +14,9 @@ class Game {
     this.currentId = 0;
     this.options = { questionPacks: null, numQuestions: null };
     this.round;
+    this.devMode = devMode;
+    this.MIN_PLAYERS = devMode ? 1 : 3;
+    this.MAX_PLAYERS = 8;
   }
 
   getPlayer(id) {
@@ -26,32 +26,43 @@ class Game {
     return false; // not found
   }
 
+  playerDisconnectedHandler(player) {
+    player.socket.on('disconnect', () => {
+      debug('disconnect');
+      player.isConnected = false;
+      if (!this.inProgress) {
+        debug('removing player %d', player.id);
+        this.removePlayer(player.id);
+      } else {
+        if (this.round.activePlayers.has(player.id)) {
+          this.round.removeActivePlayer(player.id);
+        }
+      }
+      this.playerDisconnected(player);
+      this.sendUpdatedPlayersList();
+    });
+  }
+
   initPlayer(player) {
     player.socket.join(this.code);
-    console.log('initPlayer');
+    debug('initPlayer');
     if (!this.host) {
       this.setHost(player);
     }
-    // player disconnects
-    player.socket.on('disconnect', () => {
-      player.isConnected = false;
-      if (!this.inProgress) {
-        this.removePlayer(player.id);
-      }
-      this.onPlayerDisconnected(player);
-      this.sendUpdatedPlayersList();
-    });
+    this.playerDisconnectedHandler(player);
   }
 
   addPlayer(name, socket) {
     let newPlayer = new Player(socket, this.code, name, this.currentId++);
     this.initPlayer(newPlayer);
     this.players.set(newPlayer.id, newPlayer);
+    debug('addPlayer (id: %d, name: %s)', newPlayer.id, newPlayer.name);
     this.sendUpdatedPlayersList();
     return newPlayer;
   }
 
   removePlayer(id) {
+    debug('removePlayer');
     if (!this.players.has(id)) {
       return false;
     }
@@ -66,6 +77,8 @@ class Game {
       throw new Error(`Player id ${id} not found`);
     }
     player.socket = socket;
+    player.isConnected = true;
+    this.initPlayer(player);
   }
 
   deleteGame(game) {
@@ -83,14 +96,12 @@ class Game {
     };
   }
 
-  onPlayerDisconnected(player) {
-    console.log('onPlayerDisconnected');
-    if (this.deleteGameIfEmpty()) {
-    }
+  playerDisconnected(player) {
+    debug('updatePlayerDisconnected');
+    this.deleteGameIfEmpty();
     if (!this.host || (this.host && this.host === player)) {
       // find new host
       this.host = null;
-
       for (const player of this.players.values()) {
         if (player.isConnected) {
           this.setHost(player);
@@ -101,21 +112,27 @@ class Game {
   }
 
   deleteGameIfEmpty() {
-    console.log('deleteGameIfEmpty');
-    if (this.players.size === 0) {
-      // delete game after 5 seconds of being empty
-      setTimeout(() => {
-        if (this.players.size === 0) {
-          this.deleteGame();
-        }
-      }, 5000);
-      return true;
+    debug('deleteGameIfEmpty');
+    const players = Array.from(this.players.values());
+    const areThereActivePlayers = players.some(p => p.isConnected);
+    let isEmpty = this.players.size === 0 || !areThereActivePlayers;
+    if (isEmpty) {
+      if (this.inProgress) {
+        setTimeout(() => {
+          if (this.round.activePlayers.size === 0) {
+            debug('deleting game %s', this.code);
+            this.deleteGame();
+          }
+        }, 1000);
+      } else {
+        debug('deleting game %s', this.code);
+        this.deleteGame();
+      }
     }
-    return false;
   }
 
   sendUpdatedPlayersList() {
-    console.log('sendUpdatedPlayersList');
+    debug('sendUpdatedPlayersList');
     this.sendToAllPlayers('updatePlayerList', {
       players: Array.from(this.players.values()).map(player => player.getJSON())
     });
@@ -133,7 +150,7 @@ class Game {
 
   startRound() {
     this.inProgress = true;
-    console.log('startRound');
+    debug('startRound');
     this.round = new Round(this.options);
     this.sendToAllPlayers('startRound');
   }

@@ -1,12 +1,22 @@
 const Questions = require('./questions').Questions;
 
+const debug = require('debug')('guesswho:round');
+
 class Round {
   constructor(options) {
     this.questionPacks = options.questionPacks;
     this.numQuestions = options.numQuestions;
+    this.activePlayers = new Map();
+    // a map from player id to their answers
+    this.answers = new Map();
+  }
+
+  addPlayer(player) {
+    this.activePlayers.set(player.id, player);
   }
 
   getQuestions() {
+    debug('getQuestions');
     if (
       this.numQuestions > Questions.getNumberOfQuestions(this.questionPacks)
     ) {
@@ -26,6 +36,21 @@ class Round {
       numOfAddedQuestions++;
     }
     return questions;
+  }
+
+  removeActivePlayer(playerId) {
+    debug('removeActivePlayer');
+    this.activePlayers.delete(playerId);
+  }
+
+  isRoundOver() {
+    debug('isRoundOver');
+    for (const playerId of this.activePlayers.keys()) {
+      if (!this.answers.has(playerId)) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

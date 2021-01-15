@@ -113,8 +113,6 @@ socket.on('startRound', data => {
   // write id to cookie
   const cookieObj = { code: code, id: thisPlayer.id };
   document.cookie = 'guessWhoRoomId=' + JSON.stringify(cookieObj);
-  document.getElementById('selected-question-packs').value = data.questionPacks;
-  
   document.getElementById('options-form').submit();
 });
 

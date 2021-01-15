@@ -58,14 +58,14 @@ joinCodeForm.addEventListener('submit', event => {
     .then(res => {
       if (!res) {
         const errorMessage = 'קוד שגוי';
-        showErrorMessage('join-error-message', errorMessage, 2000);
+        showErrorMessage('join-warning', errorMessage, 2000);
       } else {
         return fetch(`/can-join-game/${codeEntered}`)
           .then(res => res.json())
           .then(res => {
             if (!res.result) {
               const errorMessage = `מצטערים, ${res.errorMessage}.`;
-              showErrorMessage('join-error-message', errorMessage, 4000);
+              showErrorMessage('join-warning',errorMessage, 4000);
             } else {
               code = codeEntered;
               joinCodeArea.style.display = 'none';

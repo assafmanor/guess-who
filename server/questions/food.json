@@ -18,11 +18,37 @@
       "type": "multipleChoice"
     },
     {
+      "question": "מיונז",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "גויאבה",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["תפוח", "אגס"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קוקוס", "אננס"]
+    },
+    {
       "question": "ופל לימון",
       "type": "multipleChoice"
     },
     {
+      "question": "כוסברה",
+      "type": "multipleChoice"
+    },
+    {
       "question": "במבה אדומה",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "חומוס",
       "type": "multipleChoice"
     },
     {
@@ -76,6 +102,16 @@
       "choices": ["רוטב עגבניות", "רוטב שמנת"]
     },
     {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ג'חנון", "מלאווח"]
+    },
+    {
+      "question": "קסטה: מאיזה צד מתחילים?",
+      "type": "multipleChoice",
+      "choices": ["הוניל", "השוקולד", "שניהם בו זמנית", "איכס"]
+    },
+    {
       "question": "מה התוספת הכי טובה לצד שניצל?",
       "type": "shortAnswer"
     },
@@ -96,7 +132,15 @@
       "type": "shortAnswer"
     },
     {
-      "question": "קסטה: מאיזה צד מתחילים?",
+      "question": "מה הפרי האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "לאיזה מדינה יש את האוכל הכי טעים?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה לשים לך בלאפה אחי?",
       "type": "shortAnswer"
     },
     {

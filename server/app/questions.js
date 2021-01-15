@@ -1,5 +1,6 @@
 var path = require('path');
 const fs = require('fs');
+const debug = require('debug')('guesswho:questions');
 
 class Questions {
   static PACKS_PATH = path.join(__dirname, '../questions');
@@ -7,7 +8,7 @@ class Questions {
   constructor() {}
 
   static loadAllPacks() {
-    console.log('loadAllPacks');
+    debug('loadAllPacks');
     let uniqueId = 0;
     fs.readdir(this.PACKS_PATH, (err, filenames) => {
       filenames.forEach(filename => {

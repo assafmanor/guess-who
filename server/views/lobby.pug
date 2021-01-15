@@ -37,7 +37,9 @@ block content
           .col-75
             select#num-questions(name='num-questions', value='20', required)
               option(disabled, selected, hidden, value='') בחר
-              - for(let num = 5; num <= 50; num += 5)
+              if devMode
+                option(value='1') 1
+              - for(let num = 10; num <= 50; num += 5)
                 option(value=`${num}`) #{num}
         input#selected-question-packs(type='hidden', name='selected-question-packs')
         .row.submit

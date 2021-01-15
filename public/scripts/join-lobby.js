@@ -10,7 +10,7 @@ fetch(`/can-join-game/${code}`)
       return;
     }
     const errorMessage = `מצטערים, ${res.errorMessage}.`;
-    showErrorMessage('join-error-message', errorMessage);
+    showErrorMessage('join-warning', errorMessage);
     // disable form
     document.querySelector('form .btn').disabled = true;
     document.getElementById('join-name').disabled = true;

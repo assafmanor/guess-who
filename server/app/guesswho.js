@@ -5,9 +5,10 @@ class GuessWho {
   CODE_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
   CODE_LENGTH = 4;
 
-  constructor(io) {
+  constructor(io, devMode) {
     this.io = io;
     this.games = new Map();
+    this.devMode = devMode;
     Questions.loadAllPacks();
   }
 
@@ -18,7 +19,12 @@ class GuessWho {
     } else {
       code = this.generateCode();
     }
-    const newGame = new Game(this.io, code, this.removeGame.bind(this, code));
+    const newGame = new Game(
+      this.io,
+      code,
+      this.removeGame.bind(this, code),
+      this.devMode
+    );
     this.games.set(code, newGame);
     return newGame;
   }

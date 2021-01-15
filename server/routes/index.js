@@ -10,15 +10,19 @@ const INGAME = 'ingame';
 
 const CSS = 'css/style.css';
 
+const devMode = process.env.NODE_ENV === 'development';
 const path = require('path');
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
+const debug = require('debug')('guesswho:index');
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const guessWho = new GuessWho(io);
+debug('booting app');
+
+const guessWho = new GuessWho(io, devMode);
 let lobbies = new Map();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,7 +30,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 http.listen(PORT, err => {
-  console.log(`listening on *:${PORT}`);
+  debug('listening on port %d', PORT);
 });
 
 app.set('views', path.join(__dirname, '../views'));
@@ -63,7 +67,7 @@ app.all('/:code([a-z]{4})', async (req, res) => {
 
   if (name === undefined) {
     const guessWhoRoom = req.cookies.guessWhoRoom;
-    if (guessWhoRoom && guessWhoRoom.code == code) {
+    if (guessWhoRoom && JSON.parse(guessWhoRoom).code == code) {
       name = JSON.parse(guessWhoRoom).name;
     } else {
       renderJoinLobby(req, res);
@@ -79,9 +83,30 @@ app.all('/:code([a-z]{4})', async (req, res) => {
   renderLobby(req, res);
 });
 
+app.get('/dev', (req, res) => {
+  if (!devMode) {
+    res.sendStatus(404);
+    return;
+  }
+  // create room
+  const game = guessWho.createGame();
+  const gameJSON = game.getJSON();
+  const lobby = new Lobby(game);
+  const code = gameJSON.code;
+  lobbies.set(code, lobby);
+
+  const cookie = { code: code, name: 'מפתח' };
+  res.cookie('guessWhoRoom', JSON.stringify(cookie), {
+    httpOnly: false
+  });
+  res.redirect(`/${code}`);
+});
+
 function _getPlayerList(game) {
   return Array.from(game.players.values()).map(player => player.name);
 }
+
+app.get;
 
 app.all('/join-room', (req, res) => {
   let name = req.body.name;
@@ -98,13 +123,11 @@ app.all('/join-room', (req, res) => {
   guessWhoRoom = JSON.parse(guessWhoRoomStr);
   code = guessWhoRoom.code;
   name = guessWhoRoom.name;
-  console.log(code, name);
   res.redirect(307, `/${code}`);
 });
 
 app.post('/:code([a-z]{4})/ingame', (req, res) => {
   const code = req.params.code;
-  let name = req.body.name;
 
   const game = guessWho.findGame(code);
   if (game === false) {
@@ -160,6 +183,7 @@ function renderLobby(req, res) {
     name: name,
     code: code,
     questionPacks: questionPacks,
+    devMode: devMode,
     scripts: scripts
   });
 }

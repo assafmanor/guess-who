@@ -17,7 +17,7 @@ joinNameForm.addEventListener('submit', event => {
         event.target.submit();
       } else {
         const errorMessage = 'השם כבר תפוס.';
-        showErrorMessage('join-error-message', errorMessage, 2000);
+        showErrorMessage('join-warning', errorMessage, 2000);
       }
     });
 });

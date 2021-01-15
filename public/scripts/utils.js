@@ -1,7 +1,7 @@
-export function showErrorMessage(elementId, message, timeToShow = null) {
-  const warningDiv = document.getElementById('join-warning');
+export function showErrorMessage(warningDivId, message, timeToShow = null) {
+  const warningDiv = document.getElementById(warningDivId);
   warningDiv.removeAttribute('hidden');
-  const element = document.getElementById(elementId);
+  const element = warningDiv.querySelector('p');
   element.textContent = message;
   if (timeToShow != null) {
     setTimeout(() => {
