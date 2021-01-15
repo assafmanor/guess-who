@@ -56,13 +56,13 @@ class Game {
     let newPlayer = new Player(socket, this.code, name, this.currentId++);
     this.initPlayer(newPlayer);
     this.players.set(newPlayer.id, newPlayer);
-    debug('addPlayer (id: %d, name: %s)', newPlayer.id, newPlayer.name);
+    debug('addPlayer {id: %d, name: %s}', newPlayer.id, newPlayer.name);
     this.sendUpdatedPlayersList();
     return newPlayer;
   }
 
   removePlayer(id) {
-    debug('removePlayer');
+    debug('removePlayer(id=%d)', id);
     if (!this.players.has(id)) {
       return false;
     }
@@ -72,6 +72,7 @@ class Game {
   }
 
   reconnectPlayer(id, socket) {
+    debug("reconnectPlayer(id=%d, socket=...)", id)
     const player = this.getPlayer(id);
     if (!player) {
       throw new Error(`Player id ${id} not found`);
@@ -120,12 +121,12 @@ class Game {
       if (this.inProgress) {
         setTimeout(() => {
           if (this.round.activePlayers.size === 0) {
-            debug('deleting game %s', this.code);
+            debug('deleting game {code: %s}', this.code);
             this.deleteGame();
           }
         }, 1000);
       } else {
-        debug('deleting game %s', this.code);
+        debug('deleting game {code: %s}', this.code);
         this.deleteGame();
       }
     }

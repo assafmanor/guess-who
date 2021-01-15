@@ -10,6 +10,7 @@ body {
   font-family: 'Varela Round', sans-serif;
   direction: rtl;
   background: #f3f3f3;
+  line-height: 1.8;
 }
 
 .container {
@@ -84,12 +85,17 @@ section {
 .text-tiny {
   font-size: 0.65em;
 }
+
+h1 {
+  font-size: 1.5em;
+}
 .btn {
   background-color: rgb(243, 208, 168);
   border: 1px solid rgb(221, 169, 111);
   color: #000;
   text-align: center;
   padding: 15px 32px;
+  font-family: 'Varela Round', sans-serif;
   text-decoration: none;
   margin-right: 20px;
   padding: 10px;

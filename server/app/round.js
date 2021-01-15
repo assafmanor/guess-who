@@ -16,7 +16,7 @@ class Round {
   }
 
   getQuestions() {
-    debug('getQuestions');
+    debug('getQuestions()');
     if (
       this.numQuestions > Questions.getNumberOfQuestions(this.questionPacks)
     ) {
@@ -39,12 +39,12 @@ class Round {
   }
 
   removeActivePlayer(playerId) {
-    debug('removeActivePlayer');
+    debug('removeActivePlayer()');
     this.activePlayers.delete(playerId);
   }
 
   isRoundOver() {
-    debug('isRoundOver');
+    debug('isRoundOver()');
     for (const playerId of this.activePlayers.keys()) {
       if (!this.answers.has(playerId)) {
         return false;

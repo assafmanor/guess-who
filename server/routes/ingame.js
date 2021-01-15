@@ -40,6 +40,7 @@ class InGame {
       if (data.code !== this.game.code) return;
       this.round.answers.set(data.player.id, data.answers);
       if (this.round.isRoundOver()) {
+        debug('updateRoundOver {code: %s}', data.code);
         this.game.sendToAllPlayers('updateRoundOver');
       }
     });
