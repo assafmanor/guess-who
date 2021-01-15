@@ -12,10 +12,11 @@ html
     //- icons
     script(src='https://kit.fontawesome.com/005d4d84d3.js', crossorigin='anonymous')
     //- scripts
-    each script in scripts
-      - var scriptType = script.isModule ? 'module' : 'application/javascript'
-      - var path = script.path
-      script(type=`${scriptType}`, src=`${path}`, defer)
+    if scripts
+      each script in scripts
+        - var scriptType = script.isModule ? 'module' : 'application/javascript'
+        - var path = script.path
+        script(type=`${scriptType}`, src=`${path}`, defer)
     block js
 
   body

@@ -1,0 +1,9 @@
+extends layout
+
+block main-title
+  h1 שגיאה: #{error.message}
+
+block content
+  h2.centered-text #{error.status}
+  if stack
+    p.ltr #{stack}

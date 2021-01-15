@@ -65,6 +65,10 @@ section {
   justify-content: center;
 }
 
+.ltr {
+  direction: ltr;
+}
+
 .text-lg {
   font-size: 1.5em;
 }
