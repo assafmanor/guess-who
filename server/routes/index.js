@@ -83,7 +83,7 @@ function router(app) {
     res.redirect(307, `/${code}`);
   });
 
-  app.post('/:code([a-z]{4})/ingame', (req, res) => {
+  app.post('/:code([a-z]{4})/ingame', (req, res, next) => {
     const code = req.params.code;
 
     const game = guessWho.findGame(code);
@@ -178,6 +178,25 @@ function router(app) {
       return;
     }
     res.send({ result: true });
+  });
+
+  app.get('/num-of-allowed-questions', (req, res, next) => {
+    const packsStr = req.query.questionPacks;
+    if (!packsStr) {
+      sendError(next, 'לא הוזנו חבילות שאלות');
+      return;
+    }
+    const questionPacks = packsStr.split(',');
+    try {
+      const numQuestions = guessWho.Questions.getNumberOfQuestions(
+        questionPacks
+      );
+      res.json({ result: numQuestions });
+      return;
+    } catch (e) {
+      sendError(next, e.message);
+      return;
+    }
   });
 
   // error handling

@@ -64,7 +64,8 @@ answersFormEl.addEventListener('submit', event => {
     showErrorMessage('warning', 'אנא השב על השאלה', 2000);
     if (answers.size === questions.length) {
       // hide submit button
-      submitQuestionsForm.querySelector('input').setAttribute('type', 'hidden');
+      // submitQuestionsForm.querySelector('input').setAttribute('type', 'hidden');
+      submitQuestionsForm.querySelector('input').classList.add('hidden');
     }
     return;
   }
@@ -73,7 +74,9 @@ answersFormEl.addEventListener('submit', event => {
   answers.set(question, answer);
   if (answers.size === questions.length) {
     // show submit button
-    submitQuestionsForm.querySelector('input').setAttribute('type', 'submit');
+    // submitQuestionsForm.querySelector('input').setAttribute('type', 'submit');
+    submitQuestionsForm.querySelector('input').classList.remove('hidden');
+
     return;
   }
   if (questions.length <= questionNumber + 1) {

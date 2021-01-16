@@ -1,5 +1,7 @@
 import { getCookie } from './utils.js';
 
+const MAX_NUM_QUESTIONS = 40;
+
 const socket = io();
 
 const playerListEl = document.getElementById('players-list');
@@ -19,7 +21,7 @@ if (name === '') {
 }
 socket.emit('updateNewPlayer', { code: code, name: name });
 
-socket.on('updatePlayerList', playersData => {
+socket.on('updatePlayerList', async playersData => {
   console.log('updatePlayerList');
   playerListEl.innerHTML = '';
   for (const player of playersData.players) {
@@ -30,13 +32,12 @@ socket.on('updatePlayerList', playersData => {
     }
     playerListEl.append(li);
   }
-  checkMinimumNumberOfPlayers().then(res => {
-    if (res.result) {
-      document.getElementById('players-wait').style.display = 'none';
-    } else {
-      document.getElementById('players-wait').style.display = 'block';
-    }
-  });
+  const isEnoughPlayer = await checkMinimumNumberOfPlayers();
+  if (isEnoughPlayer) {
+    document.getElementById('players-wait').style.display = 'none';
+  } else {
+    document.getElementById('players-wait').style.display = 'block';
+  }
   enableStartButtonIfOKTo();
 });
 
@@ -129,6 +130,7 @@ addPackBtn.addEventListener('click', () => {
     player: thisPlayer,
     value: selectedQuestionPackNames
   });
+  setNumQuestionsOptions();
   enableStartButtonIfOKTo();
 });
 
@@ -154,6 +156,8 @@ function enableHostOptions() {
     });
     toggleQuestionPackSelection('block');
   }
+  // update num questions
+  setNumQuestionsOptions();
   // add 'remove item' buttons to the selected packs list
   questionPackListEl.childNodes.forEach(li => {
     li.appendChild(createRemoveItemButtonEl());
@@ -163,13 +167,12 @@ function enableHostOptions() {
 async function enableStartButtonIfOKTo() {
   const startGameButton = document.getElementById('start-game-btn');
   if (checkAllFieldsAreFilled()) {
-    checkMinimumNumberOfPlayers().then(res => {
-      if (res.result) {
-        startGameButton.removeAttribute('disabled');
-      } else {
-        startGameButton.setAttribute('disabled', '');
-      }
-    });
+    const isEnoughPlayers = await checkMinimumNumberOfPlayers();
+    if (isEnoughPlayers) {
+      startGameButton.removeAttribute('disabled');
+    } else {
+      startGameButton.setAttribute('disabled', '');
+    }
   } else {
     startGameButton.setAttribute('disabled', '');
   }
@@ -189,8 +192,30 @@ async function checkMinimumNumberOfPlayers() {
   return await fetch(`/is-enough-players/${code}`)
     .then(res => res.json())
     .then(res => {
-      return res;
+      return res.result;
     });
+}
+
+async function setNumQuestionsOptions() {
+  let numAllowedQuestions;
+  if (selectedQuestionPackNames.length === 0) {
+    numAllowedQuestions = 0;
+  } else {
+    const origin = window.location.origin;
+    const url = new URL(origin + '/num-of-allowed-questions/');
+    const params = { questionPacks: selectedQuestionPackNames };
+    url.search = new URLSearchParams(params).toString();
+    numAllowedQuestions = await fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        return res.result;
+      });
+  }
+  removeOptionsWithValueAboveN(numQuestionsEl, numAllowedQuestions);
+  addNumQuestionOptionsUntilN(
+    numQuestionsEl,
+    Math.min(MAX_NUM_QUESTIONS, numAllowedQuestions)
+  );
 }
 
 function updateQuestionPacksList(questionPackNames) {
@@ -235,6 +260,7 @@ function createRemoveItemButtonEl() {
     if (index > -1) {
       selectedQuestionPackNames.splice(index, 1);
     }
+    setNumQuestionsOptions();
 
     enableStartButtonIfOKTo();
     socket.emit('questionPacksChanged', {
@@ -243,4 +269,31 @@ function createRemoveItemButtonEl() {
     });
   });
   return removeListItemEl;
+}
+
+function removeOptionsWithValueAboveN(parentSelect, n) {
+  let currentOption = parentSelect.lastChild;
+  while (
+    +currentOption.value > n &&
+    !currentOption.classList.contains('no-remove')
+  ) {
+    parentSelect.removeChild(currentOption);
+    currentOption = parentSelect.lastChild;
+  }
+}
+
+function addNumQuestionOptionsUntilN(parentSelect, n, skip = 5) {
+  let currentOption = parentSelect.lastChild;
+  let startingVal =
+    currentOption.value % 5 === 0 ? +currentOption.value + 5 : 5;
+  for (let i = startingVal; i <= n; i += skip) {
+    addNumQuestionsOption(parentSelect, i);
+  }
+}
+
+function addNumQuestionsOption(parentSelect, value) {
+  const optionEl = document.createElement('option');
+  optionEl.value = value;
+  optionEl.textContent = value;
+  parentSelect.appendChild(optionEl);
 }

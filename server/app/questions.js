@@ -43,9 +43,14 @@ class Questions {
   }
 
   static getNumberOfQuestions(packNames) {
-    return packNames
+    debug('getNumberOfQuestions');
+    const sum = packNames
       .map(packName => this.allPacks.get(packName))
       .reduce((sum, pack) => sum + pack.length, 0);
+    if (sum === NaN) {
+      throw new Error('שמות חבילות לא תקינות');
+    }
+    return sum;
   }
 
   static getPackNames() {

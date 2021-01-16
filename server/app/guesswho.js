@@ -10,6 +10,7 @@ class GuessWho {
     this.games = new Map();
     this.devMode = devMode;
     this.lobbies = new Map();
+    this.Questions = Questions;
     Questions.loadAllPacks();
   }
 

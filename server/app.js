@@ -25,12 +25,4 @@ app.set('view engine', 'pug');
 
 app.use(express.static('public'));
 
-app.use((err, req, res, next) => {
-  res.status(404).render(NOT_FOUND, {
-    title: 'לא נמצא',
-    css: '../' + CSS,
-    errorMessage: err.message
-  });
-});
-
 require('./routes/index.js').router(app);
