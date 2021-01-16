@@ -79,6 +79,21 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["קולה", "פיוז טי"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קולה", "ספרייט"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קוקה קולה", "פפסי"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["פיצה", "פסטה"]
     },
     {
@@ -112,6 +127,11 @@
       "choices": ["הוניל", "השוקולד", "שניהם בו זמנית", "איכס"]
     },
     {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["בירה", "יין"]
+    },
+    {
       "question": "מה התוספת הכי טובה לצד שניצל?",
       "type": "shortAnswer"
     },
@@ -141,6 +161,10 @@
     },
     {
       "question": "מה לשים לך בלאפה אחי?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה המשקה המוגז האהוב עליך?",
       "type": "shortAnswer"
     },
     {

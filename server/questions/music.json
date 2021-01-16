@@ -1,0 +1,104 @@
+{
+  "name": "מוזיקה",
+  "questions": [
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פינק פלויד", "ביונסה"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פינק פלויד", "ביונסה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["הביטלס", "רולינג סטונס"]
+    },
+    {
+      "question": "מי עדיפה?",
+      "type": "multipleChoice",
+      "choices": [
+        "ביונסה",
+        "מריה קארי",
+        "כריסטינה אגילרה",
+        "בריטני ספירס",
+        "אף אחת"
+      ]
+    },
+    {
+      "question": "מי עדיפה?",
+      "type": "multipleChoice",
+      "choices": ["ליידי גאגא", "טיילור סוויפט", "אף אחת"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["רוק", "פופ", "ראפ", "מוזיקה אלקטרונית"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מוזיקה לועזית", "מוזיקה ישראלית"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מוזיקה לטינית", "מוזיקה קלאסית"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אמינם", "Jay-Z", "אף אחד"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אמינם", "טופאק"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["רד הוט צ'ילי פפרס", "בלאק אייד פיז"]
+    },
+    {
+      "question": "מוזיקה מזרחית",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מוזיקה קלאסית",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "Dubstep",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "קריוקי",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מחזות זמר",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אייל גולן", "עומר אדם", "אף אחד"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Green Day", "Linkin Park", "אף אחד"]
+    },
+    {
+      "question": "מטאל",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "את מי הכי היית רוצה לראות בהופעה חייה?",
+      "type": "shortAnswer"
+    }
+  ]
+}

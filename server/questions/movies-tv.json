@@ -1,0 +1,78 @@
+{
+  "name": "סרטים וטלוויזיה",
+  "questions": [
+    {
+      "question": "אנימה",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "טלנובלות",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטי גיבורים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "ראליטי",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "הורדה פיראטית",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["האח הגדול", "משחקי הכס", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מארוול", "די.סי.", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["הישרדות", "המירוץ למיליון", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ריק ומורטי", "איש משפחה", "משפחת סימפסון", "אף אחד"]
+    },
+    {
+      "question": "איזה דמות מחברים את/ה?",
+      "type": "multipleChoice",
+      "choices": ["רייצ'ל", "רוס", "ג'ואי", "מוניקה", "צ'נדלר", "פיבי"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["יס", "הוט", "פרטנר טיוי", "סלקום טיוי", "נטפליקס", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פוקימון", "דיג'ימון", "אף אחד"]
+    },
+    {
+      "question": "מי עדיפים?",
+      "type": "multipleChoice",
+      "choices": ["בראנג'לינה", "בניפר", "אף אחד"]
+    },
+    {
+      "question": "מי עדיפים?",
+      "type": "multipleChoice",
+      "choices": ["דיסני", "פיקסאר", "דרימוורקס", "אף אחד"]
+    },
+    {
+      "question": "מה הסדרה המצוירת האהובה עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה הסרט דיסני האהוב עליך?",
+      "type": "shortAnswer"
+    }
+  ]
+}

@@ -2,23 +2,6 @@
   "name": "כללי",
   "questions": [
     {
-      "question": "הארי פוטר",
-      "type": "multipleChoice"
-    },
-    {
-      "question": "מטאל",
-      "type": "multipleChoice"
-    },
-    {
-      "question": "אנימה",
-      "type": "multipleChoice"
-    },
-    {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["הביטלס", "רולינג סטונס"]
-    },
-    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["כדורגל", "כדורסל"]
@@ -31,12 +14,7 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["פינק פלויד", "ביונסה"]
-    },
-    {
-      "question": "מוזיקה...",
-      "type": "multipleChoice",
-      "choices": ["לועזית", "ישראלית"]
+      "choices": ["באולינג", "ביליארד"]
     },
     {
       "question": "מה עדיף?",
@@ -69,6 +47,10 @@
       "choices": ["קיץ", "חורף"]
     },
     {
+      "question": "הארי פוטר",
+      "type": "multipleChoice"
+    },
+    {
       "question": "לאיזה בית את/ה שייך/ת?",
       "type": "multipleChoice",
       "choices": ["גריפינדור", "סלית'רין", "רייבנקלו", "האפלפאף"]
@@ -77,11 +59,6 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["כלב", "חתול"]
-    },
-    {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["פוקימון", "דיג'ימון"]
     },
     {
       "question": "מה עדיף?",
@@ -97,11 +74,6 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["עיר", "כפר"]
-    },
-    {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["האח הגדול", "משחקי הכס"]
     },
     {
       "question": "צבא: מה עדיף?",
@@ -144,11 +116,6 @@
       "choices": ["פייסבוק", "אינסטגרם", "טיקטוק", "אחר", "אף אחד"]
     },
     {
-      "question": "איזה דמות מחברים את/ה?",
-      "type": "multipleChoice",
-      "choices": ["רייצ'ל", "רוס", "ג'ואי", "מוניקה", "צ'נדלר", "פיבי"]
-    },
-    {
       "question": "זקן (beard)",
       "type": "multipleChoice"
     },
@@ -157,9 +124,22 @@
       "type": "multipleChoice"
     },
     {
+      "question": "מועדוני ריקודים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סיגריות",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מי עדיף?",
       "type": "multipleChoice",
       "choices": ["ביבי", "בילבי"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אוטו", "אופנוע", "תחבורה ציבורית"]
     },
     {
       "question": "מה עדיף?",
@@ -192,10 +172,6 @@
     },
     {
       "question": "נתקעת באי בודד. מה תיקח/י איתך?",
-      "type": "shortAnswer"
-    },
-    {
-      "question": "מה הסרט דיסני האהוב עליך?",
       "type": "shortAnswer"
     },
     {
