@@ -1,22 +1,27 @@
 const Player = require('./player').Player;
 const Round = require('./round').Round;
+const Questions = require('./questions').Questions;
 
 const debug = require('debug')('guesswho:game');
 
 class Game {
   constructor(io, code, onEmpty, devMode) {
+    this.MIN_PLAYERS = devMode ? 1 : 3;
+    this.MAX_PLAYERS = 8;
+
+    this._currentId = 0;
+
     this.io = io;
     this.code = code;
     this.onEmpty = onEmpty;
     this.players = new Map();
     this.host;
     this.inProgress = false;
-    this.currentId = 0;
+    this.isEmpty = true;
     this.options = { questionPacks: null, numQuestions: null };
     this.round;
     this.devMode = devMode;
-    this.MIN_PLAYERS = devMode ? 1 : 3;
-    this.MAX_PLAYERS = 8;
+    this.deleteGameTimeout;
   }
 
   getPlayer(id) {
@@ -49,14 +54,24 @@ class Game {
     if (!this.host) {
       this.setHost(player);
     }
+    if (this.isEmpty) {
+      this.isEmpty = false;
+      // make sure to clear any delete timeout
+      clearTimeout(this.deleteGameTimeout);
+      this.deleteGameTimeout = null
+    }
     this.playerDisconnectedHandler(player);
   }
 
   addPlayer(name, socket) {
-    let newPlayer = new Player(socket, this.code, name, this.currentId++);
+    let newPlayer = new Player(socket, this.code, name, this._currentId++);
     this.initPlayer(newPlayer);
     this.players.set(newPlayer.id, newPlayer);
     debug('addPlayer {id: %d, name: %s}', newPlayer.id, newPlayer.name);
+    // check minimum players
+    if (this.getNumActivePlayers() >= this.MIN_PLAYERS) {
+      this.sendToAllPlayers('updateMinimumPlayers', { result: true });
+    }
     this.sendUpdatedPlayersList();
     return newPlayer;
   }
@@ -72,7 +87,7 @@ class Game {
   }
 
   reconnectPlayer(id, socket) {
-    debug("reconnectPlayer(id=%d, socket=...)", id)
+    debug('reconnectPlayer(id=%d, socket=...)', id);
     const player = this.getPlayer(id);
     if (!player) {
       throw new Error(`Player id ${id} not found`);
@@ -100,6 +115,10 @@ class Game {
   playerDisconnected(player) {
     debug('updatePlayerDisconnected');
     this.deleteGameIfEmpty();
+    // check minimum players
+    if (this.getNumActivePlayers() < this.MIN_PLAYERS) {
+      this.sendToAllPlayers('updateMinimumPlayers', { result: false });
+    }
     if (!this.host || (this.host && this.host === player)) {
       // find new host
       this.host = null;
@@ -118,17 +137,17 @@ class Game {
     const areThereActivePlayers = players.some(p => p.isConnected);
     let isEmpty = this.players.size === 0 || !areThereActivePlayers;
     if (isEmpty) {
-      if (this.inProgress) {
-        setTimeout(() => {
-          if (this.round.activePlayers.size === 0) {
-            debug('deleting game {code: %s}', this.code);
-            this.deleteGame();
-          }
-        }, 1000);
-      } else {
-        debug('deleting game {code: %s}', this.code);
-        this.deleteGame();
+      this.isEmpty = true;
+      if (this.deleteGameTimeout) {
+        clearTimeout(this.deleteGameTimeout);
       }
+      this.deleteGameTimeout = setTimeout(() => {
+        if (this.isEmpty) {
+          debug('deleting game {code: %s}', this.code);
+          this.deleteGame();
+        }
+        this.deleteGameTimeout = null;
+      }, 5000);
     }
   }
 
@@ -147,6 +166,13 @@ class Game {
     this.host = player;
     player.makeHost();
     this.sendToAllPlayers('updateNewHost', { socketId: player.socket.id });
+    this.io
+      .to(player.socket.id)
+      .emit('getQuestionPackInfo', this.getQuestionPackInfo());
+  }
+
+  getQuestionPackInfo() {
+    return Questions.getPacksInfo();
   }
 
   startRound() {
@@ -154,6 +180,12 @@ class Game {
     debug('startRound');
     this.round = new Round(this.options);
     this.sendToAllPlayers('startRound');
+  }
+
+  getNumActivePlayers() {
+    return Array.from(this.players.values())
+      .map(player => player.isConnected)
+      .reduce((acc, isConnected) => acc + (isConnected ? 1 : 0), 0);
   }
 }
 

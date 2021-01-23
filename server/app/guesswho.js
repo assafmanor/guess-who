@@ -61,7 +61,7 @@ class GuessWho {
     return code;
   }
 
-  getQuestionPackNames() {
+  getQuestionPacks() {
     return Questions.getPackNames();
   }
 }

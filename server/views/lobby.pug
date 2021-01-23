@@ -25,9 +25,9 @@ block content
             label(for='question-pack') שאלות בנושא
           .col-65
             select#question-pack(style='display: none; !important')
-              option(selected, disabled, hidden, value='') בחר
+              option.no-remove(selected, disabled, hidden, value='') בחר
               each questionPack in questionPacks
-                option(value=`${questionPack}`) #{questionPack}
+                option(value=`${questionPack}`, hidden) #{questionPack}
             ul#question-pack-list
           .col-10
             button.btn.add-button#add-pack-btn(type='button', style='display: none; !important', disabled) +
@@ -36,11 +36,11 @@ block content
             label(for='num-questions') מספר שאלות
           .col-75
             select#num-questions(name='num-questions', value='20', required)
-              option(disabled, selected, hidden, value='') בחר
+              option.no-remove(disabled, selected, hidden, value='') בחר
               if devMode
                 option.no-remove(value='1') 1
-              //- - for(let num = 10; num <= 50; num += 5)
-                option(value=`${num}`) #{num}
+              - for(let num = 10; num <= 50; num += 5)
+                option(value=`${num}`, hidden) #{num}
         input#selected-question-packs(type='hidden', name='selected-question-packs')
         .row.submit
           input.btn#start-game-btn(type='submit', disabled, style='display: none; !important', value='התחל משחק')

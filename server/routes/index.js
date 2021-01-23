@@ -134,8 +134,7 @@ function router(app) {
     const name = req.params.name;
     const game = guessWho.findGame(code);
     if (!game) {
-      // game should exist
-      sendError(next, 'המשחק לא קיים');
+      res.json({ result: false });
       return;
     }
     let isNameValid = true;
@@ -152,7 +151,7 @@ function router(app) {
     const code = req.params.code;
     const game = guessWho.findGame(code);
     if (!game) {
-      sendError(next, 'המשחק לא קיים');
+      res.json({ result: false, errorMessage: 'המשחק לא קיים' });
       return;
     }
     if (game.players.size >= game.MAX_PLAYERS) {
@@ -164,39 +163,6 @@ function router(app) {
       return;
     }
     res.json({ result: true });
-  });
-
-  app.get('/is-enough-players/:code', (req, res, next) => {
-    const code = req.params.code;
-    const game = guessWho.findGame(code);
-    if (!game) {
-      sendError(next, 'המשחק לא קיים');
-      return;
-    }
-    if (game.players.size < game.MIN_PLAYERS) {
-      res.json({ result: false });
-      return;
-    }
-    res.send({ result: true });
-  });
-
-  app.get('/num-of-allowed-questions', (req, res, next) => {
-    const packsStr = req.query.questionPacks;
-    if (!packsStr) {
-      sendError(next, 'לא הוזנו חבילות שאלות');
-      return;
-    }
-    const questionPacks = packsStr.split(',');
-    try {
-      const numQuestions = guessWho.Questions.getNumberOfQuestions(
-        questionPacks
-      );
-      res.json({ result: numQuestions });
-      return;
-    } catch (e) {
-      sendError(next, e.message);
-      return;
-    }
   });
 
   // error handling
@@ -274,7 +240,7 @@ function renderLobby(req, res) {
     { path: '../scripts/client-lobby.js', isModule: true }
   ];
 
-  const questionPacks = guessWho.getQuestionPackNames();
+  const questionPacks = guessWho.getQuestionPacks().sort();
 
   res.render(LOBBY, {
     title: title,

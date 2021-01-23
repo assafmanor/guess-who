@@ -61,11 +61,11 @@ answersFormEl.addEventListener('submit', event => {
   event.preventDefault();
   const answer = getAnswerFromForm();
   if (answer === '') {
-    showErrorMessage('warning', 'אנא השב על השאלה', 2000);
+    showErrorMessage('warning', 'אנא השב/י על השאלה', 2000);
     if (answers.size === questions.length) {
-      // hide submit button
-      // submitQuestionsForm.querySelector('input').setAttribute('type', 'hidden');
+      // hide and disable submit button
       submitQuestionsForm.querySelector('input').classList.add('hidden');
+      submitQuestionsForm.querySelector('input').setAttribute('disabled', '');
     }
     return;
   }
@@ -73,9 +73,9 @@ answersFormEl.addEventListener('submit', event => {
   const question = questions[questionNumber];
   answers.set(question, answer);
   if (answers.size === questions.length) {
-    // show submit button
-    // submitQuestionsForm.querySelector('input').setAttribute('type', 'submit');
+    // show and enable submit button
     submitQuestionsForm.querySelector('input').classList.remove('hidden');
+    submitQuestionsForm.querySelector('input').removeAttribute('disabled');
 
     return;
   }
@@ -149,10 +149,7 @@ function clearLastQuestion() {
   }
 }
 
-function addQuestion(
-  { question: question, type: type, choices: choices },
-  questionNum
-) {
+function addQuestion({ question, type, choices }, questionNum) {
   questionNumEl.textContent = questionNum;
   questionTextEl.textContent = question;
   currentQuestionType = type;

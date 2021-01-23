@@ -42,6 +42,10 @@ class Questions {
     }
   }
 
+  static _getNumOfQuestionsOnePack(packName) {
+    return this.allPacks.get(packName).length;
+  }
+
   static getNumberOfQuestions(packNames) {
     debug('getNumberOfQuestions');
     const sum = packNames
@@ -55,6 +59,13 @@ class Questions {
 
   static getPackNames() {
     return Array.from(this.allPacks.keys());
+  }
+
+  static getPacksInfo() {
+    return Array.from(this.allPacks.keys()).map(packName => ({
+      name: packName,
+      numQuestions: this._getNumOfQuestionsOnePack(packName)
+    }));
   }
 }
 

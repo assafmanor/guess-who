@@ -176,6 +176,16 @@ form fieldset label {
   border-radius: 4px;
 }
 
+#question-pack-list li:hover {
+  cursor: pointer;
+  box-shadow: 0 0 8px #ddd;
+}
+
+#question-pack-list li:hover .remove-button {
+  color: red;
+  cursor: pointer;
+}
+
 input[type='text'],
 select,
 textarea {
@@ -257,12 +267,8 @@ input[type='submit']:not(.btn-lg) {
 }
 
 .remove-button {
+  vertical-align: middle;
   margin-right: 5px;
-}
-
-.remove-button:hover {
-  color: red;
-  cursor: pointer;
 }
 
 /* Ingame */

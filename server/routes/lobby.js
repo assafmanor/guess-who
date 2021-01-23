@@ -33,6 +33,10 @@ class Lobby {
     });
   }
 
+  disconnectedHandler() {
+    this.io.on('disconnect', socket => {});
+  }
+
   startRoundHandler(socket) {
     socket.on('startRound', data => {
       if (data.code !== this.game.code) return;

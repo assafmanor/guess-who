@@ -12,13 +12,23 @@ const addPackBtn = document.getElementById('add-pack-btn');
 
 let thisPlayer;
 let isHost = false;
+let isEnoughPlayers = false;
 let selectedQuestionPackNames = [];
+let questionPackInfo;
 
 const guessWhoRoom = JSON.parse(getCookie('guessWhoRoom'));
 const code = guessWhoRoom.code;
 if (name === '') {
   name = guessWhoRoom.name;
 }
+
+// disconnect player when they leave the lobby
+window.addEventListener('beforeunload', () => {
+  if (socket) {
+    socket.disconnect();
+  }
+});
+
 socket.emit('updateNewPlayer', { code: code, name: name });
 
 socket.on('updatePlayerList', async playersData => {
@@ -32,8 +42,7 @@ socket.on('updatePlayerList', async playersData => {
     }
     playerListEl.append(li);
   }
-  const isEnoughPlayer = await checkMinimumNumberOfPlayers();
-  if (isEnoughPlayer) {
+  if (isEnoughPlayers) {
     document.getElementById('players-wait').style.display = 'none';
   } else {
     document.getElementById('players-wait').style.display = 'block';
@@ -44,6 +53,10 @@ socket.on('updatePlayerList', async playersData => {
 socket.on('getPlayerInfo', playerJSON => {
   console.log('getPlayerInfo');
   thisPlayer = playerJSON;
+});
+
+socket.on('updateMinimumPlayers', data => {
+  isEnoughPlayers = data.result;
 });
 
 socket.on('getGameOptions', data => {
@@ -58,6 +71,10 @@ socket.on('getGameOptions', data => {
   }
 });
 
+socket.on('getQuestionPackInfo', data => {
+  questionPackInfo = data;
+});
+
 socket.on('updateNewHost', hostData => {
   console.log('updateNewHost');
   const hostSocketId = hostData.socketId;
@@ -68,6 +85,7 @@ socket.on('updateNewHost', hostData => {
 
 socket.on('numQuestionsChanged', data => {
   const numQuestions = data.value;
+  console.log('numQuestions = ', numQuestions);
   numQuestionsEl.value = numQuestions;
 });
 
@@ -121,9 +139,13 @@ addPackBtn.addEventListener('click', () => {
   const selectedPackName = questionPackEl.value;
   if (selectedPackName === '') return;
   addQuestionPackToList(selectedPackName);
-  questionPackEl.remove(questionPackEl.selectedIndex);
-  if (questionPackEl.options.length == 1) {
-    // only 'בחר'
+  // hide option
+  const selectedOption = questionPackEl.selectedOptions[0];
+  selectedOption.setAttribute('hidden', '');
+  // set next option (or previous if there's no next) as selected
+  _setOtherOptionSelected(questionPackEl);
+  // hide question pack select element if no question packs are available to choose
+  if (_areAllQuestionPackOptionsHidden()) {
     toggleQuestionPackSelection('none');
   }
   socket.emit('questionPacksChanged', {
@@ -134,40 +156,57 @@ addPackBtn.addEventListener('click', () => {
   enableStartButtonIfOKTo();
 });
 
+function _areAllQuestionPackOptionsHidden() {
+  return (
+    Array.from(questionPackEl.options).filter(
+      option =>
+        !option.hasAttribute('hidden') &&
+        !option.classList.contains('no-remove')
+    ).length === 0
+  );
+}
+
+function _setOtherOptionSelected(select) {
+  for (const option of select.childNodes) {
+    if (option.classList.contains('no-remove')) continue;
+    if (!option.hasAttribute('hidden')) {
+      option.selected = true;
+    }
+  }
+}
+
 function enableHostOptions() {
   isHost = true;
   document.querySelector('form fieldset').removeAttribute('disabled');
   document.getElementById('start-game-btn').style.display = 'block';
-  // update question pack selection menu
-  while (questionPackEl.childNodes.length > 1) {
-    questionPackEl.removeChild(questionPackEl.lastChild);
-  }
-  const filter = questionPackNames.filter(
+  // // update question pack selection menu
+  // while (questionPackEl.childNodes.length > 1) {
+  //   questionPackEl.removeChild(questionPackEl.lastChild);
+  // }
+  // filter selected question packs
+  const notSelectedQuestionPacks = questionPackNames.filter(
     name => !selectedQuestionPackNames.includes(name)
   );
-  if (filter.length === 0) {
+  console.log(notSelectedQuestionPacks);
+  if (notSelectedQuestionPacks.length === 0) {
     toggleQuestionPackSelection('none');
   } else {
-    filter.forEach(name => {
-      const option = document.createElement('option');
-      option.value = name;
-      option.textContent = name;
-      questionPackEl.append(option);
-    });
+    for (const currentOption of questionPackEl.childNodes) {
+      if (notSelectedQuestionPacks.includes(currentOption.value)) {
+        currentOption.removeAttribute('hidden');
+      }
+    }
     toggleQuestionPackSelection('block');
   }
-  // update num questions
-  setNumQuestionsOptions();
   // add 'remove item' buttons to the selected packs list
   questionPackListEl.childNodes.forEach(li => {
-    li.appendChild(createRemoveItemButtonEl());
+    makeRemovable(li);
   });
 }
 
 async function enableStartButtonIfOKTo() {
   const startGameButton = document.getElementById('start-game-btn');
   if (checkAllFieldsAreFilled()) {
-    const isEnoughPlayers = await checkMinimumNumberOfPlayers();
     if (isEnoughPlayers) {
       startGameButton.removeAttribute('disabled');
     } else {
@@ -188,34 +227,26 @@ function checkAllFieldsAreFilled() {
   return true;
 }
 
-async function checkMinimumNumberOfPlayers() {
-  return await fetch(`/is-enough-players/${code}`)
-    .then(res => res.json())
-    .then(res => {
-      return res.result;
-    });
-}
-
 async function setNumQuestionsOptions() {
-  let numAllowedQuestions;
+  let numQuestions;
   if (selectedQuestionPackNames.length === 0) {
-    numAllowedQuestions = 0;
+    numQuestions = 0;
   } else {
-    const origin = window.location.origin;
-    const url = new URL(origin + '/num-of-allowed-questions/');
-    const params = { questionPacks: selectedQuestionPackNames };
-    url.search = new URLSearchParams(params).toString();
-    numAllowedQuestions = await fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        return res.result;
-      });
+    numQuestions = getNumberOfQuestions(selectedQuestionPackNames);
   }
-  removeOptionsWithValueAboveN(numQuestionsEl, numAllowedQuestions);
+  removeOptionsWithValueAboveN(numQuestionsEl, numQuestions);
   addNumQuestionOptionsUntilN(
     numQuestionsEl,
-    Math.min(MAX_NUM_QUESTIONS, numAllowedQuestions)
+    Math.min(MAX_NUM_QUESTIONS, numQuestions)
   );
+}
+
+function getNumberOfQuestions(packNames) {
+  return Array.from(questionPackInfo)
+    .filter(questionPack => packNames.includes(questionPack.name))
+    .reduce((acc, questionPack) => {
+      return acc + questionPack.numQuestions;
+    }, 0);
 }
 
 function updateQuestionPacksList(questionPackNames) {
@@ -231,7 +262,7 @@ function addQuestionPackToList(name) {
   li.textContent = name;
   li.classList.add('text-sml');
   if (isHost) {
-    li.append(createRemoveItemButtonEl());
+    makeRemovable(li);
   }
   questionPackListEl.append(li);
 }
@@ -241,59 +272,75 @@ function toggleQuestionPackSelection(display) {
   addPackBtn.style.display = display;
 }
 
-function createRemoveItemButtonEl() {
+function makeRemovable(li) {
+  // add X icon
   const removeListItemEl = document.createElement('i');
   removeListItemEl.classList.add('fas', 'fa-times', 'remove-button');
-  removeListItemEl.addEventListener('click', event => {
-    const li = event.target.parentNode;
-    li.parentNode.removeChild(li);
-    if (questionPackEl.childNodes.length === 1) {
-      toggleQuestionPackSelection('block');
-    }
-    const option = document.createElement('option');
-    const questionPackName = li.textContent;
-    option.value = questionPackName;
-    option.textContent = questionPackName;
-    questionPackEl.appendChild(option);
+  li.appendChild(removeListItemEl);
 
-    const index = selectedQuestionPackNames.indexOf(questionPackName);
-    if (index > -1) {
-      selectedQuestionPackNames.splice(index, 1);
-    }
-    setNumQuestionsOptions();
+  li.addEventListener('click', event => removeItem(event));
+}
 
-    enableStartButtonIfOKTo();
-    socket.emit('questionPacksChanged', {
-      player: thisPlayer,
-      value: selectedQuestionPackNames
-    });
+function removeItem(event) {
+  const li = event.target.closest('li');
+  li.parentNode.removeChild(li);
+  toggleQuestionPackSelection('block');
+
+  // const option = document.createElement('option');
+  // const questionPackName = li.textContent;
+  // option.value = questionPackName;
+  // option.textContent = questionPackName;
+  // questionPackEl.appendChild(option);
+
+  // unhide question pack option choice
+  const questionPackName = li.textContent;
+  const option = questionPackEl.querySelector(
+    `option[value="${questionPackName}"]`
+  );
+  option.removeAttribute('hidden');
+  option.selected = true;
+
+  const index = selectedQuestionPackNames.indexOf(questionPackName);
+  if (index > -1) {
+    selectedQuestionPackNames.splice(index, 1);
+  }
+  setNumQuestionsOptions();
+
+  enableStartButtonIfOKTo();
+  socket.emit('questionPacksChanged', {
+    player: thisPlayer,
+    value: selectedQuestionPackNames
   });
-  return removeListItemEl;
 }
 
 function removeOptionsWithValueAboveN(parentSelect, n) {
   let currentOption = parentSelect.lastChild;
   while (
+    currentOption &&
     +currentOption.value > n &&
     !currentOption.classList.contains('no-remove')
   ) {
-    parentSelect.removeChild(currentOption);
-    currentOption = parentSelect.lastChild;
+    currentOption.setAttribute('hidden', '');
+    currentOption = currentOption.previousSibling;
   }
 }
 
 function addNumQuestionOptionsUntilN(parentSelect, n, skip = 5) {
-  let currentOption = parentSelect.lastChild;
-  let startingVal =
-    currentOption.value % 5 === 0 ? +currentOption.value + 5 : 5;
-  for (let i = startingVal; i <= n; i += skip) {
-    addNumQuestionsOption(parentSelect, i);
+  let currentOption = parentSelect.firstChild;
+  while (
+    currentOption &&
+    (currentOption.classList.contains('no-remove') || +currentOption.value <= n)
+  ) {
+    if (!currentOption.classList.contains('no-remove')) {
+      currentOption.removeAttribute('hidden');
+    }
+    currentOption = currentOption.nextSibling;
   }
 }
 
-function addNumQuestionsOption(parentSelect, value) {
-  const optionEl = document.createElement('option');
-  optionEl.value = value;
-  optionEl.textContent = value;
-  parentSelect.appendChild(optionEl);
-}
+// function addNumQuestionsOption(parentSelect, value) {
+//   const optionEl = document.createElement('option');
+//   optionEl.value = value;
+//   optionEl.textContent = value;
+//   parentSelect.appendChild(optionEl);
+// }
