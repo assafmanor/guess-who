@@ -18,13 +18,42 @@
       "type": "multipleChoice"
     },
     {
+      "question": "סרטי אימה",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "פופקורן עם הסרט",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "דוקו",
+      "type": "multipleChoice"
+    },
+    {
       "question": "הורדה פיראטית",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטים שמבוססים על ספרים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטים ישנים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטים בשחור לבן",
       "type": "multipleChoice"
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["האח הגדול", "משחקי הכס", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Star Wars", "Star Trek", "אף אחד"]
     },
     {
       "question": "מה עדיף?",
@@ -42,9 +71,32 @@
       "choices": ["ריק ומורטי", "איש משפחה", "משפחת סימפסון", "אף אחד"]
     },
     {
+      "question": "מי היה הג'וקר הכי טוב?",
+      "type": "multipleChoice",
+      "choices": [
+        "הית' לדג'ר",
+        "ג'ארד לטו",
+        "חואקין פיניקס",
+        "מארק האמיל",
+        "אחר",
+        "אף אחד"
+      ]
+    },
+    {
       "question": "איזה דמות מחברים את/ה?",
       "type": "multipleChoice",
       "choices": ["רייצ'ל", "רוס", "ג'ואי", "מוניקה", "צ'נדלר", "פיבי"]
+    },
+    {
+      "question": "איזו סדרה עדיפה?",
+      "type": "multipleChoice",
+      "choices": [
+        "חברים",
+        "סיינפלד",
+        "המפץ הגדול",
+        "איך פגשתי את אמא",
+        "אף אחד"
+      ]
     },
     {
       "question": "מה עדיף?",
@@ -55,6 +107,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["פוקימון", "דיג'ימון", "אף אחד"]
+    },
+    {
+      "question": "סרט...",
+      "type": "multipleChoice",
+      "choices": ["בבית", "בקולנוע"]
     },
     {
       "question": "מי עדיפים?",
@@ -68,6 +125,14 @@
     },
     {
       "question": "מה הסדרה המצוירת האהובה עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "נבחרת למשחקי הרעב. באיזה נשק תבחר/י להשתמש?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "נתקעת בסדרת הטלוויזיה האחרונה שבה צפית. כמה נדפקת?",
       "type": "shortAnswer"
     },
     {

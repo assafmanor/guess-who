@@ -2,6 +2,18 @@
   "name": "מוזיקה",
   "questions": [
     {
+      "question": "אירוויזיון",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "ספוטיפיי",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "קליפים עם ריקודים",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מי עדיף?",
       "type": "multipleChoice",
       "choices": ["פינק פלויד", "ביונסה"]
@@ -10,6 +22,16 @@
       "question": "מי עדיף?",
       "type": "multipleChoice",
       "choices": ["פינק פלויד", "ביונסה"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אייל גולן", "אריק איינשטיין"]
+    },
+    {
+      "question": "מה עדיף למוזיקה?",
+      "type": "multipleChoice",
+      "choices": ["ספוטיפיי", "יוטיוב"]
     },
     {
       "question": "מה עדיף?",
@@ -60,7 +82,7 @@
     {
       "question": "מי עדיף?",
       "type": "multipleChoice",
-      "choices": ["רד הוט צ'ילי פפרס", "בלאק אייד פיז"]
+      "choices": ["Red Hot Chili Peppers", "The Black Eyed Peas"]
     },
     {
       "question": "מוזיקה מזרחית",
@@ -97,7 +119,11 @@
       "type": "multipleChoice"
     },
     {
-      "question": "את מי הכי היית רוצה לראות בהופעה חייה?",
+      "question": "מה הז'אנר המועדף עליך במוזיקה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "את מי הכי היית רוצה לראות בהופעה חיה?",
       "type": "shortAnswer"
     }
   ]

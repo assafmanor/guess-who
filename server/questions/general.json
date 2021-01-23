@@ -32,9 +32,25 @@
       "choices": ["ספר", "סרט", "סדרה"]
     },
     {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": [
+        "אופניים",
+        "אופניים חשמליים",
+        "קורקינט חשמלי",
+        "הוברבורד",
+        "אף אחד"
+      ]
+    },
+    {
       "question": "מחשב",
       "type": "multipleChoice",
       "choices": ["נייח", "נייד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["משחקי קלפים", "משחקי קופסה"]
     },
     {
       "question": "מה עדיף?",
@@ -45,6 +61,46 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קיץ", "חורף"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אמבטיה", "מקלחת"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ריצה", "הליכה", "אף אחד"]
+    },
+    {
+      "question": "מה יותר גרוע?",
+      "type": "multipleChoice",
+      "choices": ["לעשות כביסה", "לעשות כלים"]
+    },
+    {
+      "question": "מה יותר כיף?",
+      "type": "multipleChoice",
+      "choices": ["מסיבה", "ישיבה"]
+    },
+    {
+      "question": "בים...",
+      "type": "multipleChoice",
+      "choices": ["שחיה", "שיזוף"]
+    },
+    {
+      "question": "מקלחת...",
+      "type": "multipleChoice",
+      "choices": ["בבוקר", "בערב"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["זריחה", "שקיעה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["PC", "Mac"]
     },
     {
       "question": "הארי פוטר",
@@ -81,6 +137,11 @@
       "choices": ["קל\"ב", "רחוק מהבית"]
     },
     {
+      "question": "גיימינג: מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["PC", "PlayStation", "XBOX", "Nintendo", "אף אחד"]
+    },
+    {
       "question": "צבא: מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קרבי", "ג'ובניק"]
@@ -101,6 +162,11 @@
       "choices": ["עצמאי", "שכיר"]
     },
     {
+      "question": "מה היית אומר/ת שאת/ה?",
+      "type": "multipleChoice",
+      "choices": ["הומני/ת", "ראלי/ת", "שניהם", "אף אחד"]
+    },
+    {
       "question": "יום העצמאות...",
       "type": "multipleChoice",
       "choices": ["זיקוקים", "מנגל"]
@@ -117,6 +183,14 @@
     },
     {
       "question": "זקן (beard)",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "קעקועים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "גיימינג",
       "type": "multipleChoice"
     },
     {
@@ -176,6 +250,14 @@
     },
     {
       "question": "מה החג האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "נשארה לך שנה לחיות. מה תעשה/י בה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "אז מה נשמע?",
       "type": "shortAnswer"
     },
     {

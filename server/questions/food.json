@@ -40,7 +40,19 @@
       "type": "multipleChoice"
     },
     {
+      "question": "בשר ודג נא",
+      "type": "multipleChoice"
+    },
+    {
       "question": "כוסברה",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטוני אוכל",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מקדונלד'ס",
       "type": "multipleChoice"
     },
     {
@@ -52,6 +64,22 @@
       "type": "multipleChoice"
     },
     {
+      "question": "פיצה עם אננס",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סושי",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "ג'ינג'ר",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "אוכל כשר",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["מתוק", "מלוח"]
@@ -60,6 +88,41 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["נוטלה", "השחר"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["סרט", "סדרה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["ארומה", "ארקפה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["עוגה", "עוגיות"]
+    },
+    {
+      "question": "גלידה...",
+      "type": "multipleChoice",
+      "choices": ["בכוס", "בגביע"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מאפינס", "קאפקייקס"]
+    },
+    {
+      "question": "מה סוג הביצה האהוב עליך?",
+      "type": "multipleChoice",
+      "choices": ["חביתה", "עין", "קשה", "עלומה", "אחר", "אף אחד"]
+    },
+    {
+      "question": "לצד סושי",
+      "type": "multipleChoice",
+      "choices": ["ג'ינג'ר", "וואסאבי", "שניהם", "אף אחד"]
     },
     {
       "question": "מה עדיף?",
@@ -119,7 +182,7 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["ג'חנון", "מלאווח"]
+      "choices": ["ג'חנון", "מלאווח", "זיווה"]
     },
     {
       "question": "קסטה: מאיזה צד מתחילים?",
@@ -130,6 +193,16 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["בירה", "יין"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אוכל בריא", "אוכל טעים"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["לשבת במסעדה", "להזמין הביתה"]
     },
     {
       "question": "מה התוספת הכי טובה לצד שניצל?",
@@ -145,6 +218,22 @@
     },
     {
       "question": "כמה סוכר לשים לך בקפה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה הפסטה האהובה עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה התוספת האהובה עליך בפיצה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזה מאכל עושה לך בחילה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה הגלידה המועדפת עליך?",
       "type": "shortAnswer"
     },
     {
@@ -165,6 +254,14 @@
     },
     {
       "question": "מה המשקה המוגז האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה החטיף הכי שווה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "המאנץ' המושלם בעיניך",
       "type": "shortAnswer"
     },
     {
