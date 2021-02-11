@@ -366,9 +366,7 @@ continueNextAnswerEl.addEventListener('click', () => {
   if (answerNumber === answersBatch.length) {
     // get the next batch ready
     socket.emit('getAnswersBatch', { code: code });
-    if (answersBatch) {
-      hideAnswerArea();
-    }
+    socket.emit('batchOver', { code: code });
     return;
   }
   if (answerNumber === answersBatch.length - 1) {
@@ -383,7 +381,15 @@ continueGetAnswersEl.addEventListener('click', () => {
   if (!answersBatch) {
     socket.emit('getAnswersBatch', { code: code });
   }
+  socket.emit('startBatch', { code: code });
+});
+
+socket.on('startBatch', () => {
   startBatch();
+});
+
+socket.on('batchOver', () => {
+  hideAnswerArea();
 });
 
 function showAnswerArea() {
@@ -404,4 +410,3 @@ function goToResultsArea() {
   toggleShowElement(guessingAreaEl);
   toggleShowElement(resultsAreaEl);
 }
-

@@ -20,6 +20,8 @@ class InGame {
         this.sendQuestionsHandler(socket);
         this.playerDoneAnsweringHandler(socket);
         this.getNextAnswersBatchHandler(socket);
+        this.startBatchHandler(socket);
+        this.batchOverHandler(socket);
         this.showNextAnswerHandler(socket);
         // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
@@ -74,6 +76,20 @@ class InGame {
           answers: JSON.stringify(Array.from(answers.answers))
         }
       });
+    });
+  }
+
+  startBatchHandler(socket) {
+    socket.on('startBatch', data => {
+      if (data.code !== this.game.code) return;
+      this.game.sendToAllPlayers('startBatch');
+    });
+  }
+
+  batchOverHandler(socket) {
+    socket.on('batchOver', data => {
+      if (data.code !== this.game.code) return;
+      this.game.sendToAllPlayers('batchOver');
     });
   }
 
