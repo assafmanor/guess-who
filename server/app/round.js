@@ -4,6 +4,8 @@ const debug = require('debug')('guesswho:round');
 
 class Round {
   constructor(options) {
+    this.NUM_ANSWERS_EACH_TIME = 5;
+
     this.questionPacks = options.questionPacks;
     this.numQuestions = options.numQuestions;
     this.activePlayers = new Map();
@@ -22,20 +24,50 @@ class Round {
     ) {
       throw new Error('Cannot get enough questions');
     }
-    let questions = [];
-    const addedQuestionIds = new Set();
-    let numOfAddedQuestions = 0;
-    let currentQuestion;
-    while (numOfAddedQuestions < this.numQuestions) {
-      currentQuestion = Questions.getRandomQuestion(this.questionPacks);
-      if (addedQuestionIds.has(currentQuestion.id)) {
-        continue;
-      }
-      questions.push(currentQuestion);
-      addedQuestionIds.add(currentQuestion.id);
-      numOfAddedQuestions++;
+    return Questions.getNRandomQuestions(this.questionPacks, this.numQuestions);
+  }
+
+  _getNumOfRemainingAnswers() {
+    let count = 0;
+    for (const playerAnswers of this.answers.values()) {
+      count += playerAnswers.size;
     }
-    return questions;
+    debug('_getNumOfRemainingAnswers: %d', count);
+    return count;
+  }
+
+  getNextAnswersBatch(numAnswers = this.NUM_ANSWERS_EACH_TIME) {
+    debug('getNextAnswersBatch()');
+    const numRemainingAnswers = this._getNumOfRemainingAnswers();
+    if (numRemainingAnswers === 0) {
+      // no answers to return
+      return null;
+    }
+    // choose a random number between 0 and (the number of remaining answers / numAnswers)
+    // and then multiply it by numAnswers so that it'll be a multiple of numAnswers
+    const randNum =
+      Math.floor((Math.random() * numRemainingAnswers) / numAnswers) *
+      numAnswers;
+    let curSum = 0;
+    for (const [playerId, playerAnswers] of this.answers) {
+      if (randNum < curSum + playerAnswers.size) {
+        const startIndex = randNum - curSum;
+        const tmpAnswersArray = Array.from(playerAnswers).slice(
+          startIndex,
+          startIndex + numAnswers
+        );
+        // remove these answers from the available answers
+        tmpAnswersArray.forEach(([question, answer]) => {
+          playerAnswers.delete(question);
+        });
+        const answers = new Map(tmpAnswersArray);
+        return {
+          playerId: playerId,
+          answers: answers
+        };
+      }
+      curSum += playerAnswers.size;
+    }
   }
 
   removeActivePlayer(playerId) {

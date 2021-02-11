@@ -6,8 +6,6 @@ class InGame {
     this.io = game.io;
     this.round = game.round;
     this.reconnectPlayersHandler();
-    //this.sendQuestionsHandler();
-    //this.playerDoneAnsweringHandler();
   }
 
   reconnectPlayersHandler() {
@@ -18,8 +16,12 @@ class InGame {
         this.game.reconnectPlayer(data.id, socket);
         const player = this.game.getPlayer(data.id);
         this.round.addPlayer(player);
+        // add all handlers
         this.sendQuestionsHandler(socket);
         this.playerDoneAnsweringHandler(socket);
+        this.getNextAnswersBatchHandler(socket);
+        this.showNextAnswerHandler(socket);
+        // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
       });
     });
@@ -38,11 +40,47 @@ class InGame {
     socket.on('updateDoneAnswering', data => {
       debug('updateDoneAnswering');
       if (data.code !== this.game.code) return;
-      this.round.answers.set(data.player.id, data.answers);
+      const playerData = data.player;
+      this.game.getPlayer(playerData.id).isDoneAnswering = true;
+      const answers = new Map(JSON.parse(data.answers));
+      this.round.answers.set(playerData.id, answers);
       if (this.round.isRoundOver()) {
         debug('updateRoundOver {code: %s}', data.code);
         this.game.sendToAllPlayers('updateRoundOver');
+      } else {
+        this.game.sendToSelectedPlayers(
+          'updateWaitingPlayersList',
+          this.game.getPlayerList(player => !player.isDoneAnswering),
+          player => player.isDoneAnswering
+        );
       }
+    });
+  }
+
+  getNextAnswersBatchHandler(socket) {
+    socket.on('getAnswersBatch', data => {
+      if (data.code !== this.game.code) return;
+      const answers = this.round.getNextAnswersBatch();
+      if (!answers) {
+        this.game.sendToAllPlayers('getAnswersBatch', {
+          success: false
+        });
+        return;
+      }
+      this.game.sendToAllPlayers('getAnswersBatch', {
+        success: true,
+        result: {
+          playerId: answers.playerId,
+          answers: JSON.stringify(Array.from(answers.answers))
+        }
+      });
+    });
+  }
+
+  showNextAnswerHandler(socket) {
+    socket.on('showNextAnswer', data => {
+      if (data.code !== this.game.code) return;
+      this.game.sendToAllPlayers('showNextAnswer');
     });
   }
 }

@@ -31,7 +31,7 @@ window.addEventListener('beforeunload', () => {
 
 socket.emit('updateNewPlayer', { code: code, name: name });
 
-socket.on('updatePlayerList', async playersData => {
+socket.on('updatePlayerList', playersData => {
   console.log('updatePlayerList');
   playerListEl.innerHTML = '';
   for (const player of playersData.players) {
@@ -77,10 +77,8 @@ socket.on('getQuestionPackInfo', data => {
 
 socket.on('updateNewHost', hostData => {
   console.log('updateNewHost');
-  const hostSocketId = hostData.socketId;
-  if (socket.id === hostSocketId) {
-    enableHostOptions();
-  }
+  isHost = true;
+  enableHostOptions();
 });
 
 socket.on('numQuestionsChanged', data => {
@@ -125,15 +123,20 @@ document.getElementById('options-form').addEventListener('submit', event => {
   document.getElementById('selected-question-packs').value = JSON.stringify(
     selectedQuestionPackNames
   );
+  writeGameCookie();
   event.target.submit();
 });
 
 socket.on('startRound', data => {
+  writeGameCookie();
+});
+
+function writeGameCookie() {
   // write id to cookie
   const cookieObj = { code: code, id: thisPlayer.id };
   document.cookie = 'guessWhoRoomId=' + JSON.stringify(cookieObj);
   document.getElementById('options-form').submit();
-});
+}
 
 addPackBtn.addEventListener('click', () => {
   const selectedPackName = questionPackEl.value;
@@ -176,13 +179,8 @@ function _setOtherOptionSelected(select) {
 }
 
 function enableHostOptions() {
-  isHost = true;
   document.querySelector('form fieldset').removeAttribute('disabled');
   document.getElementById('start-game-btn').style.display = 'block';
-  // // update question pack selection menu
-  // while (questionPackEl.childNodes.length > 1) {
-  //   questionPackEl.removeChild(questionPackEl.lastChild);
-  // }
   // filter selected question packs
   const notSelectedQuestionPacks = questionPackNames.filter(
     name => !selectedQuestionPackNames.includes(name)

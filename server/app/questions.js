@@ -24,22 +24,28 @@ class Questions {
     });
   }
 
-  static getRandomQuestion(packNames) {
-    let packs = [];
-    let numberOfQuestions = 0;
+  static _rnd(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  static _swap(array, i, j) {
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  static getNRandomQuestions(packNames, n) {
+    let allQuestions = [];
     packNames.forEach(packName => {
       const pack = this.allPacks.get(packName);
-      packs.push(pack);
-      numberOfQuestions += pack.length;
+      allQuestions.push(...pack);
     });
-    const randNum = Math.floor(Math.random() * numberOfQuestions);
-    let curSum = 0;
-    for (const pack of packs) {
-      if (randNum < curSum + pack.length) {
-        return pack[randNum - curSum];
-      }
-      curSum += pack.length;
+    let chosenQuestions = [];
+    for (let i = 0; i < n; i++) {
+      const randIdx = this._rnd(i, allQuestions.length - 1);
+      chosenQuestions.push(allQuestions[randIdx]);
+      // swap elements in the array to make sure this question does not get chosen again
+      this._swap(allQuestions, randIdx, i);
     }
+    return chosenQuestions;
   }
 
   static _getNumOfQuestionsOnePack(packName) {

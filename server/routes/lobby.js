@@ -12,8 +12,8 @@ class Lobby {
   newConnectionHandler() {
     this.io.on('connection', socket => {
       socket.on('updateNewPlayer', data => {
-        debug('updateNewPlayer');
         if (data.code !== this.game.code) return;
+        debug('updateNewPlayer');
         const name = data.name;
         const newPlayer = this.game.addPlayer(name, socket);
         this.startRoundHandler(socket);

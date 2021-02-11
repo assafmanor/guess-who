@@ -22,6 +22,8 @@ class Game {
     this.round;
     this.devMode = devMode;
     this.deleteGameTimeout;
+    this.numConnections = 0;
+    this.waitingForPlayers = false;
   }
 
   getPlayer(id) {
@@ -50,6 +52,7 @@ class Game {
 
   initPlayer(player) {
     player.socket.join(this.code);
+    this.numConnections++;
     debug('initPlayer');
     if (!this.host) {
       this.setHost(player);
@@ -58,7 +61,7 @@ class Game {
       this.isEmpty = false;
       // make sure to clear any delete timeout
       clearTimeout(this.deleteGameTimeout);
-      this.deleteGameTimeout = null
+      this.deleteGameTimeout = null;
     }
     this.playerDisconnectedHandler(player);
   }
@@ -95,6 +98,13 @@ class Game {
     player.socket = socket;
     player.isConnected = true;
     this.initPlayer(player);
+    this.updateWaitingForPlayers();
+  }
+
+  updateWaitingForPlayers() {
+    if (this.players.length == this.numConnections) {
+      this.waitingForPlayers = false;
+    }
   }
 
   deleteGame(game) {
@@ -114,12 +124,13 @@ class Game {
 
   playerDisconnected(player) {
     debug('updatePlayerDisconnected');
+    this.numConnections--;
     this.deleteGameIfEmpty();
     // check minimum players
     if (this.getNumActivePlayers() < this.MIN_PLAYERS) {
       this.sendToAllPlayers('updateMinimumPlayers', { result: false });
     }
-    if (!this.host || (this.host && this.host === player)) {
+    if (!this.waitingForPlayers && (!this.host || (this.host && this.host === player))) {
       // find new host
       this.host = null;
       for (const player of this.players.values()) {
@@ -151,21 +162,36 @@ class Game {
     }
   }
 
+  getPlayerList(filter = player => true) {
+    const allPlayers = Array.from(this.players.values());
+    return {
+      players: allPlayers.filter(filter).map(player => player.getJSON())
+    };
+  }
+
   sendUpdatedPlayersList() {
     debug('sendUpdatedPlayersList');
-    this.sendToAllPlayers('updatePlayerList', {
-      players: Array.from(this.players.values()).map(player => player.getJSON())
-    });
+    this.sendToAllPlayers('updatePlayerList', this.getPlayerList());
   }
 
   sendToAllPlayers(eventName, data) {
     this.io.to(this.code).emit(eventName, data);
   }
 
+  sendToSelectedPlayers(eventName, data, filter) {
+    debug('sendToSelectedPlayers');
+    Array.from(this.players.values())
+      .filter(filter)
+      .forEach(player => {
+        debug('sending %s to %s', eventName, player.name);
+        this.io.to(player.socket.id).emit(eventName, data);
+      });
+  }
+
   setHost(player) {
     this.host = player;
     player.makeHost();
-    this.sendToAllPlayers('updateNewHost', { socketId: player.socket.id });
+    this.io.to(player.socket.id).emit('updateNewHost');
     this.io
       .to(player.socket.id)
       .emit('getQuestionPackInfo', this.getQuestionPackInfo());
@@ -180,6 +206,7 @@ class Game {
     debug('startRound');
     this.round = new Round(this.options);
     this.sendToAllPlayers('startRound');
+    this.waitingForPlayers = true;
   }
 
   getNumActivePlayers() {

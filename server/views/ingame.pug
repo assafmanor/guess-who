@@ -1,21 +1,24 @@
 extends layout
 
 block main-title
-  i.fas.fa-arrow-circle-right.fa-2x.float-right.back-forward-btn#back-btn(style='display: none; !important')
-  i.fas.fa-arrow-circle-left.fa-2x.float-left.back-forward-btn#next-btn
-  h1.text-lg#q-number שאלה 
-    span#q-num
+  #title-area
+    i.fas.fa-arrow-circle-right.fa-2x.float-right.back-forward-btn#back-btn(style='display: none; !important')
+    i.fas.fa-arrow-circle-left.fa-2x.float-left.back-forward-btn#next-btn
+    h1.text-lg#q-number שאלה 
+      span#q-num
 
 block content
-  section.container.bg-lightblue
+
+  // Question Area
+  section.container.bg-lightblue#question-area
     .content.centered-text
-      h2#question
+      h2#question-question
     .content
-      form#answers-form
-        .choice-container#multiple-choice-area(style='display: none; !important')
-        #short-answer-area(style='display: none; !important')
+      form#question-form
+        .choice-container#question-multiple-choice-area(style='display: none; !important')
+        #question-short-answer-area(style='display: none; !important')
           .row
-            input.answer-input#short-answer(type='text', name='answer', autocomplete="off")
+            input.answer-input#question-short-answer(type='text', name='answer', autocomplete="off")
           .row.submit
             input.btn.btn-blue#submit-answer-btn(type='submit', value='שלח')
     .content#warning(hidden)
@@ -23,3 +26,36 @@ block content
   .content#submit-questions.centered-text
     form#submit-questions-form
       input.btn.btn-lg.hidden.fade(type='submit', value='סיימתי לענות', disabled)
+
+  // Waiting Area  
+  section.container#waiting-area(style='display: none; !important;')
+    .content.centered-text
+      h2 עוד לא סיימו לענות:
+      ul#players-list
+
+  // Guessing Area
+  section.container#guessing-area(style='display: none; !important')
+    .content.centered-text#explanation
+      p 5 השאלות הבאות נענו על ידי אחד השחקנים.
+      p נסו לנחש כמה שיותר מהר מי זה.
+      input.btn#continue-get-answers-btn(type='submit', value='המשך לתשובות', style='display: none; !important')
+    #answer-area(style='display: none; !important')
+      .content.centered-text
+        h2#answer-question
+      .content
+        form#answer-form
+          fieldset
+            .choice-container#answer-multiple-choice-area(style='display: none; !important')
+            #answer-short-answer-area(style='display: none; !important')
+              .row
+                input.answer-input#answer-short-answer(type='text', name='answer', autocomplete="off")
+        .content.centered-text
+          input.btn#continue-next-answer-btn(type='submit', value='תשובה הבאה', style='display: none; !important')
+
+  // Results area
+  section.container#results-area(style='display: none; !important')
+    .content.centered-text
+      h1 המשחק נגמר
+    .content.centered-text
+      p רשימת המנצחים
+      p ...

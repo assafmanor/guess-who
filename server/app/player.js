@@ -6,6 +6,7 @@ class Player {
     this.id = id;
     this.isHost = isHost;
     this.isConnected = true;  
+    this.isDoneAnswering = false;
   }
 
   getJSON() {
