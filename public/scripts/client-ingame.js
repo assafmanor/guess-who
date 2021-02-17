@@ -348,6 +348,9 @@ function toggleShowElement(div) {
   Chart.defaults.global.defaultFontFamily = "'Varela Round', sans-serif";
   Chart.defaults.global.defaultFontSize = 20;
   Chart.defaults.global.defaultFontColor = '#000';
+  Chart.defaults.global.legend.display = false;
+  Chart.defaults.global.tooltips.enabled = false;
+
 })();
 
 function showAnswer(question, answer) {
@@ -511,43 +514,54 @@ function getPlayerList() {
 async function initVotingSystem() {
   playerList = await getPlayerList();
   initChart(playerList);
+  initPollOptions(playerList);
 }
 
 function initPollOptions(playerList) {
   // makes sure all buttons are on the same line
+  const repeatNum = playerList.length + 1;
   document.querySelectorAll('.o-container').forEach(el => {
-    el.style.gridTemplateColumns = `repeat(${playerList.length}, 1fr)`;
+    el.style.gridTemplateColumns = `repeat(${repeatNum}, 1fr)`;
   });
   let colorIterator = COLORS_ARRAY.values();
   playerList.forEach(({ id, name }) => {
     const voteButton = document.createElement('button');
     voteButton.className = 'btn vote-btn';
-    voteButton.value = name;
+    voteButton.value = id;
     voteButton.textContent = name;
     voteButton.style.backgroundColor = `#${colorIterator.next().value}`;
     voteButton.addEventListener('click', event => {
       event.preventDefault();
       makeVote(id, name);
     });
-    if (currentPlayerAnswers.id === thisPlayer.id) {
-      // the player whose answers are shown cannot vote
-      voteButton.disabled = true;
-    } else if (id === thisPlayer.id) {
-      // players can't vote for themselves
-      voteButton.disabled = true;
-    }
     voteButtonsDiv.appendChild(voteButton);
     const pollScoreEl = document.createElement('p');
+    pollScoreEl.classList.add('poll-score');
     pollScoreEl.id = `poll-score-${id}`;
     pollResultsDiv.appendChild(pollScoreEl);
     pollScoreEl.textContent = '0';
   });
 }
 
+function resetPollOptions(playerList) {
+  voteButtonsDiv.querySelectorAll('button').forEach(button => {
+    if (currentPlayerAnswers.id === thisPlayer.id) {
+      // the player whose answers are shown cannot vote
+      button.disabled = true;
+    } else if (+button.value === thisPlayer.id) {
+      // players can't vote for themselves
+      button.disabled = true;
+    } else {
+      button.disabled = false;
+    }
+    pollResultsDiv.querySelectorAll('.poll-score').forEach(pollScoreEl => {
+      pollScoreEl.textContent = '0';
+    });
+  });
+}
+
 function startNewVote() {
-  voteButtonsDiv.innerHTML = '';
-  pollResultsDiv.innerHTML = '';
-  initPollOptions(playerList);
+  resetPollOptions(playerList);
   voteChart.data.datasets.forEach(dataset => {
     dataset.data[0] = 0;
   });
@@ -583,6 +597,7 @@ function initChart(playerList) {
       tooltips: {
         enabled: false
       },
+      maintainAspectRatio: false,
       scales: {
         yAxes: [
           {

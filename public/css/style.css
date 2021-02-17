@@ -383,6 +383,11 @@ textarea {
 }
 
 /* Vote Buttons */
+
+#voting-chart {
+  min-height: 200px;
+}
+
 .vote-btn {
   font-size: 0.8em;
   border-color: #000;
@@ -432,5 +437,13 @@ textarea {
   .choice-item .radio:after {
     top: 4.5px;
     left: 5px;
+  }
+
+  .main-container {
+    padding: 15px;
+  }
+
+  section {
+    padding: 10px;
   }
 }
