@@ -48,7 +48,7 @@ const continueNextAnswerEl = document.getElementById(
 const explanationTextEl = document.getElementById('explanation');
 let voteChart;
 const voteButtonsDiv = document.getElementById('vote-buttons');
-const pollResultsDiv = document.getElementById('vote-results');
+// const pollResultsDiv = document.getElementById('vote-results');
 
 // results area elements
 const resultsAreaEl = document.getElementById('results-area');
@@ -350,7 +350,6 @@ function toggleShowElement(div) {
   Chart.defaults.global.defaultFontColor = '#000';
   Chart.defaults.global.legend.display = false;
   Chart.defaults.global.tooltips.enabled = false;
-
 })();
 
 function showAnswer(question, answer) {
@@ -464,11 +463,13 @@ const COLORS_ARRAY = [
   'cd9bc8'
 ];
 
-function makeVote(id, name) {
+function castVote(id, name) {
   if (playerBatchInfo.voted) return;
   playerBatchInfo.voted = true;
   // disable voting buttons
-  const voteButtons = document.getElementById('vote-buttons').children;
+  const voteButtons = document
+    .getElementById('vote-buttons')
+    .querySelectorAll('button');
   Array.from(voteButtons).forEach(button => {
     button.disabled = true;
   });
@@ -520,9 +521,9 @@ async function initVotingSystem() {
 function initPollOptions(playerList) {
   // makes sure all buttons are on the same line
   const repeatNum = playerList.length + 1;
-  document.querySelectorAll('.o-container').forEach(el => {
-    el.style.gridTemplateColumns = `repeat(${repeatNum}, 1fr)`;
-  });
+  // document.querySelectorAll('.o-container').forEach(el => {
+  //   el.style.gridTemplateColumns = `repeat(${repeatNum}, 1fr)`;
+  // });
   let colorIterator = COLORS_ARRAY.values();
   playerList.forEach(({ id, name }) => {
     const voteButton = document.createElement('button');
@@ -532,19 +533,28 @@ function initPollOptions(playerList) {
     voteButton.style.backgroundColor = `#${colorIterator.next().value}`;
     voteButton.addEventListener('click', event => {
       event.preventDefault();
-      makeVote(id, name);
+      event.target.classList.add('voted');
+      castVote(id, name);
     });
-    voteButtonsDiv.appendChild(voteButton);
+    const voteButtonItem = document.createElement('div');
+    voteButtonItem.classList.add('poll-item');
     const pollScoreEl = document.createElement('p');
     pollScoreEl.classList.add('poll-score');
     pollScoreEl.id = `poll-score-${id}`;
-    pollResultsDiv.appendChild(pollScoreEl);
     pollScoreEl.textContent = '0';
+    // const pollScoreItem = document.createElement('div');
+    // pollScoreItem.classList.add('poll-item');
+    // pollScoreItem.appendChild(pollScoreEl);
+    // pollResultsDiv.appendChild(pollScoreItem);
+    voteButtonItem.appendChild(voteButton);
+    voteButtonItem.appendChild(pollScoreEl);
+    voteButtonsDiv.appendChild(voteButtonItem);
   });
 }
 
 function resetPollOptions(playerList) {
   voteButtonsDiv.querySelectorAll('button').forEach(button => {
+    button.classList.remove('voted');
     if (currentPlayerAnswers.id === thisPlayer.id) {
       // the player whose answers are shown cannot vote
       button.disabled = true;
@@ -554,7 +564,7 @@ function resetPollOptions(playerList) {
     } else {
       button.disabled = false;
     }
-    pollResultsDiv.querySelectorAll('.poll-score').forEach(pollScoreEl => {
+    voteButtonsDiv.querySelectorAll('.poll-score').forEach(pollScoreEl => {
       pollScoreEl.textContent = '0';
     });
   });
