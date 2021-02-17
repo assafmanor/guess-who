@@ -37,6 +37,7 @@ const answerMultipleChoiceAreaEl = document.getElementById(
 const answerShortAnswerAreaEl = document.getElementById(
   'answer-short-answer-area'
 );
+const votingArea = document.getElementById('voting-area');
 const answerShortAnswerTextEl = document.getElementById('answer-short-answer');
 const continueGetAnswersEl = document.getElementById(
   'continue-get-answers-btn'
@@ -45,14 +46,29 @@ const continueNextAnswerEl = document.getElementById(
   'continue-next-answer-btn'
 );
 const explanationTextEl = document.getElementById('explanation');
+let voteChart;
+const voteButtonsDiv = document.getElementById('vote-buttons');
+const pollResultsDiv = document.getElementById('vote-results');
 
 // results area elements
 const resultsAreaEl = document.getElementById('results-area');
+const resultsTitleEl = document.getElementById('results-title');
+const resultsCorrectPlayerEl = document.getElementById(
+  'results-correct-player'
+);
+const resultsSubTitleEl = document.getElementById('results-sub-title');
+const resultsPlayerLeaderboard = document.getElementById('player-leaderboard');
+const resultsCorrectPlayerAreaEl = document.getElementById(
+  'results-correct-player-area'
+);
+const resultsWinnerArea = document.getElementById('results-winner-area');
+const winnerEl = document.getElementById('winner');
 
 // game variables
 const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
 const code = guessWhoRoomId.code;
 const id = guessWhoRoomId.id;
+let isGameOver = false;
 
 let thisPlayer;
 let isHost = false;
@@ -68,6 +84,11 @@ let playerAnswers = new Map();
 let answersBatch;
 let answerNumber = 0;
 let currentPlayerAnswers;
+
+let playerBatchInfo;
+let playerList;
+
+const RESULTS_SHOW_TIME = 7000; // show results for 7 seconds
 
 // browser's back and forward click listener
 window.addEventListener('popstate', event => {
@@ -111,6 +132,7 @@ socket.on('getQuestions', data => {
 
 socket.on('updateRoundOver', () => {
   console.log('updateRoundOver');
+  initVotingSystem();
   goToGuessingArea();
 });
 
@@ -322,6 +344,12 @@ function toggleShowElement(div) {
 // ------ Guessing Area -------
 // ----------------------------
 
+(function chartConfig() {
+  Chart.defaults.global.defaultFontFamily = "'Varela Round', sans-serif";
+  Chart.defaults.global.defaultFontSize = 20;
+  Chart.defaults.global.defaultFontColor = '#000';
+})();
+
 function showAnswer(question, answer) {
   clearLastQuestion(
     answerMultipleChoiceAreaEl,
@@ -340,23 +368,31 @@ function showAnswer(question, answer) {
 
 function startBatch() {
   showAnswerArea();
+  playerBatchInfo = {
+    voted: false
+  };
+  startNewVote();
   continueNextAnswerEl.value = 'תשובה הבאה';
-  socket.emit('showNextAnswer', { code: code });
 }
 
 socket.on('getAnswersBatch', data => {
   console.log('getAnswersBatch');
   if (data.success) {
-    currentPlayerAnswers = data.result.playerId;
+    currentPlayerAnswers = data.result.player;
     answersBatch = JSON.parse(data.result.answers);
     answerNumber = 0;
   } else {
     // guessing over
-    goToResultsArea();
+    isGameOver = true;
+    updateResultsArea();
+    setTimeout(() => {
+      updateResultsArea(true);
+    }, RESULTS_SHOW_TIME);
   }
 });
 
 socket.on('showNextAnswer', () => {
+  console.log('showNextAnswer');
   const [question, answer] = answersBatch[answerNumber++];
   showAnswer(question, answer);
 });
@@ -364,15 +400,14 @@ socket.on('showNextAnswer', () => {
 continueNextAnswerEl.addEventListener('click', () => {
   if (!isHost) return;
   if (answerNumber === answersBatch.length) {
+    socket.emit('batchOver', { code: code });
     // get the next batch ready
     socket.emit('getAnswersBatch', { code: code });
-    socket.emit('batchOver', { code: code });
     return;
   }
   if (answerNumber === answersBatch.length - 1) {
     continueNextAnswerEl.value = 'סיום';
   }
-  console.log('answerNumber: ' + answerNumber);
   socket.emit('showNextAnswer', { code: code });
 });
 
@@ -382,6 +417,7 @@ continueGetAnswersEl.addEventListener('click', () => {
     socket.emit('getAnswersBatch', { code: code });
   }
   socket.emit('startBatch', { code: code });
+  socket.emit('showNextAnswer', { code: code });
 });
 
 socket.on('startBatch', () => {
@@ -390,23 +426,247 @@ socket.on('startBatch', () => {
 
 socket.on('batchOver', () => {
   hideAnswerArea();
+  toggleShowResultsArea();
+  updateResultsArea();
+
+  setTimeout(() => {
+    if (!isGameOver) {
+      toggleShowResultsArea();
+    }
+  }, RESULTS_SHOW_TIME);
 });
 
 function showAnswerArea() {
   answerAreaEl.style.display = 'block';
   explanationTextEl.style.display = 'none';
+  votingArea.style.display = 'block';
 }
 
 function hideAnswerArea() {
   answerAreaEl.style.display = 'none';
   explanationTextEl.style.display = 'block';
+  votingArea.style.display = 'none';
+}
+
+// Voting System
+
+const COLORS_ARRAY = [
+  '8d9fe2',
+  '70b3ff',
+  '6cc66f',
+  'ecd557',
+  'f98f24',
+  'ff5f5c',
+  'fa7596',
+  'cd9bc8'
+];
+
+function makeVote(id, name) {
+  if (playerBatchInfo.voted) return;
+  playerBatchInfo.voted = true;
+  // disable voting buttons
+  const voteButtons = document.getElementById('vote-buttons').children;
+  Array.from(voteButtons).forEach(button => {
+    button.disabled = true;
+  });
+  // check if guess is correct
+  const isCorrect = id === currentPlayerAnswers.id;
+  // emit vote
+  socket.emit('makeVote', {
+    code: code,
+    player: thisPlayer,
+    choice: { id, name },
+    isCorrect: isCorrect,
+    answerNumber: answerNumber
+  });
+}
+
+socket.on('updatePoll', data => {
+  console.log('updatePoll');
+  const choice = data.choice;
+  // update chart
+  voteChart.data.datasets.forEach(dataset => {
+    if (dataset.label === choice.name) {
+      dataset.data[0] += 1;
+    }
+  });
+  voteChart.update();
+  // update score
+  const pollScoreEl = document.getElementById(`poll-score-${choice.id}`);
+  if (pollScoreEl) {
+    const newScore = +pollScoreEl.textContent + 1;
+    pollScoreEl.textContent = newScore;
+  }
+});
+
+function getPlayerList() {
+  return new Promise(resolve => {
+    socket.emit('getPlayerList', { code: code });
+    socket.once('getPlayerList', data => {
+      resolve(data.players);
+    });
+  });
+}
+
+async function initVotingSystem() {
+  playerList = await getPlayerList();
+  initChart(playerList);
+}
+
+function initPollOptions(playerList) {
+  // makes sure all buttons are on the same line
+  document.querySelectorAll('.o-container').forEach(el => {
+    el.style.gridTemplateColumns = `repeat(${playerList.length}, 1fr)`;
+  });
+  let colorIterator = COLORS_ARRAY.values();
+  playerList.forEach(({ id, name }) => {
+    const voteButton = document.createElement('button');
+    voteButton.className = 'btn vote-btn';
+    voteButton.value = name;
+    voteButton.textContent = name;
+    voteButton.style.backgroundColor = `#${colorIterator.next().value}`;
+    voteButton.addEventListener('click', event => {
+      event.preventDefault();
+      makeVote(id, name);
+    });
+    if (currentPlayerAnswers.id === thisPlayer.id) {
+      // the player whose answers are shown cannot vote
+      voteButton.disabled = true;
+    } else if (id === thisPlayer.id) {
+      // players can't vote for themselves
+      voteButton.disabled = true;
+    }
+    voteButtonsDiv.appendChild(voteButton);
+    const pollScoreEl = document.createElement('p');
+    pollScoreEl.id = `poll-score-${id}`;
+    pollResultsDiv.appendChild(pollScoreEl);
+    pollScoreEl.textContent = '0';
+  });
+}
+
+function startNewVote() {
+  voteButtonsDiv.innerHTML = '';
+  pollResultsDiv.innerHTML = '';
+  initPollOptions(playerList);
+  voteChart.data.datasets.forEach(dataset => {
+    dataset.data[0] = 0;
+  });
+  voteChart.update();
+}
+
+function initChart(playerList) {
+  let datasets = [];
+  let colorIterator = COLORS_ARRAY.values();
+
+  playerList.forEach(({ name }) => {
+    datasets.push({
+      maxBarThickness: 70,
+      label: name,
+      data: [0],
+      backgroundColor: [`#${colorIterator.next().value}`],
+      borderColor: ['gray'],
+      borderWidth: 1
+    });
+  });
+
+  const chartEl = document.getElementById('voting-chart');
+  voteChart = new Chart(chartEl, {
+    type: 'bar',
+    data: {
+      datasets: datasets.reverse()
+    },
+    options: {
+      title: {
+        display: true,
+        text: ['תוצאות הצבעה']
+      },
+      tooltips: {
+        enabled: false
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              display: true,
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }
+        ]
+      }
+    }
+  });
 }
 
 // ---------------------------
 // ------ Results Area -------
 // ---------------------------
 
-function goToResultsArea() {
+function toggleShowResultsArea() {
   toggleShowElement(guessingAreaEl);
   toggleShowElement(resultsAreaEl);
+}
+
+function updateResultsArea(gameOver = false) {
+  console.log('updateResultsArea');
+  if (gameOver) {
+    titleAreaEl.innerHTML = '<h1>המשחק נגמר</h1>';
+    resultsTitleEl.style.display = 'none';
+    resultsCorrectPlayerAreaEl.style.display = 'none';
+    resultsWinnerArea.style.display = 'block';
+    resultsSubTitleEl.textContent = 'ניקוד סופי';
+  }
+  updateCorrectPlayerReveal();
+  updateLeaderboard(gameOver);
+}
+
+function updateCorrectPlayerReveal() {
+  console.log('updateCorrectPlayerReveal');
+  resultsCorrectPlayerEl.textContent = currentPlayerAnswers.name;
+}
+
+function updateWinners(leaderboard) {
+  console.log('updateWinners');
+  console.dir(leaderboard);
+  const highestScore = Math.max(...leaderboard.map(player => player.score));
+  console.log('highestScore: ' + highestScore);
+  const winners = leaderboard
+    .filter(player => player.score === highestScore)
+    .map(player => player.name);
+  console.log('winners: ');
+  console.dir(winners);
+  winnerEl.textContent = winners.join(', ');
+}
+
+function getScores() {
+  return new Promise(resolve => {
+    socket.emit('getScores', { code: code });
+    socket.once('getScores', data => {
+      resolve(data.scores);
+    });
+  });
+}
+
+async function updateLeaderboard(gameOver = false) {
+  console.log('updateLeaderboard');
+  const scores = await getScores();
+  resultsPlayerLeaderboard.innerHTML = '';
+  // create rows reflecting the scores
+  scores.forEach(({ name, score, addedPoints }) => {
+    const rowEl = document.createElement('div');
+    rowEl.classList.add('lb-row');
+    const nameEl = document.createElement('div');
+    nameEl.classList.add('lb-name');
+    nameEl.textContent = name;
+    const scoreEl = document.createElement('div');
+    scoreEl.classList.add('lb-score');
+    rowEl.appendChild(nameEl);
+    rowEl.appendChild(scoreEl);
+    const addedPointsStr = !gameOver && addedPoints ? ` (+${addedPoints})` : '';
+    scoreEl.textContent = `${score}${addedPointsStr}`;
+    resultsPlayerLeaderboard.appendChild(rowEl);
+  });
+  if (gameOver) {
+    updateWinners(scores);
+  }
 }

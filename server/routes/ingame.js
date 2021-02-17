@@ -23,6 +23,9 @@ class InGame {
         this.startBatchHandler(socket);
         this.batchOverHandler(socket);
         this.showNextAnswerHandler(socket);
+        this.getPlayerListHandler(socket);
+        this.voteHandler(socket);
+        this.getScoresHandler(socket);
         // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
       });
@@ -72,7 +75,10 @@ class InGame {
       this.game.sendToAllPlayers('getAnswersBatch', {
         success: true,
         result: {
-          playerId: answers.playerId,
+          player: {
+            id: answers.playerId,
+            name: this.game.getPlayer(answers.playerId).name
+          },
           answers: JSON.stringify(Array.from(answers.answers))
         }
       });
@@ -83,6 +89,7 @@ class InGame {
     socket.on('startBatch', data => {
       if (data.code !== this.game.code) return;
       this.game.sendToAllPlayers('startBatch');
+      this.round.startBatch();
     });
   }
 
@@ -97,6 +104,40 @@ class InGame {
     socket.on('showNextAnswer', data => {
       if (data.code !== this.game.code) return;
       this.game.sendToAllPlayers('showNextAnswer');
+    });
+  }
+
+  getPlayerListHandler(socket) {
+    socket.on('getPlayerList', data => {
+      if (data.code !== this.game.code) return;
+      this.game.sendPlayerList();
+    });
+  }
+
+  voteHandler(socket) {
+    socket.on('makeVote', data => {
+      if (data.code !== this.game.code) return;
+      const playerData = data.player;
+      if (data.isCorrect) {
+        const player = this.game.getPlayer(playerData.id);
+        this.round.updateScore(player, data.answerNumber);
+      }
+      this.game.sendToAllPlayers('updatePoll', { choice: data.choice });
+    });
+  }
+
+  getScoresHandler(socket) {
+    socket.on('getScores', data => {
+      if (data.code !== this.game.code) return;
+      this.game.getPlayerList().players.forEach(player => {
+        debug(player);
+      });
+      const scores = this.game.getPlayerList().players.map(player => ({
+        name: player.name,
+        score: player.score,
+        addedPoints: player.addedPoints
+      }));
+      this.game.sendToAllPlayers('getScores', { scores: scores });
     });
   }
 }

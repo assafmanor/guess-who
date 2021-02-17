@@ -39,6 +39,7 @@ block content
               option.no-remove(disabled, selected, hidden, value='') בחר
               if devMode
                 option.no-remove(value='1') 1
+                option.no-remove(value='5') 5
               - for(let num = 10; num <= 50; num += 5)
                 option(value=`${num}`, hidden) #{num}
         input#selected-question-packs(type='hidden', name='selected-question-packs')

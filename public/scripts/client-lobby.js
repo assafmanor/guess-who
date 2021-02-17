@@ -284,12 +284,6 @@ function removeItem(event) {
   li.parentNode.removeChild(li);
   toggleQuestionPackSelection('block');
 
-  // const option = document.createElement('option');
-  // const questionPackName = li.textContent;
-  // option.value = questionPackName;
-  // option.textContent = questionPackName;
-  // questionPackEl.appendChild(option);
-
   // unhide question pack option choice
   const questionPackName = li.textContent;
   const option = questionPackEl.querySelector(
@@ -335,10 +329,3 @@ function addNumQuestionOptionsUntilN(parentSelect, n, skip = 5) {
     currentOption = currentOption.nextSibling;
   }
 }
-
-// function addNumQuestionsOption(parentSelect, value) {
-//   const optionEl = document.createElement('option');
-//   optionEl.value = value;
-//   optionEl.textContent = value;
-//   parentSelect.appendChild(optionEl);
-// }

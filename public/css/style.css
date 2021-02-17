@@ -22,6 +22,8 @@ body {
 }
 
 .main-container {
+  position: relative;
+  min-height: 80vh;
   background: #fff;
   padding: 30px;
   box-shadow: 0 0 25px #ccc;
@@ -352,6 +354,64 @@ textarea {
 .back-forward-btn:hover {
   cursor: pointer;
   color: rgb(48, 105, 190);
+}
+
+#continue-next-answer-btn,
+#continue-get-answers-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 1em;
+  margin-left: 1em;
+}
+
+/* Chart Area */
+
+/* options container */
+.o-container {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-rows: 100%, 1fr, 100%, 1fr;
+  /* grid-template-columns: repeat(); */
+}
+
+/* chart container */
+.c-container {
+  width: 100%;
+  margin: auto;
+}
+
+/* Vote Buttons */
+.vote-btn {
+  font-size: 0.8em;
+  border-color: #000;
+}
+
+.vote-btn:hover {
+  filter: brightness(115%);
+}
+
+/* Leaderboard */
+.lb-row {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 40px;
+  border-bottom: 1px solid #afafaf;
+}
+
+.lb-name {
+  position: relative;
+  display: inline-block;
+  width: 75%;
+  line-height: 45px;
+}
+
+.lb-score {
+  position: relative;
+  display: inline-block;
+  width: 25%;
 }
 
 /* Mobile */

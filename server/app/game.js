@@ -6,8 +6,8 @@ const debug = require('debug')('guesswho:game');
 
 class Game {
   constructor(io, code, onEmpty, devMode) {
-    this.MIN_PLAYERS = devMode ? 1 : 3;
-    this.MAX_PLAYERS = 8;
+    this.MIN_PLAYERS = devMode ? 1 : process.env.MIN_PLAYERS;
+    this.MAX_PLAYERS = process.env.MAX_PLAYERS;
 
     this._currentId = 0;
 
@@ -130,7 +130,10 @@ class Game {
     if (this.getNumActivePlayers() < this.MIN_PLAYERS) {
       this.sendToAllPlayers('updateMinimumPlayers', { result: false });
     }
-    if (!this.waitingForPlayers && (!this.host || (this.host && this.host === player))) {
+    if (
+      !this.waitingForPlayers &&
+      (!this.host || (this.host && this.host === player))
+    ) {
       // find new host
       this.host = null;
       for (const player of this.players.values()) {
@@ -172,6 +175,11 @@ class Game {
   sendUpdatedPlayersList() {
     debug('sendUpdatedPlayersList');
     this.sendToAllPlayers('updatePlayerList', this.getPlayerList());
+  }
+
+  sendPlayerList() {
+    debug('sendPlayersList');
+    this.sendToAllPlayers('getPlayerList', this.getPlayerList());
   }
 
   sendToAllPlayers(eventName, data) {

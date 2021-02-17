@@ -4,7 +4,7 @@ const debug = require('debug')('guesswho:round');
 
 class Round {
   constructor(options) {
-    this.NUM_ANSWERS_EACH_TIME = 5;
+    this.NUM_ANSWERS_EACH_TIME = process.env.NUM_ANSWERS_EACH_TIME;
 
     this.questionPacks = options.questionPacks;
     this.numQuestions = options.numQuestions;
@@ -56,8 +56,8 @@ class Round {
           startIndex,
           startIndex + numAnswers
         );
-        // remove these answers from the available answers
-        tmpAnswersArray.forEach(([question, answer]) => {
+        // remove chosen answers from the available answers
+        tmpAnswersArray.forEach(([question, _]) => {
           playerAnswers.delete(question);
         });
         const answers = new Map(tmpAnswersArray);
@@ -83,6 +83,27 @@ class Round {
       }
     }
     return true;
+  }
+
+  startBatch() {
+    // reset all players' added points
+    this.activePlayers.forEach(player => {
+      player.addedPoints = 0;
+    });
+  }
+
+  updateScore(player, answerNumber) {
+    player.addedPoints = this._calculatePoints(answerNumber);
+    player.score += player.addedPoints;
+  }
+
+  _calculatePoints(answerNumber) {
+    debug(
+      '_calculatePoints: %d - %d + 1',
+      this.NUM_ANSWERS_EACH_TIME,
+      answerNumber
+    );
+    return this.NUM_ANSWERS_EACH_TIME - answerNumber + 1;
   }
 }
 

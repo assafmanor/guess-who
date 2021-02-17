@@ -34,28 +34,47 @@ block content
       ul#players-list
 
   // Guessing Area
-  section.container#guessing-area(style='display: none; !important')
-    .content.centered-text#explanation
-      p 5 השאלות הבאות נענו על ידי אחד השחקנים.
-      p נסו לנחש כמה שיותר מהר מי זה.
-      input.btn#continue-get-answers-btn(type='submit', value='המשך לתשובות', style='display: none; !important')
-    #answer-area(style='display: none; !important')
-      .content.centered-text
-        h2#answer-question
-      .content
-        form#answer-form
-          fieldset
-            .choice-container#answer-multiple-choice-area(style='display: none; !important')
-            #answer-short-answer-area(style='display: none; !important')
-              .row
-                input.answer-input#answer-short-answer(type='text', name='answer', autocomplete="off")
+  #guessing-area(style='display: none; !important')
+    section.container
+      .content.centered-text#explanation
+        p 5 השאלות הבאות נענו על ידי אחד השחקנים.
+        p נסו לנחש כמה שיותר מהר מי זה.
+        .row.submit
+          input.btn#continue-get-answers-btn(type='submit', value='המשך לתשובות', style='display: none; !important')
+      #answer-area(style='display: none; !important')
         .content.centered-text
-          input.btn#continue-next-answer-btn(type='submit', value='תשובה הבאה', style='display: none; !important')
+          h2#answer-question
+        .content
+          form#answer-form
+            fieldset
+              .choice-container#answer-multiple-choice-area(style='display: none; !important')
+              #answer-short-answer-area(style='display: none; !important')
+                .row
+                  input.answer-input#answer-short-answer(type='text', name='answer', autocomplete="off")
+    #voting-area(style='display: none; !important')
+      section.container
+        .content.centered-text
+          .c-container
+            canvas#voting-chart
+          .vote-options.centered-text
+            #vote-buttons.o-container
+            #vote-results.o-container
+      .content.centered-text
+        input.btn#continue-next-answer-btn(type='submit', value='תשובה הבאה', style='display: none; !important')
 
   // Results area
-  section.container#results-area(style='display: none; !important')
-    .content.centered-text
-      h1 המשחק נגמר
-    .content.centered-text
-      p רשימת המנצחים
-      p ...
+  #results-area(style='display: none; !important')
+    h1.centered-text#results-title תוצאות
+    section.container#results-correct-player-area
+      .content.centered-text
+        h2 תשובה נכונה: 
+          span.font-important#results-correct-player
+    section.container#results-winner-area(style='display: none; !important')
+      .content.centered-text
+        h2 המנצחים: 
+        p.font-important.text-lg#winner
+    section.container
+      .content.centered-text
+        h2#results-sub-title ניקוד נוכחי
+      .content
+        #player-leaderboard

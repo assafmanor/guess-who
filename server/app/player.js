@@ -5,8 +5,10 @@ class Player {
     this.name = name;
     this.id = id;
     this.isHost = isHost;
-    this.isConnected = true;  
+    this.isConnected = true;
     this.isDoneAnswering = false;
+    this.score = 0;
+    this.addedPoints = 0;
   }
 
   getJSON() {
@@ -15,7 +17,10 @@ class Player {
       roomCode: this.roomCode,
       name: this.name,
       isHost: this.isHost,
-      isConnected: this.isConnected
+      isConnected: this.isConnected,
+      isDoneAnswering: this.isDoneAnswering,
+      score: this.score,
+      addedPoints: this.addedPoints
     };
   }
 

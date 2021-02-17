@@ -89,15 +89,11 @@ function router(app) {
     const game = guessWho.findGame(code);
     if (!game) {
       sendError(next, 'המשחק לא קיים');
-      return;
-    }
-
-    if (!game.inProgress) {
+    } else if (!game.inProgress) {
       renderJoinLobby(req, res, next);
-      return;
+    } else {
+      renderInGame(req, res);
     }
-
-    renderInGame(req, res);
   });
 
   // dev mode routes
@@ -289,6 +285,7 @@ function renderInGame(req, res) {
   const code = req.params.code;
   const scripts = [
     { path: '/socket.io/socket.io.js', isModule: false },
+    { path: '../scripts/Chart.min.js', isModule: false },
     { path: '../scripts/utils.js', isModule: true },
     { path: '../scripts/client-ingame.js', isModule: true }
   ];

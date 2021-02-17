@@ -42,7 +42,8 @@ class Questions {
     for (let i = 0; i < n; i++) {
       const randIdx = this._rnd(i, allQuestions.length - 1);
       chosenQuestions.push(allQuestions[randIdx]);
-      // swap elements in the array to make sure this question does not get chosen again
+      // swap elements in the array to make sure this question
+      // does not get chosen again
       this._swap(allQuestions, randIdx, i);
     }
     return chosenQuestions;

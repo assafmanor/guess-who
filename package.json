@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A social game for guessing the preferences of your friends",
   "dependencies": {
+    "chart.js": "^2.9.4",
     "cookie-parser": "^1.4.5",
     "debug": "^4.3.1",
     "express": "^4.17.1",
@@ -10,7 +11,7 @@
     "socket.io": "^3.0.5"
   },
   "scripts": {
-    "dev": "nodemon -r dotenv/config server/app.js",
+    "start:dev": "nodemon -r dotenv/config server/app.js",
     "start": "node server/app.js"
   },
   "devDependencies": {
