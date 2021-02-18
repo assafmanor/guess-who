@@ -88,7 +88,9 @@ let currentPlayerAnswers;
 let playerBatchInfo;
 let playerList;
 
-const RESULTS_SHOW_TIME = +process.env.RESULTS_SHOW_TIME;
+// The length of time (in ms) it shows the leaderboard
+// between each round of answers
+const RESULTS_SHOW_TIME = 10000;
 
 // browser's back and forward click listener
 window.addEventListener('popstate', event => {
