@@ -4,7 +4,7 @@ const debug = require('debug')('guesswho:round');
 
 class Round {
   constructor(options) {
-    this.NUM_ANSWERS_EACH_TIME = process.env.NUM_ANSWERS_EACH_TIME;
+    this.NUM_ANSWERS_EACH_TIME = +process.env.NUM_ANSWERS_EACH_TIME;
 
     this.questionPacks = options.questionPacks;
     this.numQuestions = options.numQuestions;
@@ -50,23 +50,26 @@ class Round {
       numAnswers;
     let curSum = 0;
     for (const [playerId, playerAnswers] of this.answers) {
-      if (randNum < curSum + playerAnswers.size) {
-        const startIndex = randNum - curSum;
-        const tmpAnswersArray = Array.from(playerAnswers).slice(
-          startIndex,
-          startIndex + numAnswers
-        );
-        // remove chosen answers from the available answers
-        tmpAnswersArray.forEach(([question, _]) => {
-          playerAnswers.delete(question);
-        });
-        const answers = new Map(tmpAnswersArray);
-        return {
-          playerId: playerId,
-          answers: answers
-        };
+      if (randNum >= curSum + playerAnswers.size) {
+        curSum += playerAnswers.size;
+        continue;
       }
-      curSum += playerAnswers.size;
+      // got to the player from which it was chosen to take the answers from
+      // we just need to calculate the index to start from
+      const startIndex = randNum - curSum;
+      const tmpAnswersArray = Array.from(playerAnswers).slice(
+        startIndex,
+        startIndex + numAnswers
+      );
+      // remove chosen answers from the available answers
+      tmpAnswersArray.forEach(([question, _]) => {
+        playerAnswers.delete(question);
+      });
+      const answers = new Map(tmpAnswersArray);
+      return {
+        playerId: playerId,
+        answers: answers
+      };
     }
   }
 

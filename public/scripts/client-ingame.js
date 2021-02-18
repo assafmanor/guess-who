@@ -48,7 +48,7 @@ const continueNextAnswerEl = document.getElementById(
 const explanationTextEl = document.getElementById('explanation');
 let voteChart;
 const voteButtonsDiv = document.getElementById('vote-buttons');
-// const pollResultsDiv = document.getElementById('vote-results');
+const answerNumberEl = document.getElementById('answer-num');
 
 // results area elements
 const resultsAreaEl = document.getElementById('results-area');
@@ -88,7 +88,7 @@ let currentPlayerAnswers;
 let playerBatchInfo;
 let playerList;
 
-const RESULTS_SHOW_TIME = 7000; // show results for 7 seconds
+const RESULTS_SHOW_TIME = +process.env.RESULTS_SHOW_TIME;
 
 // browser's back and forward click listener
 window.addEventListener('popstate', event => {
@@ -364,7 +364,10 @@ function showAnswer(question, answer) {
     answerMultipleChoiceAreaEl,
     answerShortAnswerAreaEl
   );
+  // disable form so that the answer couldn't be changed
   answerFormEl.querySelector('fieldset').setAttribute('disabled', '');
+  // set question number
+  answerNumberEl.textContent = answerNumber;
   setAnswer(question, answer, answerFormEl);
 }
 
@@ -374,6 +377,7 @@ function startBatch() {
     voted: false
   };
   startNewVote();
+  answerNumber = 0;
   continueNextAnswerEl.value = 'תשובה הבאה';
 }
 
@@ -382,7 +386,6 @@ socket.on('getAnswersBatch', data => {
   if (data.success) {
     currentPlayerAnswers = data.result.player;
     answersBatch = JSON.parse(data.result.answers);
-    answerNumber = 0;
   } else {
     // guessing over
     isGameOver = true;
@@ -401,7 +404,7 @@ socket.on('showNextAnswer', () => {
 
 continueNextAnswerEl.addEventListener('click', () => {
   if (!isHost) return;
-  if (answerNumber === answersBatch.length) {
+  if (answerNumber >= answersBatch.length) {
     socket.emit('batchOver', { code: code });
     // get the next batch ready
     socket.emit('getAnswersBatch', { code: code });

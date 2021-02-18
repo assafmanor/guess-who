@@ -294,6 +294,7 @@ function renderInGame(req, res) {
     title: title,
     css: '../' + CSS,
     code: code,
+    NUM_ANSWERS_EACH_TIME: process.env.NUM_ANSWERS_EACH_TIME,
     scripts: scripts
   });
 }

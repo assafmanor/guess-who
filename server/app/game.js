@@ -6,8 +6,8 @@ const debug = require('debug')('guesswho:game');
 
 class Game {
   constructor(io, code, onEmpty, devMode) {
-    this.MIN_PLAYERS = devMode ? 1 : process.env.MIN_PLAYERS;
-    this.MAX_PLAYERS = process.env.MAX_PLAYERS;
+    this.MIN_PLAYERS = devMode ? 1 : +process.env.MIN_PLAYERS;
+    this.MAX_PLAYERS = +process.env.MAX_PLAYERS;
 
     this._currentId = 0;
 
