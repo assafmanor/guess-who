@@ -40,7 +40,7 @@ block content
         p 5 השאלות הבאות נענו על ידי אחד השחקנים.
         p נסו לנחש כמה שיותר מהר מי זה.
         .row.submit
-          input.btn#continue-get-answers-btn(type='submit', value='המשך לתשובות', style='display: none; !important')
+          input.btn#continue-get-answers-btn(type='submit', value='המשך לתשובות', style='display: none; !important')      
       #answer-area(style='display: none; !important')
         .content.centered-text
           h2 (#[span#answer-num]/#{NUM_ANSWERS_EACH_TIME})
@@ -52,6 +52,8 @@ block content
               #answer-short-answer-area(style='display: none; !important')
                 .row
                   input.answer-input#answer-short-answer(type='text', name='answer', autocomplete="off")
+    section.container.centered-text#your-answers-indicator(style='display: none; !important')
+      h2.font-important אלה התשובות שלך. אין צורך להצביע.
     #voting-area(style='display: none; !important')
       section.container
         .content.centered-text

@@ -49,6 +49,9 @@ const explanationTextEl = document.getElementById('explanation');
 let voteChart;
 const voteButtonsDiv = document.getElementById('vote-buttons');
 const answerNumberEl = document.getElementById('answer-num');
+const yourAnswersIndicatorEl = document.getElementById(
+  'your-answers-indicator'
+);
 
 // results area elements
 const resultsAreaEl = document.getElementById('results-area');
@@ -447,11 +450,15 @@ function showAnswerArea() {
   answerAreaEl.style.display = 'block';
   explanationTextEl.style.display = 'none';
   votingArea.style.display = 'block';
+  if (currentPlayerAnswers.id === thisPlayer.id) {
+    yourAnswersIndicatorEl.style.display = 'block';
+  }
 }
 
 function hideAnswerArea() {
   answerAreaEl.style.display = 'none';
   explanationTextEl.style.display = 'block';
+  yourAnswersIndicatorEl.style.display = 'none';
   votingArea.style.display = 'none';
 }
 
@@ -478,9 +485,6 @@ function castVote(id, name) {
   Array.from(voteButtons).forEach(button => {
     button.disabled = true;
   });
-  // check if guess is correct
-  // const isCorrect = id === currentPlayerAnswers.id;
-  // emit vote
   socket.emit('makeVote', {
     code: code,
     player: thisPlayer,
@@ -696,7 +700,8 @@ async function updateLeaderboard(gameOver = false) {
       !gameOver && addedPoints
         ? ` (${Math.abs(addedPoints)}${addedPoints > 0 ? '+' : '-'})`
         : '';
-    scoreEl.textContent = `${score}${addedPointsStr}`;
+    const totalPointsStr = `${Math.abs(score)}${score < 0 ? '-' : ''}`;
+    scoreEl.textContent = `${totalPointsStr}${addedPointsStr}`;
     resultsPlayerLeaderboard.appendChild(rowEl);
   });
   if (gameOver) {
