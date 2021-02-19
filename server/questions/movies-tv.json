@@ -150,6 +150,16 @@
       "choices": ["יו-גי-הו!", "בייבלייד", "אף אחד"]
     },
     {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["הארי פוטר", "שר הטבעות", "אף אחד"]
+    },
+    {
+      "question": "מי עדיף?",
+      "type": "multipleChoice",
+      "choices": ["בראד פיט", "לאונרדו דיקפריו", "אף אחד"]
+    },
+    {
       "question": "סרט...",
       "type": "multipleChoice",
       "choices": ["בבית", "בקולנוע"]
@@ -158,6 +168,11 @@
       "question": "מי עדיפים?",
       "type": "multipleChoice",
       "choices": ["בראנג'לינה", "בניפר", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Adventure Time", "Steven Universe", "אף אחד"]
     },
     {
       "question": "מי עדיפים?",

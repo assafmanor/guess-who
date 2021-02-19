@@ -109,6 +109,11 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["כאן 11", "קשת 12", "רשת 13", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["כלב", "חתול"]
     },
     {
@@ -130,11 +135,6 @@
       "question": "צבא: מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קל\"ב", "רחוק מהבית"]
-    },
-    {
-      "question": "גיימינג: מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["PC", "PlayStation", "XBOX", "Nintendo", "אף אחד"]
     },
     {
       "question": "צבא: מה עדיף?",
@@ -196,7 +196,15 @@
       "type": "multipleChoice"
     },
     {
+      "question": "סנדלי שורש",
+      "type": "multipleChoice"
+    },
+    {
       "question": "גיימינג",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "גשם",
       "type": "multipleChoice"
     },
     {
@@ -261,6 +269,14 @@
     },
     {
       "question": "מה החג האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "יש לך שעה לבזבז 5000$. לאן תלך/י?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איך תירגע/י אחרי יום ארוך ומעייף?",
       "type": "shortAnswer"
     },
     {

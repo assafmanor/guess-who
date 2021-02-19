@@ -1,0 +1,132 @@
+{
+  "name": "גיימינג",
+  "questions": [
+    {
+      "question": "משחקי FPS",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "משחקי RPG",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "Puzzle Games",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מיינקראפט",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "פורטנייט",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "משחקי פיפא",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "Cyberpunk 2077",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "Assassin's Creed",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Grand Theft Auto", "Red Dead Redemption"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["FIFA", "PES", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Single Player", "Multiplayer"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["MapleStory", "World of Warcraft"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["MapleStory", "RuneScape"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Crash Bandicoot", "Spyro", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מיינקראפט", "פורטנייט"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["זלדה", "מריו"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Skyrim", "Witcher 3"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Mario Kart", "Mario Party", "Mario Maker"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Tekken", "Mortal Kombat", "Street Fighter"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": [
+        "League of Legends",
+        "DOTA 2",
+        "Smite",
+        "Heroes of the Storm",
+        "אחר",
+        "אף אחד"
+      ]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Team Fortress 2", "Overwatch"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Portal", "Half-Life", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["בולבזאור", "צ'רמנדר", "סקווירטל"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["PC", "PlayStation", "XBOX", "Nintendo", "אף אחד"]
+    },
+    {
+      "question": "נתקעת במשחק האחרון בו שיחקת. כמה נדפקת?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה משחק הפוקימון המועדף עליך?",
+      "type": "shortAnswer"
+    }
+  ]
+}

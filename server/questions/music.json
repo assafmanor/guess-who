@@ -123,6 +123,10 @@
       "type": "shortAnswer"
     },
     {
+      "question": "את/ה חבר/ה בלהקת רוק. באיזה כלי תנגן/י?",
+      "type": "shortAnswer"
+    },
+    {
       "question": "את מי הכי היית רוצה לראות בהופעה חיה?",
       "type": "shortAnswer"
     }

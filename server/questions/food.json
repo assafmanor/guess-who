@@ -10,6 +10,14 @@
       "type": "multipleChoice"
     },
     {
+      "question": "אבוקדו",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "קלמנטינות",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מיונז",
       "type": "multipleChoice"
     },
@@ -90,6 +98,11 @@
       "choices": ["נוטלה", "השחר"]
     },
     {
+      "question": "בורקס...",
+      "type": "multipleChoice",
+      "choices": ["גבינה", "תפוח אדמה", "פיצה"]
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["סרט", "סדרה"]
@@ -98,6 +111,31 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["ארומה", "ארקפה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["דומינו'ס", "פיצה האט"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["במבה", "ביסלי", "תפוצ'יפס", "דוריטוס", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["סניקרס", "מארס", "מילקי וויי", "טוויקס", "באונטי"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פסק זמן", "טעמי", "אגוזי", "טוויסט", "מקופלת"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["בן אנד ג'ריס", "האגן דאז"]
     },
     {
       "question": "מה עדיף?",
@@ -165,6 +203,16 @@
       "choices": ["תה", "קפה"]
     },
     {
+      "question": "ערגליות...",
+      "type": "multipleChoice",
+      "choices": ["תות", "שוקו", "אחר", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["מילקשייק", "פרישייק"]
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קפה", "שוקו"]
@@ -206,6 +254,14 @@
     },
     {
       "question": "מה התוספת הכי טובה לצד שניצל?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "את/ה יושב/ת בבר. מה תזמין/י לשתות?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איפה ההמבורגר הכי טעים?",
       "type": "shortAnswer"
     },
     {
