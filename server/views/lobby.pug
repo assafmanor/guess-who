@@ -3,6 +3,7 @@ extends layout
 block js
   script.
     let name = `#{name}`;
+    let roomCode = `#{code}`;
     const questionPackNames = `#{questionPacks}`.split(',');
 
 block main-title
@@ -18,7 +19,7 @@ block content
   section.container#options
     .content.centered-text
       h2 הגדרות המשחק:
-    form#options-form(action=`${code}/ingame`, method='post')
+    form#options-form(action=`/${code}/ingame`, method='post')
       fieldset(disabled='true')
         .row.text-sml
           .col-25

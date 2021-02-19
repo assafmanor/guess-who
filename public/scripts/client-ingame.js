@@ -67,6 +67,10 @@ const resultsCorrectPlayerAreaEl = document.getElementById(
 const resultsWinnerArea = document.getElementById('results-winner-area');
 const winnerEl = document.getElementById('winner');
 
+// return to lobby area
+const returnToLobbyAreaEl = document.getElementById('return-to-lobby-area');
+const returnToLobbyFormEl = document.getElementById('return-to-lobby-form');
+
 // game variables
 const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
 const code = guessWhoRoomId.code;
@@ -93,7 +97,8 @@ let playerList;
 
 // The length of time (in ms) it shows the leaderboard
 // between each round of answers
-const RESULTS_SHOW_TIME = 10000;
+// const RESULTS_SHOW_TIME = 10000;
+const RESULTS_SHOW_TIME = 100;
 
 // browser's back and forward click listener
 window.addEventListener('popstate', event => {
@@ -110,7 +115,9 @@ window.addEventListener('popstate', event => {
   }
 });
 
-socket.emit('reconnectPlayer', { code: code, id: id });
+window.addEventListener('load', () => {
+  socket.emit('reconnectPlayerIngame', { code: code, id: id });
+});
 
 socket.on('getPlayerInfo', playerJSON => {
   console.log('getPlayerInfo');
@@ -195,6 +202,7 @@ submitQuestionsForm.addEventListener('submit', event => {
 function enableHostOptions() {
   continueGetAnswersEl.style.display = 'inline-block';
   continueNextAnswerEl.style.display = 'inline-block';
+  returnToLobbyFormEl.querySelector('input').classList.remove('hidden');
 }
 
 function goToWaitingArea() {
@@ -396,7 +404,7 @@ socket.on('getAnswersBatch', data => {
     isGameOver = true;
     updateResultsArea();
     setTimeout(() => {
-      updateResultsArea(true);
+      showRoundResults();
     }, RESULTS_SHOW_TIME);
   }
 });
@@ -528,11 +536,6 @@ async function initVotingSystem() {
 }
 
 function initPollOptions(playerList) {
-  // makes sure all buttons are on the same line
-  const repeatNum = playerList.length + 1;
-  // document.querySelectorAll('.o-container').forEach(el => {
-  //   el.style.gridTemplateColumns = `repeat(${repeatNum}, 1fr)`;
-  // });
   let colorIterator = COLORS_ARRAY.values();
   playerList.forEach(({ id, name }) => {
     const voteButton = document.createElement('button');
@@ -663,12 +666,9 @@ function updateWinners(leaderboard) {
   console.log('updateWinners');
   console.dir(leaderboard);
   const highestScore = Math.max(...leaderboard.map(player => player.score));
-  console.log('highestScore: ' + highestScore);
   const winners = leaderboard
     .filter(player => player.score === highestScore)
     .map(player => player.name);
-  console.log('winners: ');
-  console.dir(winners);
   winnerEl.textContent = winners.join(', ');
 }
 
@@ -708,3 +708,17 @@ async function updateLeaderboard(gameOver = false) {
     updateWinners(scores);
   }
 }
+
+function showRoundResults() {
+  updateResultsArea(true);
+  returnToLobbyAreaEl.style.display = 'block';
+}
+
+returnToLobbyFormEl.querySelector('input').addEventListener('click', event => {
+  event.preventDefault();
+  socket.emit('returnToLobby', { code: code });
+});
+
+socket.on('returnToLobby', () => {
+  returnToLobbyFormEl.submit();
+});

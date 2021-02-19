@@ -24,6 +24,7 @@ class Game {
     this.deleteGameTimeout;
     this.numConnections = 0;
     this.waitingForPlayers = false;
+    this.ingame;
   }
 
   getPlayer(id) {
@@ -41,7 +42,7 @@ class Game {
         debug('removing player %d', player.id);
         this.removePlayer(player.id);
       } else {
-        if (this.round.activePlayers.has(player.id)) {
+        if (this.round && this.round.activePlayers.has(player.id)) {
           this.round.removeActivePlayer(player.id);
         }
       }
@@ -99,11 +100,27 @@ class Game {
     player.isConnected = true;
     this.initPlayer(player);
     this.updateWaitingForPlayers();
+    if (player.isHost) {
+      this.setHost(player);
+    }
+    if (this.getNumActivePlayers() >= this.MIN_PLAYERS) {
+      this.sendToAllPlayers('updateMinimumPlayers', { result: true });
+    }
+    this.sendUpdatedPlayersList();
+    return player;
   }
 
   updateWaitingForPlayers() {
-    if (this.players.length == this.numConnections) {
+    debug(
+      'players.length = %d, numConnections = %d',
+      this.players.size,
+      this.numConnections
+    );
+    if (this.players.size === this.numConnections) {
       this.waitingForPlayers = false;
+      if (!this.round) {
+        this.inProgress = false;
+      }
     }
   }
 
@@ -124,7 +141,7 @@ class Game {
 
   playerDisconnected(player) {
     debug('updatePlayerDisconnected');
-    this.numConnections--;
+    // this.numConnections--;
     this.deleteGameIfEmpty();
     // check minimum players
     if (this.getNumActivePlayers() < this.MIN_PLAYERS) {
@@ -215,6 +232,21 @@ class Game {
     this.round = new Round(this.options);
     this.sendToAllPlayers('startRound');
     this.waitingForPlayers = true;
+    this.numConnections = 0;
+  }
+
+  endRound() {
+    debug('endRound');
+    delete this.round;
+    this.round = null;
+    this.waitingForPlayers = true;
+    this.ingame.destruct();
+    delete this.ingame;
+    this.ingame = null;
+    this.numConnections = 0;
+    this.players.forEach(player => {
+      player.reset();
+    });
   }
 
   getNumActivePlayers() {

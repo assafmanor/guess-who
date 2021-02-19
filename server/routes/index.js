@@ -42,11 +42,6 @@ function router(app) {
       return;
     }
 
-    if (game.inProgress) {
-      renderJoinLobby(req, res, next);
-      return;
-    }
-
     if (name === undefined) {
       const guessWhoRoom = req.cookies.guessWhoRoom;
       if (guessWhoRoom && JSON.parse(guessWhoRoom).code == code) {
@@ -57,10 +52,11 @@ function router(app) {
       }
     }
 
-    if (_getPlayerList(game).includes(name)) {
-      renderJoinLobby(req, res, next);
-      return;
-    }
+    // if (_getPlayerList(game).includes(name)) {
+    //   debug('join lobby 2');
+    //   renderJoinLobby(req, res, next);
+    //   return;
+    // }
 
     renderLobby(req, res);
   });

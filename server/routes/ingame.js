@@ -5,16 +5,19 @@ class InGame {
     this.game = game;
     this.io = game.io;
     this.round = game.round;
+    this.isDead = false;//
     this.reconnectPlayersHandler();
   }
 
   reconnectPlayersHandler() {
     this.io.on('connection', socket => {
-      socket.on('reconnectPlayer', data => {
-        debug('reconnectPlayer');
+      socket.once('reconnectPlayerIngame', data => {
+        debug('reconnectPlayerIngame');
+        if (this.isDead) return;
         if (data.code !== this.game.code) return;
-        this.game.reconnectPlayer(data.id, socket);
         const player = this.game.getPlayer(data.id);
+        if(player && player.isConnected) return;
+        this.game.reconnectPlayer(data.id, socket);
         this.round.addPlayer(player);
         // add all handlers
         this.sendQuestionsHandler(socket);
@@ -26,6 +29,7 @@ class InGame {
         this.getPlayerListHandler(socket);
         this.voteHandler(socket);
         this.getScoresHandler(socket);
+        this.returnToLobbyHandler(socket);
         // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
       });
@@ -137,6 +141,18 @@ class InGame {
       }));
       this.game.sendToAllPlayers('getScores', { scores: scores });
     });
+  }
+
+  returnToLobbyHandler(socket) {
+    socket.on('returnToLobby', data => {
+      if (data.code !== this.game.code) return;
+      this.game.endRound();
+      this.game.sendToAllPlayers('returnToLobby');
+    });
+  }
+
+  destruct() {
+    this.isDead = true;
   }
 }
 

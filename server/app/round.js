@@ -52,10 +52,15 @@ class Round {
   isRoundOver() {
     debug('isRoundOver()');
     for (const playerId of this.activePlayers.keys()) {
-      if (!this.answers.has(playerId)) {
+      debug('isRoundOver, %d', playerId);
+      if (
+        !this.answers.has(playerId) ||
+        this.answers.get(playerId).size === 0
+      ) {
         return false;
       }
     }
+    debug('isRoundOver, answers: ');
     return true;
   }
 

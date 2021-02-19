@@ -1,4 +1,4 @@
-import { getCookie } from './utils.js';
+import { getCookie, deleteCookie } from './utils.js';
 
 const MAX_NUM_QUESTIONS = 40;
 
@@ -22,14 +22,38 @@ if (name === '') {
   name = guessWhoRoom.name;
 }
 
-// disconnect player when they leave the lobby
-window.addEventListener('beforeunload', () => {
-  if (socket) {
-    socket.disconnect();
+function canJoinGame(id) {
+  return new Promise(resolve => {
+    socket.emit('isIdAvailable', { code: code, id: id });
+    socket.once('isIdAvailable', data => {
+      resolve(data.result);
+    });
+  });
+}
+
+window.addEventListener('load', async () => {
+  const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
+  if (code !== roomCode) return;
+  if (guessWhoRoomId && guessWhoRoomId.code === code) {
+    const prevId = guessWhoRoomId.id;
+    const canJoin = await canJoinGame(prevId);
+    if (!canJoin) {
+      return;
+    }
+    socket.emit('reconnectPlayerLobby', { code: code, id: prevId });
+  } else {
+    socket.emit('updateNewPlayer', { code: code, name: name });
   }
 });
 
-socket.emit('updateNewPlayer', { code: code, name: name });
+// disconnect player when they leave the lobby
+window.addEventListener('beforeunload', () => {
+  alert('before unloading');
+  if (socket) {
+    socket.disconnect();
+  }
+  return;
+});
 
 socket.on('updatePlayerList', playersData => {
   console.log('updatePlayerList');
@@ -69,10 +93,13 @@ socket.on('getGameOptions', data => {
   if (numQuestions) {
     numQuestionsEl.value = numQuestions;
   }
+  enableStartButtonIfOKTo();
 });
 
 socket.on('getQuestionPackInfo', data => {
+  console.log('getQuestionPackInfo');
   questionPackInfo = data;
+  setNumQuestionsOptions();
 });
 
 socket.on('updateNewHost', hostData => {
@@ -92,6 +119,7 @@ socket.on('questionPacksChanged', data => {
   const questionPackNames = data.value;
   updateQuestionPacksList(questionPackNames);
   selectedQuestionPackNames = questionPackNames;
+  setNumQuestionsOptions();
 });
 
 socket.on('startRound', () => {
@@ -142,15 +170,6 @@ addPackBtn.addEventListener('click', () => {
   const selectedPackName = questionPackEl.value;
   if (selectedPackName === '') return;
   addQuestionPackToList(selectedPackName);
-  // hide option
-  const selectedOption = questionPackEl.selectedOptions[0];
-  selectedOption.setAttribute('hidden', '');
-  // set next option (or previous if there's no next) as selected
-  _setOtherOptionSelected(questionPackEl);
-  // hide question pack select element if no question packs are available to choose
-  if (_areAllQuestionPackOptionsHidden()) {
-    toggleQuestionPackSelection('none');
-  }
   socket.emit('questionPacksChanged', {
     player: thisPlayer,
     value: selectedQuestionPackNames
@@ -226,6 +245,7 @@ function checkAllFieldsAreFilled() {
 }
 
 async function setNumQuestionsOptions() {
+  console.dir(selectedQuestionPackNames);
   let numQuestions;
   if (selectedQuestionPackNames.length === 0) {
     numQuestions = 0;
@@ -263,6 +283,17 @@ function addQuestionPackToList(name) {
     makeRemovable(li);
   }
   questionPackListEl.append(li);
+  // hide option
+  const selectedOption = questionPackEl.querySelector(
+    `option[value="${name}"]`
+  );
+  selectedOption.setAttribute('hidden', '');
+  // set next option (or previous if there's no next) as selected
+  _setOtherOptionSelected(questionPackEl);
+  // hide question pack select element if no question packs are available to choose
+  if (_areAllQuestionPackOptionsHidden()) {
+    toggleQuestionPackSelection('none');
+  }
 }
 
 function toggleQuestionPackSelection(display) {

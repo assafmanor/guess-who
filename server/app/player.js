@@ -31,6 +31,12 @@ class Player {
   makeHost() {
     this.isHost = true;
   }
+
+  reset() {
+    this.isDoneAnswering = false;
+    this.score = 0;
+    this.addedPoints = 0;
+  }
 }
 
 module.exports.Player = Player;

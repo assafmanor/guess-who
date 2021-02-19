@@ -11,26 +11,45 @@ class Lobby {
 
   newConnectionHandler() {
     this.io.on('connection', socket => {
-      socket.on('updateNewPlayer', data => {
+      this.isIdAvailableHandler(socket);
+      // new player handler
+      socket.once('updateNewPlayer', data => {
         if (data.code !== this.game.code) return;
         debug('updateNewPlayer');
         const name = data.name;
         const newPlayer = this.game.addPlayer(name, socket);
-        this.startRoundHandler(socket);
-        this.optionChangedHandler(
-          socket,
-          'numQuestionsChanged',
-          'numQuestions'
-        );
-        this.optionChangedHandler(
-          socket,
-          'questionPacksChanged',
-          'questionPacks'
-        );
+        this.registerHandlers(socket);
+        // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', newPlayer.getJSON());
         this.io.to(socket.id).emit('getGameOptions', this.game.options);
       });
+      // reconnect player handler
+      socket.on('reconnectPlayerLobby', data => {
+        debug('reconnectPlayerLobby');
+        if (data.code !== this.game.code) return;
+        const player = this.game.reconnectPlayer(data.id, socket);
+        this.registerHandlers(socket);
+        // send player info to client
+        this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
+        this.io.to(socket.id).emit('getGameOptions', this.game.options);
+      });
     });
+  }
+
+  isIdAvailableHandler(socket) {
+    socket.on('isIdAvailable', data => {
+      if (data.code !== this.game.code) return;
+      const id = data.id;
+      this.io
+        .to(socket.id)
+        .emit('isIdAvailable', { result: this.game.players.has(id) });
+    });
+  }
+
+  registerHandlers(socket) {
+    this.startRoundHandler(socket);
+    this.optionChangedHandler(socket, 'numQuestionsChanged', 'numQuestions');
+    this.optionChangedHandler(socket, 'questionPacksChanged', 'questionPacks');
   }
 
   disconnectedHandler() {
@@ -41,7 +60,7 @@ class Lobby {
     socket.on('startRound', data => {
       if (data.code !== this.game.code) return;
       this.game.startRound();
-      new InGame(this.game);
+      this.game.ingame = new InGame(this.game);
       this.game.getPlayer(data.player.id).send('startRound');
     });
   }
