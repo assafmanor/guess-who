@@ -1,16 +1,17 @@
+const BatchFactory = require('./batch-factory').BatchFactory;
 const Questions = require('./questions').Questions;
 
 const debug = require('debug')('guesswho:round');
 
 class Round {
-  constructor(options) {
-    this.NUM_ANSWERS_EACH_TIME = +process.env.NUM_ANSWERS_EACH_TIME;
-
-    this.questionPacks = options.questionPacks;
-    this.numQuestions = options.numQuestions;
+  constructor({ questionPacks, numQuestions }) {
+    this.questionPacks = questionPacks;
+    this.numQuestions = numQuestions;
     this.activePlayers = new Map();
     // a map from player id to their answers
     this.answers = new Map();
+    this.batchFactory;
+    this.currentBatch;
   }
 
   addPlayer(player) {
@@ -27,50 +28,20 @@ class Round {
     return Questions.getNRandomQuestions(this.questionPacks, this.numQuestions);
   }
 
-  _getNumOfRemainingAnswers() {
-    let count = 0;
-    for (const playerAnswers of this.answers.values()) {
-      count += playerAnswers.size;
-    }
-    debug('_getNumOfRemainingAnswers: %d', count);
-    return count;
-  }
-
   getNextAnswersBatch(numAnswers = this.NUM_ANSWERS_EACH_TIME) {
     debug('getNextAnswersBatch()');
-    const numRemainingAnswers = this._getNumOfRemainingAnswers();
-    if (numRemainingAnswers === 0) {
-      // no answers to return
+    if (!this.batchFactory) {
+      this.batchFactory = new BatchFactory(
+        this.activePlayers.size,
+        this.answers
+      );
+    }
+    const nextBatchResults = this.batchFactory.nextBatch();
+    if (nextBatchResults.done) {
       return null;
     }
-    // choose a random number between 0 and (the number of remaining answers / numAnswers)
-    // and then multiply it by numAnswers so that it'll be a multiple of numAnswers
-    const randNum =
-      Math.floor((Math.random() * numRemainingAnswers) / numAnswers) *
-      numAnswers;
-    let curSum = 0;
-    for (const [playerId, playerAnswers] of this.answers) {
-      if (randNum >= curSum + playerAnswers.size) {
-        curSum += playerAnswers.size;
-        continue;
-      }
-      // got to the player from which it was chosen to take the answers from
-      // we just need to calculate the index to start from
-      const startIndex = randNum - curSum;
-      const tmpAnswersArray = Array.from(playerAnswers).slice(
-        startIndex,
-        startIndex + numAnswers
-      );
-      // remove chosen answers from the available answers
-      tmpAnswersArray.forEach(([question, _]) => {
-        playerAnswers.delete(question);
-      });
-      const answers = new Map(tmpAnswersArray);
-      return {
-        playerId: playerId,
-        answers: answers
-      };
-    }
+    this.currentBatch = nextBatchResults.value;
+    return this.currentBatch.getJSON();
   }
 
   removeActivePlayer(playerId) {
@@ -95,8 +66,11 @@ class Round {
     });
   }
 
-  updateScore(player, answerNumber) {
-    player.addedPoints = this._calculatePoints(answerNumber);
+  updateScore(player, choiceId, answerNumber) {
+    player.addedPoints = this.currentBatch.getAddedPoints(
+      choiceId,
+      answerNumber
+    );
     player.score += player.addedPoints;
   }
 

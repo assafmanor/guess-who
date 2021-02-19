@@ -479,13 +479,13 @@ function castVote(id, name) {
     button.disabled = true;
   });
   // check if guess is correct
-  const isCorrect = id === currentPlayerAnswers.id;
+  // const isCorrect = id === currentPlayerAnswers.id;
   // emit vote
   socket.emit('makeVote', {
     code: code,
     player: thisPlayer,
     choice: { id, name },
-    isCorrect: isCorrect,
+    // isCorrect: isCorrect,
     answerNumber: answerNumber
   });
 }
@@ -692,7 +692,10 @@ async function updateLeaderboard(gameOver = false) {
     scoreEl.classList.add('lb-score');
     rowEl.appendChild(nameEl);
     rowEl.appendChild(scoreEl);
-    const addedPointsStr = !gameOver && addedPoints ? ` (+${addedPoints})` : '';
+    const addedPointsStr =
+      !gameOver && addedPoints
+        ? ` (${Math.abs(addedPoints)}${addedPoints > 0 ? '+' : '-'})`
+        : '';
     scoreEl.textContent = `${score}${addedPointsStr}`;
     resultsPlayerLeaderboard.appendChild(rowEl);
   });

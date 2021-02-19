@@ -118,10 +118,8 @@ class InGame {
     socket.on('makeVote', data => {
       if (data.code !== this.game.code) return;
       const playerData = data.player;
-      if (data.isCorrect) {
-        const player = this.game.getPlayer(playerData.id);
-        this.round.updateScore(player, data.answerNumber);
-      }
+      const player = this.game.getPlayer(playerData.id);
+      this.round.updateScore(player, data.choice.id, data.answerNumber);
       this.game.sendToAllPlayers('updatePoll', { choice: data.choice });
     });
   }
