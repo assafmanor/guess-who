@@ -32,6 +32,9 @@ class Lobby {
         // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
         this.io.to(socket.id).emit('getGameOptions', this.game.options);
+        this.io
+          .to(socket.id)
+          .emit('getQuestionPackInfo', this.game.getQuestionPackInfo());
       });
     });
   }
@@ -59,8 +62,12 @@ class Lobby {
   startRoundHandler(socket) {
     socket.on('startRound', data => {
       if (data.code !== this.game.code) return;
-      this.game.startRound();
-      this.game.ingame = new InGame(this.game);
+      const round = this.game.startRound();
+      if (!this.game.ingame) {
+        this.game.ingame = new InGame(this.game);
+      } else {
+        this.game.ingame.updateNewRound(round);
+      }
       this.game.getPlayer(data.player.id).send('startRound');
     });
   }

@@ -5,18 +5,20 @@ class InGame {
     this.game = game;
     this.io = game.io;
     this.round = game.round;
-    this.isDead = false;//
     this.reconnectPlayersHandler();
+  }
+
+  updateNewRound(round) {
+    this.round = round;
   }
 
   reconnectPlayersHandler() {
     this.io.on('connection', socket => {
       socket.once('reconnectPlayerIngame', data => {
         debug('reconnectPlayerIngame');
-        if (this.isDead) return;
         if (data.code !== this.game.code) return;
         const player = this.game.getPlayer(data.id);
-        if(player && player.isConnected) return;
+        if (player && player.isConnected) return;
         this.game.reconnectPlayer(data.id, socket);
         this.round.addPlayer(player);
         // add all handlers
@@ -149,10 +151,6 @@ class InGame {
       this.game.endRound();
       this.game.sendToAllPlayers('returnToLobby');
     });
-  }
-
-  destruct() {
-    this.isDead = true;
   }
 }
 

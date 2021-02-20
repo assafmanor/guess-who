@@ -14,7 +14,8 @@ let thisPlayer;
 let isHost = false;
 let isEnoughPlayers = false;
 let selectedQuestionPackNames = [];
-let questionPackInfo;
+let questionPackInfo = [];
+let isReconnected = false;
 
 const guessWhoRoom = JSON.parse(getCookie('guessWhoRoom'));
 const code = guessWhoRoom.code;
@@ -38,9 +39,13 @@ window.addEventListener('load', async () => {
     const prevId = guessWhoRoomId.id;
     const canJoin = await canJoinGame(prevId);
     if (!canJoin) {
+      deleteCookie('guessWhoRoomId');
+      deleteCookie('guessWhoRoomId', `/${code}`);
+      deleteCookie('guessWhoRoom');
       return;
     }
     socket.emit('reconnectPlayerLobby', { code: code, id: prevId });
+    isReconnected = true;
   } else {
     socket.emit('updateNewPlayer', { code: code, name: name });
   }
@@ -48,7 +53,6 @@ window.addEventListener('load', async () => {
 
 // disconnect player when they leave the lobby
 window.addEventListener('beforeunload', () => {
-  alert('before unloading');
   if (socket) {
     socket.disconnect();
   }
@@ -156,14 +160,16 @@ document.getElementById('options-form').addEventListener('submit', event => {
 });
 
 socket.on('startRound', data => {
-  writeGameCookie();
+  if (!isReconnected) {
+    writeGameCookie();
+  }
+  document.getElementById('options-form').submit();
 });
 
 function writeGameCookie() {
   // write id to cookie
   const cookieObj = { code: code, id: thisPlayer.id };
   document.cookie = 'guessWhoRoomId=' + JSON.stringify(cookieObj);
-  document.getElementById('options-form').submit();
 }
 
 addPackBtn.addEventListener('click', () => {

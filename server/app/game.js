@@ -233,6 +233,7 @@ class Game {
     this.sendToAllPlayers('startRound');
     this.waitingForPlayers = true;
     this.numConnections = 0;
+    return this.round;
   }
 
   endRound() {
@@ -240,9 +241,9 @@ class Game {
     delete this.round;
     this.round = null;
     this.waitingForPlayers = true;
-    this.ingame.destruct();
-    delete this.ingame;
-    this.ingame = null;
+    // this.ingame.destruct();
+    // delete this.ingame;
+    // this.ingame = null;
     this.numConnections = 0;
     this.players.forEach(player => {
       player.reset();
