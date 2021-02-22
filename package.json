@@ -19,6 +19,6 @@
     "start": "node -r dotenv/config server/app.js"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.7"
   }
 }
