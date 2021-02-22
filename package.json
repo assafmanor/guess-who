@@ -11,7 +11,8 @@
     "debug": "^4.3.1",
     "express": "^4.17.1",
     "pug": "^3.0.0",
-    "socket.io": "^3.0.5"
+    "socket.io": "^3.0.5",
+    "dotenv": "^8.2.0"
   },
   "scripts": {
     "start:dev": "nodemon -r dotenv/config server/app.js",
@@ -19,6 +20,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
-    "dotenv": "^8.2.0"
   }
 }
