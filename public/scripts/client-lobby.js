@@ -84,6 +84,7 @@ socket.on('getPlayerInfo', playerJSON => {
 });
 
 socket.on('updateMinimumPlayers', data => {
+  console.log('updateMinimumPlayers: ' + data.result);
   isEnoughPlayers = data.result;
 });
 
@@ -126,10 +127,6 @@ socket.on('questionPacksChanged', data => {
   setNumQuestionsOptions();
 });
 
-socket.on('startRound', () => {
-  console.log('startRound');
-});
-
 numQuestionsEl.addEventListener('change', () => {
   socket.emit('numQuestionsChanged', {
     player: thisPlayer,
@@ -152,14 +149,15 @@ document.getElementById('options-form').addEventListener('submit', event => {
     player: thisPlayer,
     code: code
   });
-  document.getElementById('selected-question-packs').value = JSON.stringify(
-    selectedQuestionPackNames
-  );
-  writeGameCookie();
-  event.target.submit();
+  // document.getElementById('selected-question-packs').value = JSON.stringify(
+  //   selectedQuestionPackNames
+  // );
+  // writeGameCookie();
+  // event.target.submit();
 });
 
 socket.on('startRound', data => {
+  console.log('startRound');
   if (!isReconnected) {
     writeGameCookie();
   }

@@ -68,7 +68,7 @@ class Lobby {
       } else {
         this.game.ingame.updateNewRound(round);
       }
-      this.game.getPlayer(data.player.id).send('startRound');
+      this.game.sendToAllPlayers('startRound');
     });
   }
 

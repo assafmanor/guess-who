@@ -2,6 +2,9 @@
   "name": "guess-who",
   "version": "0.0.1",
   "description": "A social game for guessing the preferences of your friends",
+  "engines": {
+    "node": "14.9.0"
+  },
   "dependencies": {
     "chart.js": "^2.9.4",
     "cookie-parser": "^1.4.5",
@@ -12,7 +15,7 @@
   },
   "scripts": {
     "start:dev": "nodemon -r dotenv/config server/app.js",
-    "start": "node server/app.js"
+    "start": "node -r dotenv/config server/app.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",

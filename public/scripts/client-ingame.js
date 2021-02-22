@@ -554,10 +554,6 @@ function initPollOptions(playerList) {
     pollScoreEl.classList.add('poll-score');
     pollScoreEl.id = `poll-score-${id}`;
     pollScoreEl.textContent = '0';
-    // const pollScoreItem = document.createElement('div');
-    // pollScoreItem.classList.add('poll-item');
-    // pollScoreItem.appendChild(pollScoreEl);
-    // pollResultsDiv.appendChild(pollScoreItem);
     voteButtonItem.appendChild(voteButton);
     voteButtonItem.appendChild(pollScoreEl);
     voteButtonsDiv.appendChild(voteButtonItem);

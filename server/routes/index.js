@@ -52,12 +52,6 @@ function router(app) {
       }
     }
 
-    // if (_getPlayerList(game).includes(name)) {
-    //   debug('join lobby 2');
-    //   renderJoinLobby(req, res, next);
-    //   return;
-    // }
-
     renderLobby(req, res);
   });
 

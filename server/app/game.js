@@ -64,18 +64,18 @@ class Game {
       clearTimeout(this.deleteGameTimeout);
       this.deleteGameTimeout = null;
     }
+    // check minimum players
+    if (this.getNumActivePlayers() >= this.MIN_PLAYERS) {
+      this.sendToAllPlayers('updateMinimumPlayers', { result: true });
+    }
     this.playerDisconnectedHandler(player);
   }
 
   addPlayer(name, socket) {
     let newPlayer = new Player(socket, this.code, name, this._currentId++);
-    this.initPlayer(newPlayer);
     this.players.set(newPlayer.id, newPlayer);
+    this.initPlayer(newPlayer);
     debug('addPlayer {id: %d, name: %s}', newPlayer.id, newPlayer.name);
-    // check minimum players
-    if (this.getNumActivePlayers() >= this.MIN_PLAYERS) {
-      this.sendToAllPlayers('updateMinimumPlayers', { result: true });
-    }
     this.sendUpdatedPlayersList();
     return newPlayer;
   }
@@ -102,9 +102,6 @@ class Game {
     this.updateWaitingForPlayers();
     if (player.isHost) {
       this.setHost(player);
-    }
-    if (this.getNumActivePlayers() >= this.MIN_PLAYERS) {
-      this.sendToAllPlayers('updateMinimumPlayers', { result: true });
     }
     this.sendUpdatedPlayersList();
     return player;
