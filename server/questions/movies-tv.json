@@ -26,11 +26,27 @@
       "type": "multipleChoice"
     },
     {
+      "question": "שעשועונים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "אדם סנדלר",
+      "type": "multipleChoice"
+    },
+    {
       "question": "דוקו",
       "type": "multipleChoice"
     },
     {
+      "question": "מונטי פייתון",
+      "type": "multipleChoice"
+    },
+    {
       "question": "הורדה פיראטית",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטי בורקס",
       "type": "multipleChoice"
     },
     {
@@ -42,13 +58,26 @@
       "type": "multipleChoice"
     },
     {
+      "question": "בית הנייר",
+      "type": "multipleChoice"
+    },
+    {
       "question": "סרטים בשחור לבן",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מלחמת הכוכבים",
       "type": "multipleChoice"
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["האח הגדול", "משחקי הכס", "אף אחד"]
+    },
+    {
+      "question": "מי את/ה?",
+      "type": "multipleChoice",
+      "choices": ["הטוב", "הרע", "המכוער"]
     },
     {
       "question": "מה עדיף?",
@@ -79,6 +108,21 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["הישרדות", "המירוץ למיליון", "אף אחד"]
+    },
+    {
+      "question": "ג'סיקה...",
+      "type": "multipleChoice",
+      "choices": ["צ'סטיין'", "אלבה", "ביל"]
+    },
+    {
+      "question": "ג'ניפר...",
+      "type": "multipleChoice",
+      "choices": ["אניסטון", "לורנס", "לופז"]
+    },
+    {
+      "question": "טום...",
+      "type": "multipleChoice",
+      "choices": ["קרוז", "הנקס", "הארדי", "הולנד"]
     },
     {
       "question": "מה עדיף?",
@@ -189,6 +233,10 @@
     },
     {
       "question": "נבחרת למשחקי הרעב. באיזה נשק תבחר/י להשתמש?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזו נסיכת דיסני את/ה?",
       "type": "shortAnswer"
     },
     {

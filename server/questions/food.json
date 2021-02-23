@@ -26,10 +26,6 @@
       "type": "multipleChoice"
     },
     {
-      "question": "מיונז",
-      "type": "multipleChoice"
-    },
-    {
       "question": "גויאבה",
       "type": "multipleChoice"
     },
@@ -42,6 +38,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קוקוס", "אננס"]
+    },
+    {
+      "question": "בצק פיצה...",
+      "type": "multipleChoice",
+      "choices": ["דק", "עבה"]
     },
     {
       "question": "ופל לימון",
@@ -95,7 +96,27 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["אוכל ביתי", "מסעדה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אורז", "קוסקוס", "פתיתים"]
+    },
+    {
+      "question": "קפה...",
+      "type": "multipleChoice",
+      "choices": ["ספל", "זכוכית", "חד\"פ", "לא אכפת לי", "לא שותה קפה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["נוטלה", "השחר"]
+    },
+    {
+      "question": "יין...",
+      "type": "multipleChoice",
+      "choices": ["אדום", "לבן", "רוזה", "אף אחד"]
     },
     {
       "question": "בורקס...",

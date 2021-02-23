@@ -55,6 +55,16 @@
       "choices": ["ליידי גאגא", "טיילור סוויפט", "אף אחת"]
     },
     {
+      "question": "ג'סטין...",
+      "type": "multipleChoice",
+      "choices": ["ביבר", "טימברלייק", "אף אחד"]
+    },
+    {
+      "question": "מי עדיפים?",
+      "type": "multipleChoice",
+      "choices": ["בקסטריט בויז", "אן סינק", "אף אחד"]
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["רוק", "פופ", "ראפ", "מוזיקה אלקטרונית"]
@@ -78,6 +88,21 @@
       "question": "מי עדיף?",
       "type": "multipleChoice",
       "choices": ["אמינם", "טופאק"]
+    },
+    {
+      "question": "לשמוע מוזיקה...",
+      "type": "multipleChoice",
+      "choices": ["באוזניות", "ברמקולים"]
+    },
+    {
+      "question": "לאיזו קבוצת ז'אנרים את/ה הכי מתחבר/ת?",
+      "type": "multipleChoice",
+      "choices": [
+        "פופ, ראפ, היפ-הופ",
+        "רוק, מטאל",
+        "מזרחית, דיכאון, ים-תיכוני",
+        "אחר"
+      ]
     },
     {
       "question": "מי עדיף?",

@@ -169,7 +169,27 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["איפור", "טבעי"]
+    },
+    {
+      "question": "קניות...",
+      "type": "multipleChoice",
+      "choices": ["באינטרנט", "בקניון"]
+    },
+    {
+      "question": "כנגד ארבעה בנים דיברה התורה. מי את/ה?",
+      "type": "multipleChoice",
+      "choices": ["חכם", "רשע", "תם", "זה שאינו יודע לשאול"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["וואטסאפ", "שיחת טלפון"]
+    },
+    {
+      "question": "ספר...",
+      "type": "multipleChoice",
+      "choices": ["רגיל", "אלקטרוני", "לא קורא/ת ספרים"]
     },
     {
       "question": "מה עדיף?",
@@ -196,7 +216,15 @@
       "type": "multipleChoice"
     },
     {
+      "question": "שעונים חכמים",
+      "type": "multipleChoice"
+    },
+    {
       "question": "סנדלי שורש",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "פודקאסטים",
       "type": "multipleChoice"
     },
     {
@@ -213,6 +241,10 @@
     },
     {
       "question": "מועדוני ריקודים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מוזאונים",
       "type": "multipleChoice"
     },
     {

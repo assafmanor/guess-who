@@ -26,6 +26,10 @@
       "type": "multipleChoice"
     },
     {
+      "question": "משחקי אימה",
+      "type": "multipleChoice"
+    },
+    {
       "question": "Cyberpunk 2077",
       "type": "multipleChoice"
     },
@@ -46,12 +50,22 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["Steam", "Origin", "Epic Games", "GOG.com"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["Single Player", "Multiplayer"]
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["MapleStory", "World of Warcraft"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["Call of Duty", "Battlefield"]
     },
     {
       "question": "מה עדיף?",
@@ -86,6 +100,11 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["Terraria", "Minecraft"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["Tekken", "Mortal Kombat", "Street Fighter"]
     },
     {
@@ -104,6 +123,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["Team Fortress 2", "Overwatch"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["קונטרולר", "עכבר ומקלדת"]
     },
     {
       "question": "מה עדיף?",
