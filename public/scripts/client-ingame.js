@@ -621,7 +621,8 @@ function initChart(playerList) {
             ticks: {
               display: true,
               beginAtZero: true,
-              stepSize: 1
+              stepSize: 1,
+              max: playerList.length - 1
             }
           }
         ]
