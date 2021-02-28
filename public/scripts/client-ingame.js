@@ -118,6 +118,12 @@ window.addEventListener('load', () => {
   socket.emit('reconnectPlayerIngame', { code: code, id: id });
 });
 
+window.addEventListener('beforeunload', event => {
+  const confirmationMessage = 'אתה בטוח שאתה רוצה לעזוב את המשחק?';
+  (event || window.event).returnValue = confirmationMessage;
+  return confirmationMessage;
+});
+
 socket.on('getPlayerInfo', playerJSON => {
   console.log('getPlayerInfo');
   thisPlayer = playerJSON;
