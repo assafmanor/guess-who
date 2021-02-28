@@ -89,6 +89,10 @@
       "type": "multipleChoice"
     },
     {
+      "question": "אוכל טבעוני",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["מתוק", "מלוח"]
@@ -196,7 +200,7 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["שניצל", "סטייק"]
+      "choices": ["שניצל", "סטייק", "אני צמחוני/ת"]
     },
     {
       "question": "מה עדיף?",
