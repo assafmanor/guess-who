@@ -149,6 +149,7 @@ class InGame {
     socket.on('returnToLobby', data => {
       if (data.code !== this.game.code) return;
       this.game.endRound();
+      this.game.removeDisconnectedPlayers();
       this.game.sendToAllPlayers('returnToLobby');
     });
   }

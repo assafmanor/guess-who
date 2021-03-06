@@ -109,7 +109,7 @@ class Game {
 
   updateWaitingForPlayers() {
     debug(
-      'players.length = %d, numConnections = %d',
+      'players.size = %d, numConnections = %d',
       this.players.size,
       this.numConnections
     );
@@ -251,6 +251,16 @@ class Game {
     return Array.from(this.players.values())
       .map(player => player.isConnected)
       .reduce((acc, isConnected) => acc + (isConnected ? 1 : 0), 0);
+  }
+
+  removeDisconnectedPlayers() {
+    debug('removeDisconnectedPlayers');
+    Array.from(this.players.values())
+      .filter(player => !player.isConnected)
+      .forEach(player => {
+        this.players.delete(player.id);
+      });
+    debug(this.players);
   }
 }
 

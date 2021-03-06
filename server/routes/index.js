@@ -32,7 +32,7 @@ function router(app) {
     res.redirect(307, `${gameJSON.code}`);
   });
 
-  app.all('/:code([a-z]{4})', async (req, res, next) => {
+  app.all('/:code([a-z]{4})', (req, res, next) => {
     const code = req.params.code;
     let name = req.body.name;
 
@@ -44,7 +44,7 @@ function router(app) {
 
     if (name === undefined) {
       const guessWhoRoom = req.cookies.guessWhoRoom;
-      if (guessWhoRoom && JSON.parse(guessWhoRoom).code == code) {
+      if (guessWhoRoom && JSON.parse(guessWhoRoom).code === code) {
         name = JSON.parse(guessWhoRoom).name;
       } else {
         renderJoinLobby(req, res, next);

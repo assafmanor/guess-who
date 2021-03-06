@@ -76,6 +76,7 @@ const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
 const code = guessWhoRoomId.code;
 const id = guessWhoRoomId.id;
 let isGameOver = false;
+let isReturningToLobby = false;
 
 let thisPlayer;
 let isHost = false;
@@ -119,9 +120,11 @@ window.addEventListener('load', () => {
 });
 
 window.addEventListener('beforeunload', event => {
-  const confirmationMessage = 'אתה בטוח שאתה רוצה לעזוב את המשחק?';
-  (event || window.event).returnValue = confirmationMessage;
-  return confirmationMessage;
+  if (!isReturningToLobby) {
+    const confirmationMessage = 'אתה בטוח שאתה רוצה לעזוב את המשחק?';
+    (event || window.event).returnValue = confirmationMessage;
+    return confirmationMessage;
+  }
 });
 
 socket.on('getPlayerInfo', playerJSON => {
@@ -722,5 +725,6 @@ returnToLobbyFormEl.querySelector('input').addEventListener('click', event => {
 });
 
 socket.on('returnToLobby', () => {
+  isReturningToLobby = true;
   returnToLobbyFormEl.submit();
 });
