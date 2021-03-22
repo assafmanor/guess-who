@@ -1,4 +1,4 @@
-import { getCookie, showErrorMessage } from './utils.js';
+import { getCookie, showErrorMessage, setCountdown } from './utils.js';
 
 const socket = io();
 
@@ -42,9 +42,7 @@ const answerShortAnswerTextEl = document.getElementById('answer-short-answer');
 const continueGetAnswersEl = document.getElementById(
   'continue-get-answers-btn'
 );
-const continueNextAnswerEl = document.getElementById(
-  'continue-next-answer-btn'
-);
+const skipAnswerEl = document.getElementById('skip-answer-btn');
 const explanationTextEl = document.getElementById('explanation');
 let voteChart;
 const voteButtonsDiv = document.getElementById('vote-buttons');
@@ -99,6 +97,10 @@ let playerList;
 // The length of time (in ms) it shows the leaderboard
 // between each round of answers
 const RESULTS_SHOW_TIME = 10000;
+
+// the maximal length of time (in seconds) each answer is shown
+const ANSWER_SHOW_TIME = 10;
+let answerCountdownInterval;
 
 // browser's back and forward click listener
 window.addEventListener('popstate', event => {
@@ -209,7 +211,6 @@ submitQuestionsForm.addEventListener('submit', event => {
 
 function enableHostOptions() {
   continueGetAnswersEl.style.display = 'inline-block';
-  continueNextAnswerEl.style.display = 'inline-block';
   returnToLobbyFormEl.querySelector('input').classList.remove('hidden');
 }
 
@@ -399,7 +400,6 @@ function startBatch() {
   };
   startNewVote();
   answerNumber = 0;
-  continueNextAnswerEl.value = 'תשובה הבאה';
 }
 
 socket.on('getAnswersBatch', data => {
@@ -417,13 +417,25 @@ socket.on('getAnswersBatch', data => {
   }
 });
 
-socket.on('showNextAnswer', () => {
+function showNextAnswer() {
   console.log('showNextAnswer');
   const [question, answer] = answersBatch[answerNumber++];
   showAnswer(question, answer);
-});
+  answerCountdownInterval = setCountdown(
+    titleAreaEl.querySelector('h1'),
+    ANSWER_SHOW_TIME,
+    continueNextAnswer
+  );
+  skipAnswerEl.disabled = false;
+  skipAnswerEl.value = 'דלג (0)';
+  // scroll to top
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0
+}
 
-continueNextAnswerEl.addEventListener('click', () => {
+socket.on('showNextAnswer', showNextAnswer);
+
+function continueNextAnswer() {
   if (!isHost) return;
   if (answerNumber >= answersBatch.length) {
     socket.emit('batchOver', { code: code });
@@ -431,10 +443,31 @@ continueNextAnswerEl.addEventListener('click', () => {
     socket.emit('getAnswersBatch', { code: code });
     return;
   }
-  if (answerNumber === answersBatch.length - 1) {
-    continueNextAnswerEl.value = 'סיום';
-  }
   socket.emit('showNextAnswer', { code: code });
+}
+
+function skipAnswerCallback(event) {
+  event.target.disabled = true;
+  socket.emit('voteSkipAnswer', {
+    code: code,
+    answerNumber: answerNumber - 1,
+    player: thisPlayer
+  });
+}
+
+skipAnswerEl.addEventListener('click', event => {
+  skipAnswerCallback(event);
+});
+
+socket.on('skipAnswer', () => {
+  clearInterval(answerCountdownInterval);
+  if(isHost) {
+    continueNextAnswer();
+  }
+});
+
+socket.on('skipAnswerUpdate', data => {
+  skipAnswerEl.value = `דלג (${data.numVotes})`;
 });
 
 continueGetAnswersEl.addEventListener('click', () => {
@@ -451,6 +484,7 @@ socket.on('startBatch', () => {
 });
 
 socket.on('batchOver', () => {
+  titleAreaEl.querySelector('h1').textContent = 'שלב הניחושים';
   hideAnswerArea();
   toggleShowResultsArea();
   updateResultsArea();

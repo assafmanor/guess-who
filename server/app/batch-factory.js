@@ -1,12 +1,12 @@
 const Batch = require('./batch').Batch;
 
-const debug = require('debug')('guesswho:batch');
+const debug = require('debug')('guesswho:batch-factory');
 
 class BatchFactory {
   NUM_ANSWERS_EACH_TIME = +process.env.NUM_ANSWERS_EACH_TIME;
 
-  constructor(numPlayers, answers) {
-    this.numPlayers = numPlayers;
+  constructor(round, answers) {
+    this.round = round;
     this.answers = answers;
   }
 
@@ -48,7 +48,7 @@ class BatchFactory {
         playerAnswers.delete(question);
       });
       const answers = new Map(tmpAnswersArray);
-      const batch = new Batch(playerId, answers, this.numPlayers);
+      const batch = new Batch(playerId, answers, this.round);
       return {
         value: batch,
         done: false

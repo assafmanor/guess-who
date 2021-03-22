@@ -28,3 +28,30 @@ export function deleteCookie(name, path = '/') {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path};`;
   }
 }
+
+/**
+ * sets an interval for @time seconds, updates the countdownEl to show the time left,
+ * and when the countdown runs out - calls @afterTimeoutCallback
+ * @param  {[HTMLElement]} countdownEl the function will update this element's text content to reflect the time left.
+ * @param  {[Number]} time countdown time in seconds.
+ * @param  {[Function]} afterTimeoutCallback this callback will be called when the countdown runs out.
+ * @return {[Number]} returns the interval set by the function.
+ */
+
+export function setCountdown(countdownEl, time, afterTimeoutCallback) {
+  let timeLeft = time;
+  const intervalCallback = () => {
+    // update countdown element
+    if (timeLeft < 0) {
+      clearInterval(interval);
+      afterTimeoutCallback();
+      return;
+    }
+    countdownEl.textContent = timeLeft;
+    timeLeft--;
+  };
+  // call callback so that the countdown starts immediately
+  intervalCallback();
+  const interval = setInterval(intervalCallback, 1000);
+  return interval;
+}

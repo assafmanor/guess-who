@@ -32,7 +32,7 @@ class Round {
     debug('getNextAnswersBatch()');
     if (!this.batchFactory) {
       this.batchFactory = new BatchFactory(
-        this.activePlayers.size,
+        this,
         this.answers
       );
     }

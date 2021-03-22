@@ -32,6 +32,7 @@ class InGame {
         this.voteHandler(socket);
         this.getScoresHandler(socket);
         this.returnToLobbyHandler(socket);
+        this.voteSkipAnswerHandler(socket);
         // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
       });
@@ -151,6 +152,21 @@ class InGame {
       this.game.endRound();
       this.game.removeDisconnectedPlayers();
       this.game.sendToAllPlayers('returnToLobby');
+    });
+  }
+
+  voteSkipAnswerHandler(socket) {
+    socket.on('voteSkipAnswer', data => {
+      if (data.code !== this.game.code) return;
+      const numVotes = this.round.currentBatch.voteSkip(
+        data.answerNumber,
+        data.player.id
+      );
+      if (this.round.currentBatch.isOkToSkip(data.answerNumber)) {
+        this.game.sendToAllPlayers('skipAnswer');
+      } else {
+        this.game.sendToAllPlayers('skipAnswerUpdate', { numVotes: numVotes });
+      }
     });
   }
 }

@@ -1,30 +1,55 @@
+const debug = require('debug')('guesswho:batch');
+
 class Batch {
   NUM_ANSWERS_EACH_TIME = +process.env.NUM_ANSWERS_EACH_TIME;
   POINTS_FOR_WRONG_ANSWER = -2;
 
-  constructor(playerId, answers, numPlayers) {
+  constructor(playerId, answers, round) {
     this.playerId = playerId;
     this.answers = answers;
-    this.numPlayers = numPlayers;
+    this.round = round;
     this.numOfPlayersWhoGuessedRight = 0;
+    this.skipsVoted = new Array(this.answers.size);
+    for (let i = 0; i < this.skipsVoted.length; i++) {
+      this.skipsVoted[i] = {
+        numVotes: 0,
+        whoVoted: new Map()
+      };
+    }
   }
 
   getJSON() {
     return { playerId: this.playerId, answers: this.answers };
   }
 
-  getAddedPoints(choiceId, answerNumber) {
+  getAddedPoints(choiceId, numberOfAnswers) {
     if (choiceId !== this.playerId) {
       // wrong guess
       return this.POINTS_FOR_WRONG_ANSWER;
     }
+    const numPlayers = this.round.activePlayers.size;
     const numRightGuessesBeforeThis = this.numOfPlayersWhoGuessedRight++;
     const pointsForAnswerNumber =
-      (this.NUM_ANSWERS_EACH_TIME - answerNumber + 1) * 2;
+      (this.NUM_ANSWERS_EACH_TIME - numberOfAnswers + 1) * 2;
     const nthRightGuessFactor =
-      (this.numPlayers - numRightGuessesBeforeThis) / this.numPlayers;
+      (numPlayers - numRightGuessesBeforeThis) / numPlayers;
     const pointsFloat = pointsForAnswerNumber * nthRightGuessFactor;
     return Math.max(1, Math.round(pointsFloat));
+  }
+
+  voteSkip(answerNumber, playerId) {
+    if (this.skipsVoted[answerNumber].whoVoted.has(playerId)) return;
+    this.skipsVoted[answerNumber].whoVoted.set(playerId);
+    this.skipsVoted[answerNumber].numVotes++;
+    return this.skipsVoted[answerNumber].numVotes;
+  }
+
+  isOkToSkip(answerNumber) {
+    debug('answerNumber: ' + answerNumber);
+    debug('numVotes: ' + this.skipsVoted[answerNumber].numVotes);
+    return (
+      this.skipsVoted[answerNumber].numVotes === this.round.activePlayers.size
+    );
   }
 }
 
