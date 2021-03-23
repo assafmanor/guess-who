@@ -35,7 +35,7 @@ export function deleteCookie(name, path = '/') {
  * @param  {[HTMLElement]} countdownEl the function will update this element's text content to reflect the time left.
  * @param  {[Number]} time countdown time in seconds.
  * @param  {[Function]} afterTimeoutCallback this callback will be called when the countdown runs out.
- * @return {[Number]} returns the interval set by the function.
+ * @return {[NodeJS.Timeout]} returns the interval set by the function.
  */
 
 export function setCountdown(countdownEl, time, afterTimeoutCallback) {
@@ -47,7 +47,7 @@ export function setCountdown(countdownEl, time, afterTimeoutCallback) {
       afterTimeoutCallback();
       return;
     }
-    countdownEl.textContent = timeLeft;
+    countdownEl.textContent = '00:' + Number(timeLeft).toString().padStart(2, '0');
     timeLeft--;
   };
   // call callback so that the countdown starts immediately

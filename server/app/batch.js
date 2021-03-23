@@ -10,10 +10,11 @@ class Batch {
     this.round = round;
     this.numOfPlayersWhoGuessedRight = 0;
     this.skipsVoted = new Array(this.answers.size);
+    // init all skip votes to 1 as the player whose answers are shown cannot vote to skip
     for (let i = 0; i < this.skipsVoted.length; i++) {
       this.skipsVoted[i] = {
-        numVotes: 0,
-        whoVoted: new Map()
+        numVotes: 1,
+        whoVoted: new Map([[playerId]])
       };
     }
   }
@@ -45,8 +46,6 @@ class Batch {
   }
 
   isOkToSkip(answerNumber) {
-    debug('answerNumber: ' + answerNumber);
-    debug('numVotes: ' + this.skipsVoted[answerNumber].numVotes);
     return (
       this.skipsVoted[answerNumber].numVotes === this.round.activePlayers.size
     );

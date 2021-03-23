@@ -426,11 +426,15 @@ function showNextAnswer() {
     ANSWER_SHOW_TIME,
     continueNextAnswer
   );
-  skipAnswerEl.disabled = false;
-  skipAnswerEl.value = 'דלג (0)';
+  if (currentPlayerAnswers.id === thisPlayer.id) {
+    skipAnswerEl.disabled = true;
+  } else {
+    skipAnswerEl.disabled = false;
+  }
+  skipAnswerEl.value = 'דלג (1)';
   // scroll to top
   document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0
+  document.documentElement.scrollTop = 0;
 }
 
 socket.on('showNextAnswer', showNextAnswer);
@@ -446,8 +450,8 @@ function continueNextAnswer() {
   socket.emit('showNextAnswer', { code: code });
 }
 
-function skipAnswerCallback(event) {
-  event.target.disabled = true;
+function skipAnswerCallback() {
+  skipAnswerEl.disabled = true;
   socket.emit('voteSkipAnswer', {
     code: code,
     answerNumber: answerNumber - 1,
@@ -456,12 +460,12 @@ function skipAnswerCallback(event) {
 }
 
 skipAnswerEl.addEventListener('click', event => {
-  skipAnswerCallback(event);
+  skipAnswerCallback();
 });
 
 socket.on('skipAnswer', () => {
   clearInterval(answerCountdownInterval);
-  if(isHost) {
+  if (isHost) {
     continueNextAnswer();
   }
 });
@@ -500,6 +504,7 @@ function showAnswerArea() {
   answerAreaEl.style.display = 'block';
   explanationTextEl.style.display = 'none';
   votingArea.style.display = 'block';
+  // this player's answers are shown
   if (currentPlayerAnswers.id === thisPlayer.id) {
     yourAnswersIndicatorEl.style.display = 'block';
   }
@@ -535,6 +540,7 @@ function castVote(id, name) {
   Array.from(voteButtons).forEach(button => {
     button.disabled = true;
   });
+  skipAnswerCallback();
   socket.emit('makeVote', {
     code: code,
     player: thisPlayer,
