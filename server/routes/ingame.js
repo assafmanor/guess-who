@@ -6,6 +6,7 @@ class InGame {
     this.io = game.io;
     this.round = game.round;
     this.reconnectPlayersHandler();
+    this.serverTime = null;
   }
 
   updateNewRound(round) {
@@ -33,6 +34,8 @@ class InGame {
         this.getScoresHandler(socket);
         this.returnToLobbyHandler(socket);
         this.voteSkipAnswerHandler(socket);
+        this.setServerTimeHandler(socket);
+        this.getServerTimeHandler(socket);
         // send player info to client
         this.io.to(socket.id).emit('getPlayerInfo', player.getJSON());
       });
@@ -110,6 +113,7 @@ class InGame {
   showNextAnswerHandler(socket) {
     socket.on('showNextAnswer', data => {
       if (data.code !== this.game.code) return;
+      this.serverTime = null;
       this.game.sendToAllPlayers('showNextAnswer');
     });
   }
@@ -167,6 +171,39 @@ class InGame {
       } else {
         this.game.sendToAllPlayers('skipAnswerUpdate', { numVotes: numVotes });
       }
+    });
+  }
+
+  setServerTimeHandler(socket) {
+    socket.on('setServerTime', data => {
+      if (data.code !== this.game.code) return;
+      this.serverTime = Date.now();
+      this.game.sendToAllPlayers('setServerTime', {
+        timestamp: this.serverTime
+      });
+    });
+  }
+
+  _sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  getServerTime() {
+    return new Promise(async resolve => {
+      while (!this.serverTime) {
+        await this._sleep(50);
+      }
+      resolve(this.serverTime);
+    });
+  }
+
+  getServerTimeHandler(socket) {
+    socket.on('getServerTime', async data => {
+      if (data.code !== this.game.code) return;
+      const serverTime = await this.getServerTime();
+      this.game.sendToAllPlayers('getServerTime', {
+        timestamp: serverTime
+      });
     });
   }
 }

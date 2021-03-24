@@ -1,4 +1,10 @@
-import { getCookie, showErrorMessage, setCountdown } from './utils.js';
+import {
+  getCookie,
+  showErrorMessage,
+  setServerTime,
+  getServerTime,
+  setCountdown
+} from './utils.js';
 
 const socket = io();
 
@@ -417,11 +423,18 @@ socket.on('getAnswersBatch', data => {
   }
 });
 
-function showNextAnswer() {
+async function showNextAnswer() {
   console.log('showNextAnswer');
   const [question, answer] = answersBatch[answerNumber++];
   showAnswer(question, answer);
+  let serverTime;
+  if (isHost) {
+    serverTime = await setServerTime(socket, code);
+  } else {
+    serverTime = await getServerTime(socket, code);
+  }
   answerCountdownInterval = setCountdown(
+    serverTime,
     titleAreaEl.querySelector('h1'),
     ANSWER_SHOW_TIME,
     continueNextAnswer
@@ -439,7 +452,7 @@ function showNextAnswer() {
 
 socket.on('showNextAnswer', showNextAnswer);
 
-function continueNextAnswer() {
+async function continueNextAnswer() {
   if (!isHost) return;
   if (answerNumber >= answersBatch.length) {
     socket.emit('batchOver', { code: code });
