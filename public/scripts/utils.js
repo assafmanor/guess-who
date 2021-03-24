@@ -76,8 +76,10 @@ export function setCountdown(
     }
     const timeLeft = countdownEndTime - Date.now();
     secondsLeft = Math.round(timeLeft / 1000);
-    countdownEl.textContent =
-      '00:' + Number(secondsLeft).toString().padStart(2, '0');
+    if (secondsLeft >= 0) {
+      countdownEl.textContent =
+        '00:' + Number(secondsLeft).toString().padStart(2, '0');
+    }
   };
   // call callback so that the countdown starts immediately
   intervalCallback();
