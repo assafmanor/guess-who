@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A social game for guessing the preferences of your friends",
   "engines": {
-    "node": "14.9.0"
+    "node": "18.15.0"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
