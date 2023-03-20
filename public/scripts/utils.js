@@ -33,7 +33,7 @@ export function setServerTime(socket, code) {
   console.log('setServerTime');
   return new Promise(resolve => {
     socket.emit('setServerTime', { code: code });
-    socket.once('setServerTime', data => {
+    socket.once('getServerTime', data => {
       resolve(data.timestamp);
     });
   });
@@ -42,7 +42,7 @@ export function setServerTime(socket, code) {
 export function getServerTime(socket, code) {
   console.log('getServerTime');
   return new Promise(resolve => {
-    socket.emit('getServerTime', { code: code });
+    // socket.emit('getServerTime', { code: code });
     socket.once('getServerTime', data => {
       resolve(data.timestamp);
     });

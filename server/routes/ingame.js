@@ -178,7 +178,7 @@ class InGame {
     socket.on('setServerTime', data => {
       if (data.code !== this.game.code) return;
       this.serverTime = Date.now();
-      this.game.sendToAllPlayers('setServerTime', {
+      this.game.sendToAllPlayers('getServerTime', {
         timestamp: this.serverTime
       });
     });
