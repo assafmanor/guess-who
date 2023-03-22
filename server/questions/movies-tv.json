@@ -110,6 +110,20 @@
       "choices": ["הישרדות", "המירוץ למיליון", "אף אחד"]
     },
     {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["כאן 11", "קשת 12", "רשת 13", "אף אחד"]
+    },
+    {
+      "question": "הארי פוטר",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "לאיזה בית את/ה שייך/ת?",
+      "type": "multipleChoice",
+      "choices": ["גריפינדור", "סלית'רין", "רייבנקלו", "האפלפאף"]
+    },
+    {
       "question": "ג'סיקה...",
       "type": "multipleChoice",
       "choices": ["צ'סטיין", "אלבה", "ביל"]
@@ -224,6 +238,11 @@
       "choices": ["דיסני", "פיקסאר", "דרימוורקס", "אף אחד"]
     },
     {
+      "question": "סיטקומים או דרמות",
+      "type": "multipleChoice",
+      "choices": ["סיטקומים", "דרמות"]
+    },
+    {
       "question": "מה הסדרה המצוירת האהובה עליך?",
       "type": "shortAnswer"
     },
@@ -245,6 +264,18 @@
     },
     {
       "question": "מה הסרט דיסני האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מהי תוכנית הטלוויזיה האהובה עליך בכל הזמנים?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מי הדמות הטלוויזיונית או הקולנועית שאתם הכי מזדהים איתה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזו סדרה אתם רואים כרגע?",
       "type": "shortAnswer"
     }
   ]
