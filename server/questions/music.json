@@ -105,6 +105,18 @@
       ]
     },
     {
+      "question": "לאיזה עשור הייתה המוזיקה הכי טובה?",
+      "type": "multipleChoice",
+      "choices": [
+        "שנות השישים",
+        "שנות השבעים",
+        "שנות השמונים",
+        "שנות התשעים",
+        "שנות האלפיים",
+        "2010-ימינו"
+      ]
+    },
+    {
       "question": "מי עדיף?",
       "type": "multipleChoice",
       "choices": ["Red Hot Chili Peppers", "The Black Eyed Peas"]
@@ -153,6 +165,18 @@
     },
     {
       "question": "את מי הכי היית רוצה לראות בהופעה חיה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מי האמן המוזיקלי/להקה האהובים עליכם?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזה שיר תמיד גורם לכם לרקוד?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה ההופעה הכי מטורפת שהייתם בה?",
       "type": "shortAnswer"
     }
   ]

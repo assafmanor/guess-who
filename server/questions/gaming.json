@@ -6,6 +6,10 @@
       "type": "multipleChoice"
     },
     {
+      "question": "משחקי RTS",
+      "type": "multipleChoice"
+    },
+    {
       "question": "משחקי RPG",
       "type": "multipleChoice"
     },
