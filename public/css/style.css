@@ -23,7 +23,7 @@ body {
 
 .main-container {
   position: relative;
-  min-height: 80vh;
+  min-height: calc(100vh - 50px);
   width: 90%;
   background: #fff;
   padding: 30px;

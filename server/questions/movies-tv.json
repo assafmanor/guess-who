@@ -26,11 +26,27 @@
       "type": "multipleChoice"
     },
     {
+      "question": "שעשועונים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "אדם סנדלר",
+      "type": "multipleChoice"
+    },
+    {
       "question": "דוקו",
       "type": "multipleChoice"
     },
     {
+      "question": "מונטי פייתון",
+      "type": "multipleChoice"
+    },
+    {
       "question": "הורדה פיראטית",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "סרטי בורקס",
       "type": "multipleChoice"
     },
     {
@@ -42,13 +58,26 @@
       "type": "multipleChoice"
     },
     {
+      "question": "בית הנייר",
+      "type": "multipleChoice"
+    },
+    {
       "question": "סרטים בשחור לבן",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מלחמת הכוכבים",
       "type": "multipleChoice"
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["האח הגדול", "משחקי הכס", "אף אחד"]
+    },
+    {
+      "question": "מי את/ה?",
+      "type": "multipleChoice",
+      "choices": ["הטוב", "הרע", "המכוער"]
     },
     {
       "question": "מה עדיף?",
@@ -79,6 +108,35 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["הישרדות", "המירוץ למיליון", "אף אחד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["כאן 11", "קשת 12", "רשת 13", "אף אחד"]
+    },
+    {
+      "question": "הארי פוטר",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "לאיזה בית את/ה שייך/ת?",
+      "type": "multipleChoice",
+      "choices": ["גריפינדור", "סלית'רין", "רייבנקלו", "האפלפאף"]
+    },
+    {
+      "question": "ג'סיקה...",
+      "type": "multipleChoice",
+      "choices": ["צ'סטיין", "אלבה", "ביל"]
+    },
+    {
+      "question": "ג'ניפר...",
+      "type": "multipleChoice",
+      "choices": ["אניסטון", "לורנס", "לופז"]
+    },
+    {
+      "question": "טום...",
+      "type": "multipleChoice",
+      "choices": ["קרוז", "הנקס", "הארדי", "הולנד"]
     },
     {
       "question": "מה עדיף?",
@@ -180,6 +238,11 @@
       "choices": ["דיסני", "פיקסאר", "דרימוורקס", "אף אחד"]
     },
     {
+      "question": "סיטקומים או דרמות",
+      "type": "multipleChoice",
+      "choices": ["סיטקומים", "דרמות"]
+    },
+    {
       "question": "מה הסדרה המצוירת האהובה עליך?",
       "type": "shortAnswer"
     },
@@ -192,11 +255,27 @@
       "type": "shortAnswer"
     },
     {
+      "question": "איזו נסיכת דיסני את/ה?",
+      "type": "shortAnswer"
+    },
+    {
       "question": "נתקעת בתוך סדרת הטלוויזיה האחרונה שבה צפית. כמה נדפקת?",
       "type": "shortAnswer"
     },
     {
       "question": "מה הסרט דיסני האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מהי תוכנית הטלוויזיה האהובה עליך בכל הזמנים?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מי הדמות הטלוויזיונית או הקולנועית שאתם הכי מזדהים איתה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזו סדרה אתם רואים כרגע?",
       "type": "shortAnswer"
     }
   ]

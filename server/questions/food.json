@@ -26,10 +26,6 @@
       "type": "multipleChoice"
     },
     {
-      "question": "מיונז",
-      "type": "multipleChoice"
-    },
-    {
       "question": "גויאבה",
       "type": "multipleChoice"
     },
@@ -42,6 +38,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["קוקוס", "אננס"]
+    },
+    {
+      "question": "בצק פיצה...",
+      "type": "multipleChoice",
+      "choices": ["דק", "עבה"]
     },
     {
       "question": "ופל לימון",
@@ -88,6 +89,10 @@
       "type": "multipleChoice"
     },
     {
+      "question": "אוכל טבעוני",
+      "type": "multipleChoice"
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["מתוק", "מלוח"]
@@ -95,7 +100,27 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
+      "choices": ["אוכל ביתי", "מסעדה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אורז", "קוסקוס", "פתיתים"]
+    },
+    {
+      "question": "קפה...",
+      "type": "multipleChoice",
+      "choices": ["ספל", "זכוכית", "חד\"פ", "לא אכפת לי", "לא שותה קפה"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
       "choices": ["נוטלה", "השחר"]
+    },
+    {
+      "question": "יין...",
+      "type": "multipleChoice",
+      "choices": ["אדום", "לבן", "רוזה", "אף אחד"]
     },
     {
       "question": "בורקס...",
@@ -175,7 +200,7 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["שניצל", "סטייק"]
+      "choices": ["שניצל", "סטייק", "אני צמחוני/ת"]
     },
     {
       "question": "מה עדיף?",
@@ -253,6 +278,17 @@
       "choices": ["לשבת במסעדה", "להזמין הביתה"]
     },
     {
+      "question": "איזה סוג ארוחת בוקר אתם מעדיפים?",
+      "type": "multipleChoice",
+      "choices": [
+        "מלוחה",
+        "מתוקה",
+        "פירותית",
+        "שתיה בלבד",
+        "אני לא אוכל/ת ארוחות בוקר"
+      ]
+    },
+    {
       "question": "מה התוספת הכי טובה לצד שניצל?",
       "type": "shortAnswer"
     },
@@ -322,6 +358,18 @@
     },
     {
       "question": "ההמבורגר המושלם בעיניך",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מהו המטבח האהוב עליך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה האוכל המנחם המועדף עליכם?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה הקינוח המועדף עליך?",
       "type": "shortAnswer"
     }
   ]

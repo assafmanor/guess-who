@@ -3,22 +3,32 @@
   "version": "0.0.1",
   "description": "A social game for guessing the preferences of your friends",
   "engines": {
-    "node": "14.9.0"
+    "node": "18.15.0"
   },
   "dependencies": {
-    "chart.js": "^2.9.4",
     "cookie-parser": "^1.4.5",
     "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "pug": "^3.0.0",
-    "socket.io": "^3.0.5"
+    "pug": "^3.0.2",
+    "socket.io": "^3.1.2"
   },
   "scripts": {
     "start:dev": "nodemon -r dotenv/config server/app.js",
     "start": "node -r dotenv/config server/app.js"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7",
-    "dotenv": "^8.2.0"
-  }
+    "nodemon": "^2.0.7"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/assafmanor/guess-who.git"
+  },
+  "author": "Assaf Manor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/assafmanor/guess-who/issues"
+  },
+  "homepage": "https://github.com/assafmanor/guess-who#readme"
 }

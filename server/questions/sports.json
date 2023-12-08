@@ -1,0 +1,102 @@
+{
+  "name": "ספורט",
+  "questions": [
+    {
+      "question": "אומנויות לחימה",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "גולף",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פוטבול", "בייסבול"]
+    },
+    {
+      "question": "איזו קבוצה עדיפה?",
+      "type": "multipleChoice",
+      "choices": ["ברצלונה", "ריאל מדריד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": [
+        "גמר ליגת האלופות",
+        "משחק אליפות בפריימרליג",
+        "משחק 7 בגמר NBA"
+      ]
+    },
+    {
+      "question": "הכי גדול בכל הזמנים ⚽️",
+      "type": "multipleChoice",
+      "choices": ["מסי", "רונאלדו", "פלה", "מראדונה", "אחר"]
+    },
+    {
+      "question": "הכי גדול בכל הזמנים 🏀",
+      "type": "multipleChoice",
+      "choices": ["מייקל ג'ורדן", "לברון ג'יימס", "אחר"]
+    },
+    {
+      "question": "הכי גדול בכל הזמנים 🎾",
+      "type": "multipleChoice",
+      "choices": ["רפאל נדאל", "רוג'ר פדרר", "נובאק ג'וקוביץ"]
+    },
+    {
+      "question": "מי תנצח?",
+      "type": "multipleChoice",
+      "choices": ["גולדן סטייט 16-17", "בולס 95-96"]
+    },
+    {
+      "question": "מה סוג האימון המועדף עליך?",
+      "type": "multipleChoice",
+      "choices": [
+        "ריצה וג'וגינג",
+        "יוגה או פילאטיס",
+        "אופניים",
+        "שחיה",
+        "הרמת משקולות",
+        "ספורט קבוצתי"
+      ]
+    },
+    {
+      "question": "איזה משחק עדיף?",
+      "type": "multipleChoice",
+      "choices": ["FIFA", "NBA 2K"]
+    },
+    {
+      "question": "מה יותר מרגש?",
+      "type": "multipleChoice",
+      "choices": ["אולימפיאדה", "מונדיאל"]
+    },
+    {
+      "question": "מה יותר מעניין?",
+      "type": "multipleChoice",
+      "choices": ["0-0 צמוד ורב  מצבים", "3-0 חד צדדי"]
+    },
+    {
+      "question": "איזה שער יותר יפה?",
+      "type": "multipleChoice",
+      "choices": ["גול מחצי מגרש", "צ'יפ מעל השוער"]
+    },
+    {
+      "question": "מי תנצח בתופסת?",
+      "type": "multipleChoice",
+      "choices": [
+        "קיליאן אמבפה",
+        "פייר אמריק אובאמיינג",
+        "לירוי סאנה",
+        "איניאקי וויליאמס"
+      ]
+    },
+    {
+      "question": "מי הספורטאי/ת הגדול/ה ביותר בכל הזמנים?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מי הספורטאי/ת של ימינו האהוב/ה עליכם?",
+      "type": "shortAnswer"
+    }
+  ]
+}

@@ -1,4 +1,10 @@
-import { getCookie, showErrorMessage } from './utils.js';
+import {
+  getCookie,
+  showErrorMessage,
+  setServerTime,
+  getServerTime,
+  setCountdown
+} from './utils.js';
 
 const socket = io();
 
@@ -42,9 +48,7 @@ const answerShortAnswerTextEl = document.getElementById('answer-short-answer');
 const continueGetAnswersEl = document.getElementById(
   'continue-get-answers-btn'
 );
-const continueNextAnswerEl = document.getElementById(
-  'continue-next-answer-btn'
-);
+const skipAnswerEl = document.getElementById('skip-answer-btn');
 const explanationTextEl = document.getElementById('explanation');
 let voteChart;
 const voteButtonsDiv = document.getElementById('vote-buttons');
@@ -76,6 +80,7 @@ const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
 const code = guessWhoRoomId.code;
 const id = guessWhoRoomId.id;
 let isGameOver = false;
+let isReturningToLobby = false;
 
 let thisPlayer;
 let isHost = false;
@@ -97,8 +102,11 @@ let playerList;
 
 // The length of time (in ms) it shows the leaderboard
 // between each round of answers
-// const RESULTS_SHOW_TIME = 10000;
-const RESULTS_SHOW_TIME = 100;
+const RESULTS_SHOW_TIME = 10000;
+
+// the maximal length of time (in seconds) each answer is shown
+const ANSWER_SHOW_TIME = 10;
+let answerCountdownInterval;
 
 // browser's back and forward click listener
 window.addEventListener('popstate', event => {
@@ -117,6 +125,14 @@ window.addEventListener('popstate', event => {
 
 window.addEventListener('load', () => {
   socket.emit('reconnectPlayerIngame', { code: code, id: id });
+});
+
+window.addEventListener('beforeunload', event => {
+  if (!isReturningToLobby) {
+    const confirmationMessage = 'אתה בטוח שאתה רוצה לעזוב את המשחק?';
+    (event || window.event).returnValue = confirmationMessage;
+    return confirmationMessage;
+  }
 });
 
 socket.on('getPlayerInfo', playerJSON => {
@@ -201,7 +217,6 @@ submitQuestionsForm.addEventListener('submit', event => {
 
 function enableHostOptions() {
   continueGetAnswersEl.style.display = 'inline-block';
-  continueNextAnswerEl.style.display = 'inline-block';
   returnToLobbyFormEl.querySelector('input').classList.remove('hidden');
 }
 
@@ -391,7 +406,6 @@ function startBatch() {
   };
   startNewVote();
   answerNumber = 0;
-  continueNextAnswerEl.value = 'תשובה הבאה';
 }
 
 socket.on('getAnswersBatch', data => {
@@ -409,13 +423,36 @@ socket.on('getAnswersBatch', data => {
   }
 });
 
-socket.on('showNextAnswer', () => {
+async function showNextAnswer() {
   console.log('showNextAnswer');
   const [question, answer] = answersBatch[answerNumber++];
   showAnswer(question, answer);
-});
+  let serverTime;
+  if (isHost) {
+    serverTime = await setServerTime(socket, code);
+  } else {
+    serverTime = await getServerTime(socket, code);
+  }
+  answerCountdownInterval = setCountdown(
+    serverTime,
+    titleAreaEl.querySelector('h1'),
+    ANSWER_SHOW_TIME,
+    continueNextAnswer
+  );
+  if (currentPlayerAnswers.id === thisPlayer.id) {
+    skipAnswerEl.disabled = true;
+  } else {
+    skipAnswerEl.disabled = false;
+  }
+  skipAnswerEl.value = 'דלג (1)';
+  // scroll to top
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 
-continueNextAnswerEl.addEventListener('click', () => {
+socket.on('showNextAnswer', showNextAnswer);
+
+async function continueNextAnswer() {
   if (!isHost) return;
   if (answerNumber >= answersBatch.length) {
     socket.emit('batchOver', { code: code });
@@ -423,10 +460,31 @@ continueNextAnswerEl.addEventListener('click', () => {
     socket.emit('getAnswersBatch', { code: code });
     return;
   }
-  if (answerNumber === answersBatch.length - 1) {
-    continueNextAnswerEl.value = 'סיום';
-  }
   socket.emit('showNextAnswer', { code: code });
+}
+
+function skipAnswerCallback() {
+  skipAnswerEl.disabled = true;
+  socket.emit('voteSkipAnswer', {
+    code: code,
+    answerNumber: answerNumber - 1,
+    player: thisPlayer
+  });
+}
+
+skipAnswerEl.addEventListener('click', event => {
+  skipAnswerCallback();
+});
+
+socket.on('skipAnswer', () => {
+  clearInterval(answerCountdownInterval);
+  if (isHost) {
+    continueNextAnswer();
+  }
+});
+
+socket.on('skipAnswerUpdate', data => {
+  skipAnswerEl.value = `דלג (${data.numVotes})`;
 });
 
 continueGetAnswersEl.addEventListener('click', () => {
@@ -443,6 +501,7 @@ socket.on('startBatch', () => {
 });
 
 socket.on('batchOver', () => {
+  titleAreaEl.querySelector('h1').textContent = 'שלב הניחושים';
   hideAnswerArea();
   toggleShowResultsArea();
   updateResultsArea();
@@ -458,6 +517,7 @@ function showAnswerArea() {
   answerAreaEl.style.display = 'block';
   explanationTextEl.style.display = 'none';
   votingArea.style.display = 'block';
+  // this player's answers are shown
   if (currentPlayerAnswers.id === thisPlayer.id) {
     yourAnswersIndicatorEl.style.display = 'block';
   }
@@ -493,6 +553,7 @@ function castVote(id, name) {
   Array.from(voteButtons).forEach(button => {
     button.disabled = true;
   });
+  skipAnswerCallback();
   socket.emit('makeVote', {
     code: code,
     player: thisPlayer,
@@ -622,7 +683,8 @@ function initChart(playerList) {
             ticks: {
               display: true,
               beginAtZero: true,
-              stepSize: 1
+              stepSize: 1,
+              max: playerList.length - 1
             }
           }
         ]
@@ -716,5 +778,6 @@ returnToLobbyFormEl.querySelector('input').addEventListener('click', event => {
 });
 
 socket.on('returnToLobby', () => {
+  isReturningToLobby = true;
   returnToLobbyFormEl.submit();
 });

@@ -43,11 +43,6 @@
       ]
     },
     {
-      "question": "מחשב",
-      "type": "multipleChoice",
-      "choices": ["נייח", "נייד"]
-    },
-    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["משחקי קלפים", "משחקי קופסה"]
@@ -95,25 +90,6 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["PC", "Mac"]
-    },
-    {
-      "question": "הארי פוטר",
-      "type": "multipleChoice"
-    },
-    {
-      "question": "לאיזה בית את/ה שייך/ת?",
-      "type": "multipleChoice",
-      "choices": ["גריפינדור", "סלית'רין", "רייבנקלו", "האפלפאף"]
-    },
-    {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["כאן 11", "קשת 12", "רשת 13", "אף אחד"]
-    },
-    {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
       "choices": ["כלב", "חתול"]
     },
     {
@@ -152,9 +128,28 @@
       "choices": ["שלג", "שמש"]
     },
     {
+      "question": "מזג אוויר מועדף?",
+      "type": "multipleChoice",
+      "choices": ["שמשי וחם", "קריר ומעונן", "גשום", "מושלג (פחח היית מת)"]
+    },
+    {
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["עצמאי", "שכיר"]
+    },
+    {
+      "question": "סוג הנעלה מועדף?",
+      "type": "multipleChoice",
+      "choices": [
+        "נעלי ספורט",
+        "סניקרס",
+        "סנדלים",
+        "כפכפים",
+        "נעלי עקב",
+        "נעלי סירה",
+        "מגפיים",
+        "אחר"
+      ]
     },
     {
       "question": "מה היית אומר/ת שאת/ה?",
@@ -169,12 +164,42 @@
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["וואטסאפ", "שיחת טלפון"]
+      "choices": ["ים", "הרים"]
     },
     {
       "question": "מה עדיף?",
       "type": "multipleChoice",
-      "choices": ["פייסבוק", "אינסטגרם", "טיקטוק", "אחר", "אף אחד"]
+      "choices": ["איפור", "טבעי"]
+    },
+    {
+      "question": "קניות...",
+      "type": "multipleChoice",
+      "choices": ["באינטרנט", "בקניון"]
+    },
+    {
+      "question": "כנגד ארבעה בנים דיברה התורה. מי את/ה?",
+      "type": "multipleChoice",
+      "choices": ["חכם", "רשע", "תם", "זה שאינו יודע לשאול"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["וואטסאפ", "שיחת טלפון"]
+    },
+    {
+      "question": "אם היית יכול/ה לנסוע בזמן, היית חוזר לעבר או עובר לעתיד?",
+      "type": "multipleChoice",
+      "choices": ["עבר", "עתיד"]
+    },
+    {
+      "question": "ספר...",
+      "type": "multipleChoice",
+      "choices": ["רגיל", "אלקטרוני", "לא קורא/ת ספרים"]
+    },
+    {
+      "question": "מה צורת הלמידה המועדפת עליך",
+      "type": "multipleChoice",
+      "choices": ["למידה חזותית", "למידה שמיעתית", "קריאה/כתיבה", "למידה מעשית"]
     },
     {
       "question": "איזה כוח על היית הכי רוצה?",
@@ -216,6 +241,10 @@
       "type": "multipleChoice"
     },
     {
+      "question": "מוזאונים",
+      "type": "multipleChoice"
+    },
+    {
       "question": "סיגריות",
       "type": "multipleChoice"
     },
@@ -240,11 +269,6 @@
       "choices": ["משחקי קופסה", "משחקי מחשב"]
     },
     {
-      "question": "מה עדיף?",
-      "type": "multipleChoice",
-      "choices": ["אנדרואיד", "אייפון"]
-    },
-    {
       "question": "את/ה טיפוס של...",
       "type": "multipleChoice",
       "choices": ["בוקר", "ערב"]
@@ -258,6 +282,11 @@
       "question": "מה עדיף?",
       "type": "multipleChoice",
       "choices": ["למצוא אהבת אמת", "לזכות במיליון דולר"]
+    },
+    {
+      "question": "מה הדרך המועדפת עליך להתעדכן על מה שקורה בארץ ובעולם?",
+      "type": "multipleChoice",
+      "choices": ["ערוצי חדשות", "אתרי חדשות", "רשתות חברתיות", "עיתונים ומגזינים", "רדיו"]
     },
     {
       "question": "להיות או לא להיות?",
@@ -289,6 +318,42 @@
     },
     {
       "question": "היעד הבא שלך בחו\"ל",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מהו יעד החופשה האידיאלי בשבילך?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזה טרנד אופנה היית רוצה בסתר שיעשה קאמבק?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "איזה תחביב חדש היית שמח/ה לנסות?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "אם הייתם יכולים להיות כל חיה שהיא, איזו חיה הייתם?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מהי החיה הפראית האהובה עליכם?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה הפעילות המועדפת עליכם מחוץ לבית?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "מה מעניין אותך ללמוד או לשפר?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "עם איזה סלבריטי היית רוצה לאכול במסעדה?",
+      "type": "shortAnswer"
+    },
+    {
+      "question": "אם היית יכול/ה ללמוד שפה חדשה, מה היית בוחר/ת?",
       "type": "shortAnswer"
     }
   ]

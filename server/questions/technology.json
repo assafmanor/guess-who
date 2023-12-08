@@ -1,0 +1,42 @@
+{
+  "name": "טכנולוגיה",
+  "questions": [
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["אנדרואיד", "אייפון"]
+    },
+    {
+      "question": "מחשב",
+      "type": "multipleChoice",
+      "choices": ["נייח", "נייד"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["PC", "Mac"]
+    },
+    {
+      "question": "מה עדיף?",
+      "type": "multipleChoice",
+      "choices": ["פייסבוק", "אינסטגרם", "טיקטוק", "אחר", "אף אחד"]
+    },
+    {
+      "question": "האם אתם מאמצים מוקדמים של טכנולוגיות חדשות, או שאתם מחכים שאחרים ינסו קודם?",
+      "type": "multipleChoice",
+      "choices": ["מאמצים מוקדם", "נותנים לאחרים לנסות לפני"]
+    },
+    {
+      "question": "שעונים חכמים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "פודקאסטים",
+      "type": "multipleChoice"
+    },
+    {
+      "question": "מה האפליקציה שאתם משתמשים בה הכי הרבה?",
+      "type": "shortAnswer"
+    }
+  ]
+}

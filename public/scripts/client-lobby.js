@@ -15,7 +15,6 @@ let isHost = false;
 let isEnoughPlayers = false;
 let selectedQuestionPackNames = [];
 let questionPackInfo = [];
-let isReconnected = false;
 
 const guessWhoRoom = JSON.parse(getCookie('guessWhoRoom'));
 const code = guessWhoRoom.code;
@@ -35,19 +34,20 @@ function canJoinGame(id) {
 window.addEventListener('load', async () => {
   const guessWhoRoomId = JSON.parse(getCookie('guessWhoRoomId'));
   if (code !== roomCode) return;
+  let isNewPlayer = true;
   if (guessWhoRoomId && guessWhoRoomId.code === code) {
-    const prevId = guessWhoRoomId.id;
-    const canJoin = await canJoinGame(prevId);
-    if (!canJoin) {
+    const canJoin = await canJoinGame(guessWhoRoomId.id);
+    if (canJoin) {
+      isNewPlayer = false;
+    } else {
       deleteCookie('guessWhoRoomId');
       deleteCookie('guessWhoRoomId', `/${code}`);
-      deleteCookie('guessWhoRoom');
-      return;
     }
-    socket.emit('reconnectPlayerLobby', { code: code, id: prevId });
-    isReconnected = true;
-  } else {
+  }
+  if (isNewPlayer) {
     socket.emit('updateNewPlayer', { code: code, name: name });
+  } else {
+    socket.emit('reconnectPlayerLobby', { code: code, id: guessWhoRoomId.id });
   }
 });
 
@@ -149,18 +149,11 @@ document.getElementById('options-form').addEventListener('submit', event => {
     player: thisPlayer,
     code: code
   });
-  // document.getElementById('selected-question-packs').value = JSON.stringify(
-  //   selectedQuestionPackNames
-  // );
-  // writeGameCookie();
-  // event.target.submit();
 });
 
 socket.on('startRound', data => {
   console.log('startRound');
-  if (!isReconnected) {
-    writeGameCookie();
-  }
+  writeGameCookie();
   document.getElementById('options-form').submit();
 });
 
